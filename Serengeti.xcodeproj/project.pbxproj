@@ -14,7 +14,11 @@
 		F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8421421E17E3800B9D0A8 /* ViewController.swift */; };
 		F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421621E17E3B00B9D0A8 /* Assets.xcassets */; };
 		F4D8421A21E17E3B00B9D0A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421821E17E3B00B9D0A8 /* Main.storyboard */; };
-		F4D8422321E17ECF00B9D0A8 /* Support Classes in Resources */ = {isa = PBXBuildFile; fileRef = F4D8422221E17ECE00B9D0A8 /* Support Classes */; };
+		F4D8422521E1813500B9D0A8 /* EntityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422421E1813500B9D0A8 /* EntityClass.swift */; };
+		F4D8422C21E182F500B9D0A8 /* MapClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422821E182F500B9D0A8 /* MapClass.swift */; };
+		F4D8422D21E182F500B9D0A8 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422921E182F500B9D0A8 /* MessageClass.swift */; };
+		F4D8422E21E182F500B9D0A8 /* random.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422A21E182F500B9D0A8 /* random.swift */; };
+		F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +32,11 @@
 		F4D8421921E17E3B00B9D0A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F4D8421B21E17E3B00B9D0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Serengeti.entitlements; sourceTree = "<group>"; };
-		F4D8422221E17ECE00B9D0A8 /* Support Classes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Support Classes"; sourceTree = "<group>"; };
+		F4D8422421E1813500B9D0A8 /* EntityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityClass.swift; sourceTree = "<group>"; };
+		F4D8422821E182F500B9D0A8 /* MapClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClass.swift; sourceTree = "<group>"; };
+		F4D8422921E182F500B9D0A8 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
+		F4D8422A21E182F500B9D0A8 /* random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = random.swift; sourceTree = "<group>"; };
+		F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneClass.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,9 +78,30 @@
 				F4D8421821E17E3B00B9D0A8 /* Main.storyboard */,
 				F4D8421B21E17E3B00B9D0A8 /* Info.plist */,
 				F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */,
-				F4D8422221E17ECE00B9D0A8 /* Support Classes */,
+				F4D8422721E182D500B9D0A8 /* Support Files */,
+				F4D8422621E1814100B9D0A8 /* AI Classes */,
 			);
 			path = Serengeti;
+			sourceTree = "<group>";
+		};
+		F4D8422621E1814100B9D0A8 /* AI Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8422421E1813500B9D0A8 /* EntityClass.swift */,
+			);
+			path = "AI Classes";
+			sourceTree = "<group>";
+		};
+		F4D8422721E182D500B9D0A8 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8422821E182F500B9D0A8 /* MapClass.swift */,
+				F4D8422921E182F500B9D0A8 /* MessageClass.swift */,
+				F4D8422A21E182F500B9D0A8 /* random.swift */,
+				F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */,
+			);
+			name = "Support Files";
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,7 +162,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4D8422321E17ECF00B9D0A8 /* Support Classes in Resources */,
 				F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */,
 				F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */,
 				F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */,
@@ -148,9 +176,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4D8422E21E182F500B9D0A8 /* random.swift in Sources */,
+				F4D8422D21E182F500B9D0A8 /* MessageClass.swift in Sources */,
+				F4D8422C21E182F500B9D0A8 /* MapClass.swift in Sources */,
 				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
+				F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
 				F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */,
+				F4D8422521E1813500B9D0A8 /* EntityClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

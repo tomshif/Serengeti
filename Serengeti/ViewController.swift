@@ -17,6 +17,8 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.window?.setFrame(NSRect(x:0,y:0,width: 1440,height: 790), display: true)
+        
         if let view = self.skView {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "GameScene") {

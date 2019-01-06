@@ -13,7 +13,7 @@ class MapClass
 {
     var zoneList=[ZoneClass]()
     var entList=[EntityClass]()
-    var elephantList=[ElephantClass]()
+    
     
     private var timeOfDay:CGFloat=200
     private let TIMESCALE:CGFloat = 0.02
@@ -65,14 +65,6 @@ class MapClass
             ent.sprite.removeFromParent()
         }
         
-        for ele in elephantList
-        {
-            ele.sprite.removeFromParent()
-        }
-        
-        zoneList.removeAll()
-        entList.removeAll()
-        elephantList.removeAll()
 
         
     

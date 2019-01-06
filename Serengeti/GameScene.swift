@@ -9,11 +9,43 @@
 import SpriteKit
 import GameplayKit
 
+
+
 class GameScene: SKScene {
+
+    // Constants
+    let mainmenuState:Int=0
+    let inGameState:Int=1
     
-
+    
+    
+    
+    
+    
+    // Game Variables
+    var myMap=MapClass()
+    var currentState:Int=0
+    
+    
+    // SpriteNodes
+    let mmBG=SKSpriteNode(imageNamed: "mainmenuBG")
+    let mmPlayButton=SKSpriteNode(imageNamed: "playButton")
+    
     override func didMove(to view: SKView) {
-
+        
+        
+        //Init main menu
+        
+        mmBG.name="mmBG"
+        mmBG.zPosition=0
+        addChild(mmBG)
+        
+        mmPlayButton.position.x = -size.width*0.25
+        mmPlayButton.name="mmPlayButton"
+        mmPlayButton.zPosition=1
+        addChild(mmPlayButton)
+        
+        
     }
     
     
@@ -52,5 +84,6 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
     }
 }
