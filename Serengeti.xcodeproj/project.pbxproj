@@ -1,0 +1,346 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */; };
+		F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8420E21E17E3700B9D0A8 /* GameScene.sks */; };
+		F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421021E17E3800B9D0A8 /* Actions.sks */; };
+		F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8421221E17E3800B9D0A8 /* GameScene.swift */; };
+		F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8421421E17E3800B9D0A8 /* ViewController.swift */; };
+		F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421621E17E3B00B9D0A8 /* Assets.xcassets */; };
+		F4D8421A21E17E3B00B9D0A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421821E17E3B00B9D0A8 /* Main.storyboard */; };
+		F4D8422321E17ECF00B9D0A8 /* Support Classes in Resources */ = {isa = PBXBuildFile; fileRef = F4D8422221E17ECE00B9D0A8 /* Support Classes */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F4D8420921E17E3700B9D0A8 /* Serengeti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Serengeti.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F4D8420E21E17E3700B9D0A8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		F4D8421021E17E3800B9D0A8 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
+		F4D8421221E17E3800B9D0A8 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		F4D8421421E17E3800B9D0A8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F4D8421621E17E3B00B9D0A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F4D8421921E17E3B00B9D0A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F4D8421B21E17E3B00B9D0A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Serengeti.entitlements; sourceTree = "<group>"; };
+		F4D8422221E17ECE00B9D0A8 /* Support Classes */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Support Classes"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F4D8420621E17E3700B9D0A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F4D8420021E17E3700B9D0A8 = {
+			isa = PBXGroup;
+			children = (
+				F4D8420B21E17E3700B9D0A8 /* Serengeti */,
+				F4D8420A21E17E3700B9D0A8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F4D8420A21E17E3700B9D0A8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8420921E17E3700B9D0A8 /* Serengeti.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F4D8420B21E17E3700B9D0A8 /* Serengeti */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */,
+				F4D8420E21E17E3700B9D0A8 /* GameScene.sks */,
+				F4D8421021E17E3800B9D0A8 /* Actions.sks */,
+				F4D8421221E17E3800B9D0A8 /* GameScene.swift */,
+				F4D8421421E17E3800B9D0A8 /* ViewController.swift */,
+				F4D8421621E17E3B00B9D0A8 /* Assets.xcassets */,
+				F4D8421821E17E3B00B9D0A8 /* Main.storyboard */,
+				F4D8421B21E17E3B00B9D0A8 /* Info.plist */,
+				F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */,
+				F4D8422221E17ECE00B9D0A8 /* Support Classes */,
+			);
+			path = Serengeti;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F4D8420821E17E3700B9D0A8 /* Serengeti */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4D8421F21E17E3B00B9D0A8 /* Build configuration list for PBXNativeTarget "Serengeti" */;
+			buildPhases = (
+				F4D8420521E17E3700B9D0A8 /* Sources */,
+				F4D8420621E17E3700B9D0A8 /* Frameworks */,
+				F4D8420721E17E3700B9D0A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Serengeti;
+			productName = Serengeti;
+			productReference = F4D8420921E17E3700B9D0A8 /* Serengeti.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F4D8420121E17E3700B9D0A8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Liberty Game Dev";
+				TargetAttributes = {
+					F4D8420821E17E3700B9D0A8 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = F4D8420421E17E3700B9D0A8 /* Build configuration list for PBXProject "Serengeti" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F4D8420021E17E3700B9D0A8;
+			productRefGroup = F4D8420A21E17E3700B9D0A8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F4D8420821E17E3700B9D0A8 /* Serengeti */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F4D8420721E17E3700B9D0A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4D8422321E17ECF00B9D0A8 /* Support Classes in Resources */,
+				F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */,
+				F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */,
+				F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */,
+				F4D8421A21E17E3B00B9D0A8 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F4D8420521E17E3700B9D0A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
+				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
+				F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F4D8421821E17E3B00B9D0A8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F4D8421921E17E3B00B9D0A8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F4D8421D21E17E3B00B9D0A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F4D8421E21E17E3B00B9D0A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		F4D8422021E17E3B00B9D0A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Serengeti/Serengeti.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Serengeti/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = LCS.Serengeti;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		F4D8422121E17E3B00B9D0A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Serengeti/Serengeti.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Serengeti/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = LCS.Serengeti;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F4D8420421E17E3700B9D0A8 /* Build configuration list for PBXProject "Serengeti" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4D8421D21E17E3B00B9D0A8 /* Debug */,
+				F4D8421E21E17E3B00B9D0A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F4D8421F21E17E3B00B9D0A8 /* Build configuration list for PBXNativeTarget "Serengeti" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4D8422021E17E3B00B9D0A8 /* Debug */,
+				F4D8422121E17E3B00B9D0A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F4D8420121E17E3700B9D0A8 /* Project object */;
+}
