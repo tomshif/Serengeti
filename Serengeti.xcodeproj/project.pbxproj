@@ -19,6 +19,8 @@
 		F4D8422D21E182F500B9D0A8 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422921E182F500B9D0A8 /* MessageClass.swift */; };
 		F4D8422E21E182F500B9D0A8 /* random.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422A21E182F500B9D0A8 /* random.swift */; };
 		F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */; };
+		F4D8423621E26DC500B9D0A8 /* mapTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423521E26DC500B9D0A8 /* mapTile.swift */; };
+		F4D8423821E26F1900B9D0A8 /* TerrainGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		F4D8422921E182F500B9D0A8 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
 		F4D8422A21E182F500B9D0A8 /* random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = random.swift; sourceTree = "<group>"; };
 		F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneClass.swift; sourceTree = "<group>"; };
+		F4D8423521E26DC500B9D0A8 /* mapTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapTile.swift; sourceTree = "<group>"; };
+		F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainGen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,17 +73,13 @@
 		F4D8420B21E17E3700B9D0A8 /* Serengeti */ = {
 			isa = PBXGroup;
 			children = (
-				F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */,
-				F4D8420E21E17E3700B9D0A8 /* GameScene.sks */,
-				F4D8421021E17E3800B9D0A8 /* Actions.sks */,
+				F4D8423421E26CCC00B9D0A8 /* Misc Files */,
 				F4D8421221E17E3800B9D0A8 /* GameScene.swift */,
 				F4D8421421E17E3800B9D0A8 /* ViewController.swift */,
 				F4D8421621E17E3B00B9D0A8 /* Assets.xcassets */,
-				F4D8421821E17E3B00B9D0A8 /* Main.storyboard */,
-				F4D8421B21E17E3B00B9D0A8 /* Info.plist */,
-				F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */,
-				F4D8422721E182D500B9D0A8 /* Support Files */,
 				F4D8422621E1814100B9D0A8 /* AI Classes */,
+				F4D8423921E2C48300B9D0A8 /* Support Classes */,
+				F4D8422721E182D500B9D0A8 /* Support Files */,
 			);
 			path = Serengeti;
 			sourceTree = "<group>";
@@ -95,13 +95,35 @@
 		F4D8422721E182D500B9D0A8 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				F4D8422821E182F500B9D0A8 /* MapClass.swift */,
-				F4D8422921E182F500B9D0A8 /* MessageClass.swift */,
+				F4D8423521E26DC500B9D0A8 /* mapTile.swift */,
 				F4D8422A21E182F500B9D0A8 /* random.swift */,
-				F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */,
+				F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */,
 			);
 			name = "Support Files";
 			path = "New Group";
+			sourceTree = "<group>";
+		};
+		F4D8423421E26CCC00B9D0A8 /* Misc Files */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */,
+				F4D8420E21E17E3700B9D0A8 /* GameScene.sks */,
+				F4D8421021E17E3800B9D0A8 /* Actions.sks */,
+				F4D8421821E17E3B00B9D0A8 /* Main.storyboard */,
+				F4D8421B21E17E3B00B9D0A8 /* Info.plist */,
+				F4D8421C21E17E3B00B9D0A8 /* Serengeti.entitlements */,
+			);
+			name = "Misc Files";
+			sourceTree = "<group>";
+		};
+		F4D8423921E2C48300B9D0A8 /* Support Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F4D8422821E182F500B9D0A8 /* MapClass.swift */,
+				F4D8422921E182F500B9D0A8 /* MessageClass.swift */,
+				F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */,
+			);
+			path = "Support Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,11 +200,13 @@
 			files = (
 				F4D8422E21E182F500B9D0A8 /* random.swift in Sources */,
 				F4D8422D21E182F500B9D0A8 /* MessageClass.swift in Sources */,
+				F4D8423821E26F1900B9D0A8 /* TerrainGen.swift in Sources */,
 				F4D8422C21E182F500B9D0A8 /* MapClass.swift in Sources */,
 				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
 				F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
 				F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */,
+				F4D8423621E26DC500B9D0A8 /* mapTile.swift in Sources */,
 				F4D8422521E1813500B9D0A8 /* EntityClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

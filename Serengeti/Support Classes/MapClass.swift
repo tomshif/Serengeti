@@ -14,6 +14,7 @@ class MapClass
     var zoneList=[ZoneClass]()
     var entList=[EntityClass]()
     
+    var seed:Int32=0
     
     private var timeOfDay:CGFloat=200
     private let TIMESCALE:CGFloat = 0.02
