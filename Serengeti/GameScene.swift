@@ -52,6 +52,7 @@ class GameScene: SKScene {
     let mmPlayButton=SKSpriteNode(imageNamed: "playButton")
     let mmLoadButton=SKSpriteNode(imageNamed: "loadButton")
     let mmLogo=SKSpriteNode(imageNamed: "mmLogo")
+    let droneHUD=SKSpriteNode(imageNamed: "droneHUD")
     
     
     // Booleans
@@ -107,8 +108,15 @@ class GameScene: SKScene {
         // Temp
         map.zPosition=100
         map.isHidden=true
-        addChild(map)
+        map.name="map"
+        cam.addChild(map)
         
+        droneHUD.isHidden=true
+        droneHUD.zPosition=10000
+        droneHUD.alpha=0.7
+        droneHUD.setScale(0.5)
+        droneHUD.name="droneHUD"
+        cam.addChild(droneHUD)
         
     } // didMove
     
@@ -261,6 +269,7 @@ class GameScene: SKScene {
                 myMap.seed=generateTerrainMap()
                 genMap()
                 drawMap()
+                droneHUD.isHidden=false
             } // if we're leaving the main menu
             
         default:
