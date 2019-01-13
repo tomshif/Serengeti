@@ -22,8 +22,8 @@ class ZoneClass
     private var scene:SKScene?
     internal var sprite=SKSpriteNode(imageNamed: "foodzone")
     
-    private let waterTexture=SKTexture(imageNamed: "waterzone")
-    private let restTexture=SKTexture(imageNamed: "restzone")
+    private let waterTexture=SKTexture(imageNamed: "zoneWater01")
+    private let restTexture=SKTexture(imageNamed: "zoneRest01")
     
     
     internal var type:Int=0
@@ -39,7 +39,7 @@ class ZoneClass
     {
         scene=theScene
         sprite.position=pos
-        sprite.zPosition = -2
+        sprite.zPosition = 10
         sprite.name="FoodZone"
         scene?.addChild(sprite)
         
@@ -51,9 +51,14 @@ class ZoneClass
         case ZoneType.WATERZONE:
             sprite.texture=waterTexture
             sprite.name="WaterZone"
+            sprite.setScale(random(min: 1.5, max: 6.5))
+            sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            
         case ZoneType.RESTZONE:
             sprite.texture=restTexture
             sprite.name="RestZone"
+            sprite.setScale(random(min: 1.5, max: 4.5))
+            sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
         default:
             break
             

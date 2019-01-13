@@ -9,27 +9,27 @@
 import Foundation
 import SpriteKit
 
+
+
 class EntityClass
 {
     public var scene:SKScene?
     var sprite=SKSpriteNode(imageNamed: "entity")
-    public var msg:MessageClass?
     public var map:MapClass?
-    
     
     public var speed:CGFloat=0
     public var age:CGFloat=1.0
     internal var hunger:CGFloat=1.0
     internal var thirst:CGFloat=1.0
+    internal var turnToAngle:CGFloat=0.0
     
-    
-    public var MAXAGE:CGFloat=30.0
+    public var MAXAGE:CGFloat=25920.0   // In game time minutes -- One year = 8640
     public var MAXSPEED:CGFloat=0.8
-    public var TURNRATE:CGFloat=0.15
-    public var TURNFREQ:Double = 0.09
+    public var TURNRATE:CGFloat=0.02
+    public var TURNFREQ:Double = 0.5
     public var MINSCALE:CGFloat = 0.5
     public var MAXSCALE:CGFloat = 1.0
-    
+    internal var WANDERANGLE:CGFloat=CGFloat.pi/4
     
     public var currentState:Int=0
     public var AICycle:Int=0
@@ -44,16 +44,23 @@ class EntityClass
     internal var isResting:Bool=false
     
     
+    public var herdLeader:EntityClass?
+    
     var hash:String
     var name:String=""
     
     public var lastWanderTurn=NSDate()
     
-    public let AGINGVALUE:CGFloat = 0.0001
+    
+    internal var gotoPoint=CGPoint(x: 0, y: 0)
     
     // Constants
     let WANDERSTATE:Int=0
     let GOTOSTATE:Int=2
+    let EATSTATE:Int=4
+    let DRINKSTATE:Int=6
+    let RESTSTATE:Int=8
+    
     
     init()
     {
@@ -62,21 +69,24 @@ class EntityClass
         sprite.position=CGPoint(x: 0, y: 0)
         sprite.setScale(0.1)
         scene?.addChild(sprite)
-    }
-    init(theScene:SKScene, theMap: MapClass, pos: CGPoint, message: MessageClass, number: Int)
+    } // init()
+    
+    init(theScene:SKScene, theMap: MapClass, pos: CGPoint, number: Int)
     {
 
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4)
         age=random(min: 1.0, max: MAXAGE*0.7)
-        msg=message
         scene=theScene
-        sprite.name=String(format:"Entity%04d", number)
-        name=String(format:"Entity%04d", number)
+        map=theMap
+        sprite.name=String(format:"entEntity%04d", number)
+        name=String(format:"entEntity%04d", number)
         hash=UUID().uuidString
         sprite.position=pos
         sprite.setScale(0.1)
+        sprite.zPosition=160
+        
         scene?.addChild(sprite)
-        map=theMap
+    
         
         let ageRatio=age/(MAXAGE*0.4)
         var scale:CGFloat=ageRatio
@@ -85,14 +95,18 @@ class EntityClass
             scale=MINSCALE
         }
         sprite.setScale(scale)
-    
+        
+        
+ 
+        
+        
         
     } // init
     
     public func updateGraphics()
     {
-        let dx=cos(sprite.zRotation)*speed
-        let dy=sin(sprite.zRotation)*speed
+        let dx=cos(sprite.zRotation)*speed*map!.getTimeScale()
+        let dy=sin(sprite.zRotation)*speed*map!.getTimeScale()
         sprite.position.x+=dx
         sprite.position.y+=dy
     } // func updateGraphics
@@ -165,6 +179,8 @@ class EntityClass
         case 2:
             return "Go to"
             
+        case 8:
+            return "Rest"
         default:
             return "Other (error)"
         } // switch
@@ -173,10 +189,10 @@ class EntityClass
     
     public func ageEntity() -> Bool
     {
-        age += AGINGVALUE
+        age += map!.getTimeInterval()*map!.getTimeScale()
         if age > MAXAGE
         {
-            msg!.sendMessage(type: 8, from: name)
+            map!.msg.sendMessage(type: 8, from: name)
             sprite.removeFromParent()
             alive=false
             return false
@@ -211,6 +227,12 @@ class EntityClass
         
     } // getDistToEntity
     
+    public func changeMode(mode: Int, loc: CGPoint)
+    {
+        currentState=mode
+        gotoPoint=loc
+    } // func changeMode
+    
     public func wander()
     {
         // check for speed up
@@ -239,25 +261,97 @@ class EntityClass
             if speed < 0
             {
                 speed=0
+
+            } // if speed drops below zero
+            
+            if isTurning && speed < 0.1
+            {
+                speed = 0.1
             }
-        }
+        } // if we slow down
+        
         if !isTurning
         {
+            if speed < 0.1
+            {
+                speed = 0.1
+            }
+            
             //check to see if it's time to turn
             let turnDelta = -lastWanderTurn.timeIntervalSinceNow
-            if turnDelta > TURNFREQ
+            if turnDelta > TURNFREQ/Double(map!.getTimeScale())
             {
-                let turn=random(min: -TURNRATE, max: TURNRATE)
-                sprite.zRotation+=turn
-                lastWanderTurn=NSDate()
-            }
-        } // if we're not turning
+                turnToAngle=sprite.zRotation + random(min: -WANDERANGLE, max: WANDERANGLE)
+                
+                // Adjust turn to angle to be 0-pi*2
+                if turnToAngle >= CGFloat.pi*2
+                {
+                    turnToAngle -= CGFloat.pi*2
+                }
+                if turnToAngle < 0
+                {
+                    turnToAngle += CGFloat.pi*2
+                }
+                isTurning=true
+            } // if it's time to turn
+        } // if we're not turning but moving
     } // func wander
+    
+    public func checkTurning() -> Bool
+    {
+        return isTurning
+    }
+    
+    internal func doTurn()
+    {
+        if isTurning
+        {
+            if abs(turnToAngle-sprite.zRotation) < TURNRATE*2*speed
+            {
+                sprite.zRotation=turnToAngle
+                isTurning=false
+                lastWanderTurn=NSDate()
+            } // if we can stop turning
+        
+        } // if we're turning
+        
+        
+        if isTurning
+        {
+            var angleDiff = turnToAngle-sprite.zRotation
+            
+            if angleDiff > CGFloat.pi*2
+            {
+                angleDiff -= CGFloat.pi*2
+            }
+            if angleDiff < 0
+            {
+                angleDiff += CGFloat.pi*2
+            }
+            
+            if angleDiff < CGFloat.pi || angleDiff < -CGFloat.pi
+            {
+                // turning left
+                sprite.zRotation += TURNRATE*speed
+                
+            } // if turn left
+            else if angleDiff > -CGFloat.pi || angleDiff > CGFloat.pi
+            {
+                // we need to turn right
+                sprite.zRotation -= TURNRATE*speed
+                
+            } // else if turn right
+
+            
+        }// if we're turning
+        
+    } // func doTurn
     
     internal func update(cycle: Int) -> Int
     {
         var ret:Int = -1
         
+        doTurn()
         updateGraphics()
         
         if alive
@@ -265,7 +359,7 @@ class EntityClass
             if !ageEntity()
             {
                 ret=2
-            } // we're able to age
+            } // we're able to age, if we die, set return death code
         } // if we're alive
         if cycle==AICycle
         {
@@ -274,6 +368,7 @@ class EntityClass
                     wander()
             }
             
+            // fix it if our rotation is more than pi*2 or less than 0
             if sprite.zRotation > CGFloat.pi*2
             {
                 sprite.zRotation -= CGFloat.pi*2

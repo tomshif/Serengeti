@@ -13,15 +13,40 @@ class MapClass
 {
     var zoneList=[ZoneClass]()
     var entList=[EntityClass]()
+    var birdList=[BirdClass]()
     
-    var seed:Int32=0
+    public var mapBorder:CGFloat=0
     
-    private var timeOfDay:CGFloat=200
-    private let TIMESCALE:CGFloat = 0.02
+    public var BOUNDARY:CGFloat=0   // width/height of map from origin
     
-    private var day:Int=1
-    private var year:Int=1
+    public let TILESIZE:CGFloat=256 // width/height of each ground tile
+    public let MAPWIDTH:CGFloat=128 // this needs to match mapDims in GameScene
+    public var seed:Int32=0
     
+    
+    
+    var msg=MessageClass()
+    
+    
+    private var timeOfDay:CGFloat=300 // time of day in minutes past midnight -- 300 = 5:00am
+    
+    private let TIMEINT:CGFloat = 0.033333
+    // TIMEINT equals the amount of game seconds advanced PER FRAME
+    // So 0.0166 = one minute game time per second of real time (at 60fps)
+    // and 0.03333 = two minutes game time per second of real time (at 60fps)
+    
+    // 0.2 = roughly 5 seconds/hour - 2 minutes/day - 12 minutes/year
+    // Time passage will be affected by frame rate, so keeping a framerate near 60fps will be important
+    
+    private var timeScale:CGFloat=1.0 // for time acceleration
+    private var day:Int=1 // days 1-3 of each year are wet season, days 4-6 are dry season
+    private var year:Int=1 
+    private let MAXTIMESCALE:CGFloat=32
+    
+    init()
+    {
+        BOUNDARY=(TILESIZE*MAPWIDTH)/2
+    }
     
     public func getTimeAsString() -> String
     {
@@ -30,23 +55,94 @@ class MapClass
         let temp=String(format: "Year: %1d Day: %1d %02d:%02d",year, day, hour, minute)
         return temp
     } // func getTimeAsString
+
     
+    public func cleanUpEntities()
+    {
+        // clean up entList
+        for i in 0..<entList.count
+        {
+            if !entList[i].isAlive()
+            {
+                entList.remove(at: i)
+                break
+            }
+        } // for each entity
+        
+        for i in 0..<birdList.count
+        {
+            if !birdList[i].isAlive
+            {
+                birdList.remove(at: i)
+                break
+            }
+        } // for each bird
+    } // func cleanUpEntities
+    
+    
+    public func getTimeInterval() -> CGFloat
+    {
+        return TIMEINT
+    }
+    public func getTimeScale() -> CGFloat
+    {
+        return timeScale
+    } // func getTimeScale
+    
+    public func convertTimeToMinutes(hours: CGFloat, minutes: CGFloat) -> CGFloat
+    {
+        let retTime = (hours*60)+(minutes)
+        return retTime
+    } // func convertTimeToMinutes
+
+    public func increaseTimeScale() -> Bool
+    {
+        var ret=false
+        if (timeScale <= MAXTIMESCALE/2)
+        {
+            timeScale*=2
+            ret = true
+        }
+        return ret
+        
+    } // func increaseTimeScale
+    
+    public func decreaseTimeScale() -> Bool
+    {
+        var ret=false
+        if timeScale > 1
+        {
+            timeScale /= 2
+            ret = true
+        }
+        return ret
+    } // func decreaseTimeScale
     public func getTimeOfDay() -> CGFloat
     {
         return timeOfDay
     } // func getTimeOfDay()
     
+    public func getDay() -> Int
+    {
+        return day
+    } // func getDay()
+    
+    public func getYear() -> Int
+    {
+        return year
+    } // func getYear()
+    
     
     public func timePlus()
     {
-        timeOfDay+=TIMESCALE
+        timeOfDay+=TIMEINT*timeScale
         if timeOfDay > 1440
         {
             timeOfDay=0
             day += 1
         } // if it's a new day
         
-        if day > 365
+        if day > 6
         {
             day = 1
             year += 1
@@ -66,6 +162,10 @@ class MapClass
             ent.sprite.removeFromParent()
         }
         
+        
+        zoneList.removeAll()
+        entList.removeAll()
+
 
         
     
