@@ -12,6 +12,7 @@
 		F49CCB4421EACCF500527926 /* MapClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4221EACCF500527926 /* MapClass.swift */; };
 		F49CCB4521EACCF500527926 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4321EACCF500527926 /* MessageClass.swift */; };
 		F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4621EACD2100527926 /* BirdClass.swift */; };
+		F49CCB4921EB99DC00527926 /* BuzzardClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4821EB99DC00527926 /* BuzzardClass.swift */; };
 		F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */; };
 		F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8420E21E17E3700B9D0A8 /* GameScene.sks */; };
 		F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421021E17E3800B9D0A8 /* Actions.sks */; };
@@ -31,6 +32,7 @@
 		F49CCB4221EACCF500527926 /* MapClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClass.swift; sourceTree = "<group>"; };
 		F49CCB4321EACCF500527926 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
 		F49CCB4621EACD2100527926 /* BirdClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirdClass.swift; sourceTree = "<group>"; };
+		F49CCB4821EB99DC00527926 /* BuzzardClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuzzardClass.swift; sourceTree = "<group>"; };
 		F4D8420921E17E3700B9D0A8 /* Serengeti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Serengeti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4D8420E21E17E3700B9D0A8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				F49CCB4621EACD2100527926 /* BirdClass.swift */,
 				F49CCB3E21EACC1F00527926 /* EntityClass.swift */,
 				F49CCB3F21EACC1F00527926 /* TestClass.swift */,
+				F49CCB4821EB99DC00527926 /* BuzzardClass.swift */,
 			);
 			path = "AI Classes";
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
 				F49CCB4421EACCF500527926 /* MapClass.swift in Sources */,
 				F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */,
+				F49CCB4921EB99DC00527926 /* BuzzardClass.swift in Sources */,
 				F49CCB4521EACCF500527926 /* MessageClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
 				F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */,

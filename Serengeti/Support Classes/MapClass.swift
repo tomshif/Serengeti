@@ -14,13 +14,14 @@ class MapClass
     var zoneList=[ZoneClass]()
     var entList=[EntityClass]()
     var birdList=[BirdClass]()
+    var buzzardList=[BuzzardClass]()
     
     public var mapBorder:CGFloat=0
     
     public var BOUNDARY:CGFloat=0   // width/height of map from origin
     
     public let TILESIZE:CGFloat=256 // width/height of each ground tile
-    public let MAPWIDTH:CGFloat=128 // this needs to match mapDims in GameScene
+    public let MAPWIDTH:CGFloat=172 // this needs to match mapDims in GameScene
     public var seed:Int32=0
     
     

@@ -44,7 +44,9 @@ class TestClass:EntityClass
         sprite.name=String(format:"entTest%04d", number)
         name=String(format:"entTest%04d", number)
         sprite.zPosition=170
-        
+        sprite.lightingBitMask=1
+        sprite.shadowedBitMask=0
+        sprite.shadowCastBitMask=0
         scene!.addChild(sprite)
         
         // Variable updates
@@ -79,7 +81,9 @@ class TestClass:EntityClass
         sprite.name=String(format:"entTest%04d", number)
         name=String(format:"entTest%04d", number)
         sprite.zPosition=170
-        
+        sprite.lightingBitMask=1
+        sprite.shadowedBitMask=0
+        sprite.shadowCastBitMask=0
         scene!.addChild(sprite)
         
         // Variable updates
@@ -181,7 +185,7 @@ class TestClass:EntityClass
             
 
             
-            if !isResting
+            if (!isResting && targetZone == nil) || (!isResting && targetZone!.type != ZoneType.RESTZONE)
             {
                 // Check to see if we're close enough to a rest zone to be resting
                 let tempZone=findZone(type: TestClass.RESTZONE)
@@ -208,6 +212,11 @@ class TestClass:EntityClass
                 } // if we find a zone
                 
             } // if we're not already resting
+            else if getDistanceToZone(zone: targetZone!) < 50
+            {
+                currentState=RESTSTATE
+                isResting=true
+            }
             
             if !isHerdLeader && !herdLeader!.isResting
             {

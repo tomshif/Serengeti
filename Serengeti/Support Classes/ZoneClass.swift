@@ -20,11 +20,11 @@ class ZoneClass
 {
     
     private var scene:SKScene?
-    internal var sprite=SKSpriteNode(imageNamed: "foodzone")
+    internal var sprite=SKSpriteNode(imageNamed: "zoneFood01")
     
     private let waterTexture=SKTexture(imageNamed: "zoneWater01")
     private let restTexture=SKTexture(imageNamed: "zoneRest01")
-    
+    private let foodTexture=SKTexture(imageNamed: "zoneFood01")
     
     internal var type:Int=0
     
@@ -41,6 +41,9 @@ class ZoneClass
         sprite.position=pos
         sprite.zPosition = 10
         sprite.name="FoodZone"
+        sprite.lightingBitMask=1
+        sprite.shadowedBitMask=0
+        sprite.shadowCastBitMask=0
         scene?.addChild(sprite)
         
         
@@ -59,6 +62,13 @@ class ZoneClass
             sprite.name="RestZone"
             sprite.setScale(random(min: 1.5, max: 4.5))
             sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            
+        case ZoneType.FOODZONE:
+            sprite.texture=foodTexture
+            sprite.name="FoodZone"
+            sprite.setScale(random(min: 1.5, max: 2.5))
+            sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            
         default:
             break
             

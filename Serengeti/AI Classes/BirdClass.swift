@@ -53,7 +53,9 @@ class BirdClass
         sprite.setScale(random(min: 0.4, max: 0.7))
         isLeader=isLdr
         sprite.zPosition=220
-        
+        sprite.lightingBitMask=1
+        sprite.shadowedBitMask=0
+        sprite.shadowCastBitMask=0
         scene!.addChild(sprite)
         followDistVar=random(min: FOLLOWDIST*0.5, max: FOLLOWDIST*5.5)
         if !isLdr && ldr != nil

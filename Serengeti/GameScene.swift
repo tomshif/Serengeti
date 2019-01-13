@@ -11,9 +11,9 @@ import GameplayKit
 
 
 // Globals //
-let mapDims:Double=128
+let mapDims:Double=172
 
-let sampleDims:Int32=128
+let sampleDims:Int32=172
 
 var map = SKSpriteNode(imageNamed: "map")
 var center = SKSpriteNode(imageNamed: "tile01")
@@ -27,14 +27,16 @@ var noiseMap=GKNoiseMap()
 var mapList=[mapTile]()
 
 let BIRDCOUNT:Int=100
+
 let ENTITYHERD:Int=0
 let SADDLECATHERD:Int=2
 let BIRDFLOCK:Int=4
 let ZEBRAHERD:Int=6
 let SPRINGBOKHERD:Int=8
 let CHEETAHHERD:Int=10
+let BUZZARDFLOCK:Int=12
 
-let ENTITYHERDSIZE:CGFloat=20
+let ENTITYHERDSIZE:CGFloat=10
 let BIRDFLOCKSIZE:Int=20
 
 var entityHerdCount:Int=0
@@ -50,11 +52,13 @@ class GameScene: SKScene {
     let loadGameState:Int=2
     let mapGenState:Int=4
     let genMapZonesState:Int=6
-    let MAXUPDATECYCLES:Int=4
+    let MAXUPDATECYCLES:Int=8
     
     let WATERZONECOUNT:Int=30
-    let RESTZONECOUNT:Int=50
-    let TESTENTITYCOUNT:Int=50
+    let RESTZONECOUNT:Int=60
+    let FOODZONECOUNT:Int=60
+    let TESTENTITYCOUNT:Int=100
+    let BUZZARDCOUNT:Int=24
     
     var mapGenDelay:Int=0
     
@@ -66,9 +70,11 @@ class GameScene: SKScene {
     var currentState:Int=0
     var waterZonesSpawned:Int=0
     var restZonesSpawned:Int=0
+    var foodZonesSpawned:Int=0
     var currentCycle:Int=0
     var testEntitiesSpawned:Int=0
     var lastLightUpdate:Int=0
+    var buzzardsSpawned:Int=0
     
     // SpriteNodes - Main Menu
     
@@ -90,7 +96,12 @@ class GameScene: SKScene {
     
     
     // SKLabels
-    let mmGenLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenSplinesLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenWaterLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenRestLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenAnimalsLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenFoodLabel=SKLabelNode(fontNamed: "Arial")
+    
     let hudTimeLabel=SKLabelNode(fontNamed: "Arial")
     let hudMsgLabel=SKLabelNode(fontNamed: "Arial")
     let hudTimeScaleLabel=SKLabelNode(fontNamed: "Arial")
@@ -118,7 +129,7 @@ class GameScene: SKScene {
         
         light.ambientColor=NSColor.black
         light.lightColor=NSColor.yellow
-        light.isEnabled=true
+        light.isEnabled=false
         light.falloff=1.5
         light.categoryBitMask=1
         light.shadowColor=NSColor.black
@@ -160,10 +171,36 @@ class GameScene: SKScene {
         mmGenerating.isHidden=true
         mmBG.addChild(mmGenerating)
         
-        mmGenLabel.zPosition=3
-        mmGenLabel.fontSize=28
-        mmGenLabel.text="Reticulating Splines"
-        mmGenerating.addChild(mmGenLabel)
+        mmGenSplinesLabel.zPosition=3
+        mmGenSplinesLabel.fontSize=22
+        mmGenSplinesLabel.position.y = mmGenerating.size.height*0.10
+        mmGenSplinesLabel.text="Reticulating Splines: 0%"
+        mmGenerating.addChild(mmGenSplinesLabel)
+        
+        mmGenWaterLabel.zPosition=3
+        mmGenWaterLabel.fontSize=22
+        mmGenWaterLabel.position.y = 0
+        mmGenWaterLabel.text="Generating Water Zones: 0%"
+        mmGenerating.addChild(mmGenWaterLabel)
+        
+        mmGenRestLabel.zPosition=3
+        mmGenRestLabel.fontSize=22
+        mmGenRestLabel.position.y = -mmGenerating.size.height*0.1
+        mmGenRestLabel.text="Generating Rest Zones: 0%"
+        mmGenerating.addChild(mmGenRestLabel)
+        
+        mmGenFoodLabel.zPosition=3
+        mmGenFoodLabel.fontSize=22
+        mmGenFoodLabel.position.y = -mmGenerating.size.height*0.2
+        mmGenFoodLabel.text="Generating Food Zones: 0%"
+        mmGenerating.addChild(mmGenFoodLabel)
+
+        
+        mmGenAnimalsLabel.zPosition=3
+        mmGenAnimalsLabel.fontSize=22
+        mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.3
+        mmGenAnimalsLabel.text="Spawning Animals: 0%"
+        mmGenerating.addChild(mmGenAnimalsLabel)
         
         hudTimeBG.position.x = -size.width/2+hudTimeBG.size.width/2
         hudTimeBG.position.y = size.height/2-hudTimeBG.size.height/2
@@ -312,6 +349,19 @@ class GameScene: SKScene {
                     myMap.msg.sendCustomMessage(message: "\(myMap.getTimeScale())x - Minimum time acceleration.")
                 }
             }
+            
+        case 37: // L
+            if currentState==inGameState
+            {
+                if light.isEnabled
+                {
+                    light.isEnabled=false
+                }
+                else
+                {
+                    light.isEnabled=true
+                }
+            }
         case 46:
             if currentState==inGameState
             {
@@ -402,7 +452,7 @@ class GameScene: SKScene {
         genMap()
         drawMap()
         currentState=genMapZonesState
-    }
+    } // func generateMap
     
     func genMapZones()
     {
@@ -411,7 +461,8 @@ class GameScene: SKScene {
             genWaterZone(theMap: myMap, theScene: self)
             waterZonesSpawned += 1
             print("Water zone #\(waterZonesSpawned)")
-            mmGenLabel.text=String(format: "Generating Water Zones: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
+            mmGenSplinesLabel.text="Reticulating splines: 100%"
+            mmGenWaterLabel.text=String(format: "Generating Water Zones: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
             
         } // if we need to spawn a water zone
         else if restZonesSpawned < RESTZONECOUNT
@@ -419,11 +470,18 @@ class GameScene: SKScene {
             genRestZone(theMap: myMap, theScene: self)
             restZonesSpawned += 1
             print("Rest Zone # \(restZonesSpawned)")
-            mmGenLabel.text=String(format: "Generating Rest Zones: %2.0f%%", (CGFloat(restZonesSpawned)/CGFloat(RESTZONECOUNT))*100)
+            mmGenRestLabel.text=String(format: "Generating Rest Zones: %2.0f%%", (CGFloat(restZonesSpawned)/CGFloat(RESTZONECOUNT))*100)
         } // if we need to spawn a rest zone
+        else if foodZonesSpawned < FOODZONECOUNT
+        {
+            genFoodZone(theMap: myMap, theScene: self)
+            foodZonesSpawned += 1
+            print("Food Zone # \(foodZonesSpawned)")
+            mmGenFoodLabel.text=String(format: "Generating Food Zones: %2.0f%%", (CGFloat(foodZonesSpawned)/CGFloat(FOODZONECOUNT))*100)
+        } // if we need to spawn a food zone
         else if testEntitiesSpawned < TESTENTITYCOUNT
         {
-            mmGenLabel.text=String(format: "Generating animals: %2.0f%%", (CGFloat(testEntitiesSpawned)/CGFloat(TESTENTITYCOUNT))*100)
+            mmGenAnimalsLabel.text=String(format: "Generating animals: %2.0f%%", (CGFloat(testEntitiesSpawned)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -431,6 +489,16 @@ class GameScene: SKScene {
             testEntitiesSpawned += 1
 
             
+        } // if we need to spawn animals
+        else if buzzardsSpawned < BUZZARDCOUNT
+        {
+            mmGenAnimalsLabel.text=String(format: "Generating animals: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(testEntitiesSpawned))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
+            let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
+            let pos = CGPoint(x: x, y: y)
+            spawnHerd(type: BUZZARDFLOCK, loc: pos)
+            buzzardsSpawned += 1
+    
         }
         else
         {
@@ -439,7 +507,7 @@ class GameScene: SKScene {
             mmBG.isHidden=true
             map.isHidden=true
             hudTimeBG.isHidden=false
-        }
+        } // if we're finished generating map
         
     } // genMapZones
     
@@ -492,7 +560,7 @@ class GameScene: SKScene {
             } // chance
         } // if we have too few birds
         
-    }
+    } // func spawnFlock
     
     func spawnHerd(type: Int, loc: CGPoint)
     {
@@ -536,6 +604,14 @@ class GameScene: SKScene {
             } // for each bird in the flock
         } // if we're spawning a bird flock
         
+        if type==BUZZARDFLOCK
+        {
+            let tempLeaderBird=BuzzardClass(theMap: myMap, theScene: self, pos: loc, isLdr: true, ldr: nil)
+            tempLeaderBird.sprite.zRotation=random(min:0, max:CGFloat.pi*2)
+            myMap.buzzardList.append(tempLeaderBird)
+            
+        }
+        
     } // func spawnHerd
 
     func checkAmbientSpawns()
@@ -550,6 +626,13 @@ class GameScene: SKScene {
             } // chance
         } // if we have too few birds
         
+        if myMap.buzzardList.count < BUZZARDCOUNT
+        {
+            spawnHerd(type: BUZZARDFLOCK, loc: CGPoint(x: random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8), y: random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)))
+            
+            
+        }
+        
     } // func checkAmbientSpawns
     
     func updateAnimals()
@@ -562,6 +645,10 @@ class GameScene: SKScene {
         for i in 0..<myMap.birdList.count
         {
             myMap.birdList[i].update(cycle: currentCycle)
+        }
+        for i in 0..<myMap.buzzardList.count
+        {
+            myMap.buzzardList[i].update(cycle: currentCycle)
         }
         
         
@@ -592,14 +679,14 @@ class GameScene: SKScene {
             hudMsgBG.run(runAction)
             //msgBG.run(SKAction.fadeOut(withDuration: 5.0))
         } // if we have unread messages
-    }
+    } // func updateHUD
     
     func adjustLighting()
     {
         if myMap.getTimeOfDay() < 300
         {
             light.ambientColor=NSColor.black
-            light.falloff=5.0
+            light.falloff=1.5
         }
         else if myMap.getTimeOfDay() < 480
         {
@@ -615,7 +702,11 @@ class GameScene: SKScene {
             //print("RGB: \(r), \(gb), \(gb)")
             light.ambientColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
             
-            light.falloff=5.0
+            light.falloff+=0.01
+            if light.falloff > 5.0
+            {
+                light.falloff = 5.0
+            }
         }
         else if myMap.getTimeOfDay() < 1200
         {
@@ -644,9 +735,9 @@ class GameScene: SKScene {
         else
         {
             light.ambientColor=NSColor.black
-            light.falloff = 2.5
+            light.falloff = 1.5
         }
-    }
+    } // func adjustLighting
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -656,7 +747,7 @@ class GameScene: SKScene {
         case inGameState:
             myMap.timePlus()
             lastLightUpdate+=1
-            if lastLightUpdate > 10
+            if lastLightUpdate > 4
             {
                 adjustLighting()
                 lastLightUpdate=0
@@ -687,7 +778,7 @@ class GameScene: SKScene {
         default:
             break
             
-        }
+        } // switch currentState
 
         
     } // update

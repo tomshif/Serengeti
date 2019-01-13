@@ -98,7 +98,7 @@ func drawMap()
         {
             ground=2
         }
-        else if value >= -0.55
+        else if value >= -0.6
         {
             ground=1
         }
@@ -210,7 +210,56 @@ func genRestZone(theMap: MapClass, theScene: SKScene)
     let tempZone=ZoneClass(zoneType: ZoneType.RESTZONE, pos: checkPoint, theScene: theScene)
     theMap.zoneList.append(tempZone)
     
-}
+} // func genRestZone
+
+func genFoodZone(theMap: MapClass, theScene: SKScene)
+{
+    let RESTZONEDISTANCE:CGFloat=8000
+    
+    var foundSpot:Bool=false
+    var checkPoint=CGPoint()
+    while !foundSpot
+    {
+        // pick a spot
+        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY),y: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY))
+        
+        // check to see if it's the right kind of terrain
+        let theNodes = theScene.nodes(at: checkPoint)
+        if theNodes.count > 0
+        {
+            for thisOne in theNodes
+            {
+                // check the terrain tile for the right terrain
+                if thisOne.name=="tile01"
+                {
+                    // Check distances to water zones
+                    for ii in 0..<theMap.zoneList.count
+                    {
+                        if theMap.zoneList[ii].type==ZoneType.RESTZONE
+                        {
+                            let dx=theMap.zoneList[ii].sprite.position.x - checkPoint.x
+                            let dy=theMap.zoneList[ii].sprite.position.y - checkPoint.y
+                            let dist = hypot(dy, dx)
+                            //print("Distance: \(dist)")
+                            
+                            if dist < RESTZONEDISTANCE
+                            {
+                                foundSpot=true
+                            } // if we're in range
+                        } // if it's a rest zone
+                    } // for each zone
+                    
+                } // if we're on the right terrain
+                
+            } // for each node
+        } // if we have nodes
+    } // while we haven't found a good spot
+    
+    let tempZone=ZoneClass(zoneType: ZoneType.FOODZONE, pos: checkPoint, theScene: theScene)
+    theMap.zoneList.append(tempZone)
+    
+} // func genFoodZone
+
 
 func genWaterZone(theMap: MapClass, theScene: SKScene)
 {

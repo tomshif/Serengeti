@@ -84,7 +84,9 @@ class EntityClass
         sprite.position=pos
         sprite.setScale(0.1)
         sprite.zPosition=160
-        
+        sprite.lightingBitMask=1
+        sprite.shadowedBitMask=0
+        sprite.shadowCastBitMask=0
         scene?.addChild(sprite)
     
         
