@@ -42,6 +42,7 @@ let BIRDFLOCKSIZE:Int=20
 
 var entityHerdCount:Int=0
 
+var treeMaster=SKSpriteNode(imageNamed: "tree01")
 
 // GameScene //
 
@@ -55,12 +56,12 @@ class GameScene: SKScene {
     let genMapZonesState:Int=6
     let MAXUPDATECYCLES:Int=8
     
-    let WATERZONECOUNT:Int=30
-    let RESTZONECOUNT:Int=60
-    let FOODZONECOUNT:Int=60
+    let WATERZONECOUNT:Int=25
+    let RESTZONECOUNT:Int=10
+    let FOODZONECOUNT:Int=50
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=4000
+    let TREECOUNT:Int=2000
     
     var mapGenDelay:Int=0
     
@@ -91,6 +92,8 @@ class GameScene: SKScene {
     let droneHUD=SKSpriteNode(imageNamed: "droneHUD")
     let hudTimeBG=SKSpriteNode(imageNamed: "hudTimeBG")
     let hudMsgBG=SKSpriteNode(imageNamed: "hudTimeBG")
+    let hudNVG=SKSpriteNode(imageNamed: "hudNightVision")
+    
     
     // ShapeNodes - In Game HUD
     let hudMapMarker=SKShapeNode(circleOfRadius: 5)
@@ -255,6 +258,10 @@ class GameScene: SKScene {
         hudMapMarker.alpha=0.75
         map.addChild(hudMapMarker)
         
+        hudNVG.isHidden=true
+        hudNVG.zPosition=5000
+        hudNVG.alpha=0.9
+        cam.addChild(hudNVG)
         
         // Temp
         map.zPosition=10000
@@ -518,7 +525,7 @@ class GameScene: SKScene {
         else if treesSpawned < TREECOUNT
         {
             drawTree(theMap: myMap, theScene: self)
-            treesSpawned+=1
+            treesSpawned+=10
             mmGenTreeLabel.text=String(format: "Tending the garden: %2.0f%%", (CGFloat(treesSpawned)/CGFloat(TREECOUNT))*100)
             
         } // if we need to spawn trees
@@ -535,7 +542,7 @@ class GameScene: SKScene {
         } // if we need to spawn animals
         else if buzzardsSpawned < BUZZARDCOUNT
         {
-            mmGenAnimalsLabel.text=String(format: "Generating animals: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(testEntitiesSpawned))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(testEntitiesSpawned))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -735,28 +742,31 @@ class GameScene: SKScene {
             {
                 hudLightMask.fillColor=NSColor(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
                 hudLightMask.alpha=0.5
+                //hudNVG.alpha=0.9
+                //hudNVG.isHidden=false
             }
             else
             {
                 hudLightMask.fillColor=NSColor.black
                 hudLightMask.alpha=0.9
+                //hudNVG.isHidden=true
             }
         }
         else if myMap.getTimeOfDay() < 480
         {
-            let lightRatio = ((myMap.getTimeOfDay()-300)/120)
+            let lightRatio = ((myMap.getTimeOfDay()-300)/180)
             let r=lightRatio
-            var gb=lightRatio*1.5
+            var gb=lightRatio-0.2
             
-            if gb > 1.0
+            if gb < 0
             {
-                gb = 1.0
+                gb = 0
             }
             //print("Ratio: \(lightRatio)")
             //print("RGB: \(r), \(gb), \(gb)")
             light.ambientColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
             hudLightMask.fillColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
-            hudLightMask.alpha=0.75-lightRatio
+            hudLightMask.alpha -= 0.001*myMap.getTimeScale()
             if hudLightMask.alpha < 0
             {
                 hudLightMask.alpha=0
@@ -779,7 +789,7 @@ class GameScene: SKScene {
             let lightRatio = ((1320-myMap.getTimeOfDay())/120)
             let b=lightRatio
             var rg=lightRatio*1.5
-            //print("Ratio: \(lightRatio)")
+            print("Ratio: \(lightRatio)")
             //print("RGB: \(rg), \(rg), \(b)")
             if rg > 1.0
             {
@@ -791,12 +801,30 @@ class GameScene: SKScene {
             {
                 light.falloff=5.0
             }
-        }
+            hudLightMask.alpha += 0.002*myMap.getTimeScale()
+            if hudLightMask.alpha > 0.9
+            {
+                hudLightMask.alpha=0.9
+                
+            }
+            hudLightMask.fillColor=NSColor(calibratedRed: rg, green: rg, blue: b, alpha: 1.0)
+        } // if between 8pm - 10pm
         else
         {
             light.ambientColor=NSColor.black
             light.falloff = 1.5
-        }
+            if nightVisionEnabled
+            {
+                hudLightMask.fillColor=NSColor(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
+                hudLightMask.alpha=0.5
+            }
+            else
+            {
+                hudLightMask.fillColor=NSColor.black
+                hudLightMask.alpha=0.9
+            }
+            
+        } // if between 10pm and midnight
     } // func adjustLighting
     
     override func update(_ currentTime: TimeInterval) {

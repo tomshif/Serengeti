@@ -91,7 +91,7 @@ class TestClass:EntityClass
         TURNRATE=0.15
         TURNFREQ=0.5
         AICycle=3
-        WANDERANGLE=CGFloat.pi/6
+        WANDERANGLE=CGFloat.pi/8
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         followDistVar=random(min: 1, max: FOLLOWDIST)
@@ -165,7 +165,7 @@ class TestClass:EntityClass
         //print("Angle: \(angleToLeader)")
         turnToAngle=angleToLeader
         isTurning = true
-        speed=MAXSPEED*0.6
+        speed=MAXSPEED*0.45
         
         
         

@@ -144,8 +144,10 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     
     
     // first pick a random spot
-    
+    for _ in 1...10
+    {
     let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9), y: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9))
+
     
     var loc=vector_int2()
     loc.x = Int32(point.x)/Int32(theMap.MAPWIDTH)
@@ -155,7 +157,6 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     let alt=biomeMap.value(at: loc)
     if alt > 0.5
     {
-        // should be tree #1 so check terrain
         let nodes=theScene.nodes(at: point)
         if nodes.count > 0
         {
@@ -192,6 +193,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                 } // if we're tile 04
             } // for each node
         } // if we have nodes
+        
     } // if the alt is > 0.5
     else if alt < -0.5
     {
@@ -233,7 +235,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
             } // for each node
         } // if we have nodes
     } // if the alt is < 0.5
-
+    } // for each of 100 trees
     
     
 } // func drawTree
