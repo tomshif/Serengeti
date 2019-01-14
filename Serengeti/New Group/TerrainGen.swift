@@ -46,7 +46,7 @@ func generateTerrainMap() -> Int32
     
     let biomeNoise = GKNoise(GKBillowNoiseSource(frequency: 0.01, octaveCount: 1, persistence: 0.1, lacunarity: 0.1, seed: seed))
     
-    let biomeMap=GKNoiseMap(biomeNoise, size: mapSize, origin: mapCenter, sampleCount: mapSamples, seamless: false)
+    biomeMap=GKNoiseMap(biomeNoise, size: mapSize, origin: mapCenter, sampleCount: mapSamples, seamless: false)
     biomeTexture=SKTexture(noiseMap: biomeMap)
     
     //waterDepth=random(min: -0.425, max: -0.2)
@@ -138,31 +138,106 @@ func drawMap()
     
 } // func drawMap
 
-func generateZones(theMap: MapClass, theScene: SKScene)
+func drawTree(theMap: MapClass, theScene: SKScene)
 {
     
     
-    let RESTZONECOUNT:Int=100
-    let WATERZONECOUNT:Int=50
-
-
     
-    // First generate water zones
-    for i in 0..<WATERZONECOUNT
+    // first pick a random spot
+    
+    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9), y: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9))
+    
+    var loc=vector_int2()
+    loc.x = Int32(point.x)/Int32(theMap.MAPWIDTH)
+    loc.y = Int32(point.y)/Int32(theMap.MAPWIDTH)
+    
+    // check the spot on the biome map to see what kind of tree
+    let alt=biomeMap.value(at: loc)
+    if alt > 0.5
     {
-       
-    } // for each zone to create
-    
-    print("Finished placing water zones.")
-    
-    // Next generate rest zones
-    for i in 0..<RESTZONECOUNT
+        // should be tree #1 so check terrain
+        let nodes=theScene.nodes(at: point)
+        if nodes.count > 0
+        {
+            for thisOne in nodes
+            {
+                if thisOne.name=="tile01"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree01")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                } // if we're on tile01
+                else if thisOne.name=="tile02"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree02")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                    
+                } // if we're on tile 02
+                else if thisOne.name=="tile04"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree04")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                    
+                } // if we're tile 04
+            } // for each node
+        } // if we have nodes
+    } // if the alt is > 0.5
+    else if alt < -0.5
     {
+        // should be tree #1 so check terrain
+        let nodes=theScene.nodes(at: point)
+        if nodes.count > 0
+        {
+            for thisOne in nodes
+            {
+                if thisOne.name=="tile01"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree01")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                } // if we're on tile01
+                else if thisOne.name=="tile02"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree02")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                    
+                } // if we're on tile 02
+                else if thisOne.name=="tile04"
+                {
+                    let tempTree=SKSpriteNode(imageNamed: "tree04")
+                    tempTree.setScale(random(min: 0.5, max: 1.2))
+                    tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    tempTree.zPosition=101
+                    tempTree.position=point
+                    theScene.addChild(tempTree)
+                    
+                } // if we're tile 04
+            } // for each node
+        } // if we have nodes
+    } // if the alt is < 0.5
 
-    } // for each rest zone to create
     
-    print("Finished generating zones.")
-} // func generateZones
+    
+} // func drawTree
+
 
 func genRestZone(theMap: MapClass, theScene: SKScene)
 {

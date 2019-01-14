@@ -29,7 +29,7 @@ class MapClass
     var msg=MessageClass()
     
     
-    private var timeOfDay:CGFloat=300 // time of day in minutes past midnight -- 300 = 5:00am
+    private var timeOfDay:CGFloat=240 // time of day in minutes past midnight -- 300 = 5:00am
     
     private let TIMEINT:CGFloat = 0.033333
     // TIMEINT equals the amount of game seconds advanced PER FRAME

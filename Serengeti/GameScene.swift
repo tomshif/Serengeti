@@ -23,6 +23,7 @@ var biomeTexture = SKTexture()
 var mapTexture=SKTexture()
 
 var noiseMap=GKNoiseMap()
+var biomeMap=GKNoiseMap()
 
 var mapList=[mapTile]()
 
@@ -59,6 +60,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=60
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
+    let TREECOUNT:Int=4000
     
     var mapGenDelay:Int=0
     
@@ -75,6 +77,7 @@ class GameScene: SKScene {
     var testEntitiesSpawned:Int=0
     var lastLightUpdate:Int=0
     var buzzardsSpawned:Int=0
+    var treesSpawned:Int=0
     
     // SpriteNodes - Main Menu
     
@@ -91,7 +94,7 @@ class GameScene: SKScene {
     
     // ShapeNodes - In Game HUD
     let hudMapMarker=SKShapeNode(circleOfRadius: 5)
-    
+    var hudLightMask=SKShapeNode()
     var light=SKLightNode()
     
     
@@ -101,6 +104,7 @@ class GameScene: SKScene {
     let mmGenRestLabel=SKLabelNode(fontNamed: "Arial")
     let mmGenAnimalsLabel=SKLabelNode(fontNamed: "Arial")
     let mmGenFoodLabel=SKLabelNode(fontNamed: "Arial")
+    let mmGenTreeLabel=SKLabelNode(fontNamed: "Arial")
     
     let hudTimeLabel=SKLabelNode(fontNamed: "Arial")
     let hudMsgLabel=SKLabelNode(fontNamed: "Arial")
@@ -115,6 +119,7 @@ class GameScene: SKScene {
     var downPressed:Bool=false
     var zoomOutPressed:Bool=false
     var zoomInPressed:Bool=false
+    var nightVisionEnabled:Bool=true
     
     // Camera
     var cam=SKCameraNode()
@@ -136,8 +141,19 @@ class GameScene: SKScene {
         light.name="playerLight"
         droneHUD.addChild(light)
         
+
         self.camera=cam
         addChild(cam)
+        
+        let hudLightMaskRect=CGRect(x: -size.width/2, y: -size.height/2, width: size.width, height: size.height)
+        hudLightMask=SKShapeNode(rect: hudLightMaskRect)
+        hudLightMask.fillColor=NSColor.init(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
+        hudLightMask.strokeColor=NSColor.systemGreen
+        hudLightMask.alpha=0.5
+        hudLightMask.isHidden=true
+        
+        hudLightMask.zPosition=4999
+        cam.addChild(hudLightMask)
         
         center.zPosition = -100
         addChild(center)
@@ -180,26 +196,31 @@ class GameScene: SKScene {
         mmGenWaterLabel.zPosition=3
         mmGenWaterLabel.fontSize=22
         mmGenWaterLabel.position.y = 0
-        mmGenWaterLabel.text="Generating Water Zones: 0%"
+        mmGenWaterLabel.text="Hitting the hot tub: 0%"
         mmGenerating.addChild(mmGenWaterLabel)
         
         mmGenRestLabel.zPosition=3
         mmGenRestLabel.fontSize=22
         mmGenRestLabel.position.y = -mmGenerating.size.height*0.1
-        mmGenRestLabel.text="Generating Rest Zones: 0%"
+        mmGenRestLabel.text="Taking a nap: 0%"
         mmGenerating.addChild(mmGenRestLabel)
         
         mmGenFoodLabel.zPosition=3
         mmGenFoodLabel.fontSize=22
         mmGenFoodLabel.position.y = -mmGenerating.size.height*0.2
-        mmGenFoodLabel.text="Generating Food Zones: 0%"
+        mmGenFoodLabel.text="Cooking dinner: 0%"
         mmGenerating.addChild(mmGenFoodLabel)
 
+        mmGenTreeLabel.zPosition=3
+        mmGenTreeLabel.fontSize=22
+        mmGenTreeLabel.position.y = -mmGenerating.size.height*0.3
+        mmGenTreeLabel.text="Tending the garden: 0%"
+        mmGenerating.addChild(mmGenTreeLabel)
         
         mmGenAnimalsLabel.zPosition=3
         mmGenAnimalsLabel.fontSize=22
-        mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.3
-        mmGenAnimalsLabel.text="Spawning Animals: 0%"
+        mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.4
+        mmGenAnimalsLabel.text="Rescuing pit bulls: 0%"
         mmGenerating.addChild(mmGenAnimalsLabel)
         
         hudTimeBG.position.x = -size.width/2+hudTimeBG.size.width/2
@@ -230,13 +251,13 @@ class GameScene: SKScene {
         hudMsgLabel.zPosition=5001
         hudMsgBG.addChild(hudMsgLabel)
         
-        hudMapMarker.zPosition=101
+        hudMapMarker.zPosition=10001
         hudMapMarker.alpha=0.75
         map.addChild(hudMapMarker)
         
         
         // Temp
-        map.zPosition=100
+        map.zPosition=10000
         map.isHidden=true
         map.name="map"
         map.position.x = size.width/2-map.size.width/2
@@ -356,10 +377,25 @@ class GameScene: SKScene {
                 if light.isEnabled
                 {
                     light.isEnabled=false
+                    hudLightMask.isHidden=false
                 }
                 else
                 {
                     light.isEnabled=true
+                    hudLightMask.isHidden=true
+                }
+            }
+            
+        case 45: // N
+            if currentState==inGameState
+            {
+                if nightVisionEnabled
+                {
+                    nightVisionEnabled=false
+                }
+                else
+                {
+                    nightVisionEnabled=true
                 }
             }
         case 46:
@@ -462,7 +498,7 @@ class GameScene: SKScene {
             waterZonesSpawned += 1
             print("Water zone #\(waterZonesSpawned)")
             mmGenSplinesLabel.text="Reticulating splines: 100%"
-            mmGenWaterLabel.text=String(format: "Generating Water Zones: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
+            mmGenWaterLabel.text=String(format: "Hitting the hot tub: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
             
         } // if we need to spawn a water zone
         else if restZonesSpawned < RESTZONECOUNT
@@ -470,18 +506,25 @@ class GameScene: SKScene {
             genRestZone(theMap: myMap, theScene: self)
             restZonesSpawned += 1
             print("Rest Zone # \(restZonesSpawned)")
-            mmGenRestLabel.text=String(format: "Generating Rest Zones: %2.0f%%", (CGFloat(restZonesSpawned)/CGFloat(RESTZONECOUNT))*100)
+            mmGenRestLabel.text=String(format: "Taking a nap: %2.0f%%", (CGFloat(restZonesSpawned)/CGFloat(RESTZONECOUNT))*100)
         } // if we need to spawn a rest zone
         else if foodZonesSpawned < FOODZONECOUNT
         {
             genFoodZone(theMap: myMap, theScene: self)
             foodZonesSpawned += 1
             print("Food Zone # \(foodZonesSpawned)")
-            mmGenFoodLabel.text=String(format: "Generating Food Zones: %2.0f%%", (CGFloat(foodZonesSpawned)/CGFloat(FOODZONECOUNT))*100)
+            mmGenFoodLabel.text=String(format: "Cooking dinner: %2.0f%%", (CGFloat(foodZonesSpawned)/CGFloat(FOODZONECOUNT))*100)
         } // if we need to spawn a food zone
+        else if treesSpawned < TREECOUNT
+        {
+            drawTree(theMap: myMap, theScene: self)
+            treesSpawned+=1
+            mmGenTreeLabel.text=String(format: "Tending the garden: %2.0f%%", (CGFloat(treesSpawned)/CGFloat(TREECOUNT))*100)
+            
+        } // if we need to spawn trees
         else if testEntitiesSpawned < TESTENTITYCOUNT
         {
-            mmGenAnimalsLabel.text=String(format: "Generating animals: %2.0f%%", (CGFloat(testEntitiesSpawned)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(testEntitiesSpawned)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -499,7 +542,7 @@ class GameScene: SKScene {
             spawnHerd(type: BUZZARDFLOCK, loc: pos)
             buzzardsSpawned += 1
     
-        }
+        } // if we need to spawn buzzards
         else
         {
             currentState=inGameState
@@ -507,6 +550,7 @@ class GameScene: SKScene {
             mmBG.isHidden=true
             map.isHidden=true
             hudTimeBG.isHidden=false
+            hudLightMask.isHidden=false
         } // if we're finished generating map
         
     } // genMapZones
@@ -687,6 +731,16 @@ class GameScene: SKScene {
         {
             light.ambientColor=NSColor.black
             light.falloff=1.5
+            if nightVisionEnabled
+            {
+                hudLightMask.fillColor=NSColor(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
+                hudLightMask.alpha=0.5
+            }
+            else
+            {
+                hudLightMask.fillColor=NSColor.black
+                hudLightMask.alpha=0.9
+            }
         }
         else if myMap.getTimeOfDay() < 480
         {
@@ -701,7 +755,12 @@ class GameScene: SKScene {
             //print("Ratio: \(lightRatio)")
             //print("RGB: \(r), \(gb), \(gb)")
             light.ambientColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
-            
+            hudLightMask.fillColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
+            hudLightMask.alpha=0.75-lightRatio
+            if hudLightMask.alpha < 0
+            {
+                hudLightMask.alpha=0
+            }
             light.falloff+=0.01
             if light.falloff > 5.0
             {
@@ -711,6 +770,7 @@ class GameScene: SKScene {
         else if myMap.getTimeOfDay() < 1200
         {
             light.ambientColor=NSColor.white
+            hudLightMask.alpha=0
             light.falloff=5.0
             
         }
