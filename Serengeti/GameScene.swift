@@ -61,7 +61,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=50
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=2000
+    let TREECOUNT:Int=20000
     
     var mapGenDelay:Int=0
     
