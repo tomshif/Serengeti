@@ -61,7 +61,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=50
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=20000
+    let TREECOUNT:Int=1000
     
     var mapGenDelay:Int=0
     
@@ -82,11 +82,13 @@ class GameScene: SKScene {
     
     // SpriteNodes - Main Menu
     
-    let mmBG=SKSpriteNode(imageNamed: "mainmenuBG")
+    let mmBG=SKSpriteNode(imageNamed: "mmBGMockup")
     let mmPlayButton=SKSpriteNode(imageNamed: "playButton")
     let mmLoadButton=SKSpriteNode(imageNamed: "loadButton")
+    let mmHowButton=SKSpriteNode(imageNamed: "loadButton")
     let mmLogo=SKSpriteNode(imageNamed: "mmLogo")
     let mmGenerating=SKSpriteNode(imageNamed: "mmGeneratingMap")
+    let mmHowPlay=SKSpriteNode(imageNamed: "mmHowToPlay")
     
     // SpriteNodes - In Game HUD
     let droneHUD=SKSpriteNode(imageNamed: "droneHUD")
@@ -167,17 +169,31 @@ class GameScene: SKScene {
         mmBG.zPosition=0
         addChild(mmBG)
         
-        mmPlayButton.position.x = -size.width*0.25
+        mmPlayButton.position.x = size.width*0.3
+        mmPlayButton.position.y = size.height*0.1
         mmPlayButton.name="mmPlayButton"
         mmPlayButton.zPosition=1
+        mmPlayButton.alpha=0.00001
         mmBG.addChild(mmPlayButton)
         
-        mmLoadButton.position.x = -size.width*0.25
-        mmLoadButton.position.y = -size.height*0.15
+        mmLoadButton.position.x = size.width*0.3
+        mmLoadButton.position.y = -size.height*0.05
         mmLoadButton.zPosition=1
         mmLoadButton.name="mmLoadButton"
+        mmLoadButton.alpha=0.00001
         mmBG.addChild(mmLoadButton)
         
+        mmHowButton.position.x = size.width*0.3
+        mmHowButton.position.y = -size.height*0.15
+        mmHowButton.zPosition=1
+        mmHowButton.name="mmHowButton"
+        mmHowButton.alpha=0.00001
+        mmBG.addChild(mmHowButton)
+        
+        mmHowPlay.zPosition=3
+        mmHowPlay.isHidden=true
+        mmHowPlay.name="mmHowToPlay"
+        mmBG.addChild(mmHowPlay)
         
         
         mmLogo.zPosition=1
@@ -290,13 +306,32 @@ class GameScene: SKScene {
             {
                 if thisNode.name=="mmPlayButton"
                 {
-                    mmGenerating.isHidden=false
-                    changeState(to: mapGenState)
-                    //myMap.seed=generateTerrainMap()
-                    
-                    map.isHidden=true
-                    
+                    if mmHowPlay.isHidden
+                    {
+                        mmGenerating.isHidden=false
+                        changeState(to: mapGenState)
+                        //myMap.seed=generateTerrainMap()
+                        
+                        map.isHidden=true
+                    }
                 } // if play button
+                
+                if thisNode.name=="mmHowButton"
+                {
+                    if mmHowPlay.isHidden
+                    {
+                        mmHowPlay.isHidden=false
+                    }
+                    else
+                    {
+                        mmHowPlay.isHidden=true
+                    }
+                } // if it's the how to play button
+                
+                if thisNode.name=="mmHowToPlay"
+                {
+                    mmHowPlay.isHidden=true
+                } // if it's the how to play pop up
             } // for each node
             
         } // if we're at the main menu

@@ -165,7 +165,7 @@ class TestClass:EntityClass
         //print("Angle: \(angleToLeader)")
         turnToAngle=angleToLeader
         isTurning = true
-        speed=MAXSPEED*0.45
+        speed=herdLeader!.speed*1.05
         
         
         
