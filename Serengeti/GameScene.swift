@@ -59,13 +59,19 @@ class GameScene: SKScene {
     let WATERZONECOUNT:Int=25
     let RESTZONECOUNT:Int=10
     let FOODZONECOUNT:Int=50
-    let TESTENTITYCOUNT:Int=100
+    let TESTENTITYCOUNT:Int=250
     let BUZZARDCOUNT:Int=24
     let TREECOUNT:Int=1000
     
+    let PARKINFOUPDATEFREQ:Double=2.0
+    
     var mapGenDelay:Int=0
     
-    
+    let MAXZOOM:CGFloat=0.5
+    let MINZOOM:CGFloat=2.5
+    let DRONEPOWER:CGFloat=0.3
+    let DRONEMAXSPEED:CGFloat=30.0
+    let DRONEINERTIA:CGFloat=0.025
     
     var myMap=MapClass()
     
@@ -91,10 +97,13 @@ class GameScene: SKScene {
     let mmHowPlay=SKSpriteNode(imageNamed: "mmHowToPlay")
     
     // SpriteNodes - In Game HUD
-    let droneHUD=SKSpriteNode(imageNamed: "droneHUD")
-    let hudTimeBG=SKSpriteNode(imageNamed: "hudTimeBG")
+    let droneHUD=SKSpriteNode(imageNamed: "hudReticleOverlay")
+    let hudTimeBG=SKSpriteNode(imageNamed: "hudTimeFrame")
     let hudMsgBG=SKSpriteNode(imageNamed: "hudTimeBG")
     let hudNVG=SKSpriteNode(imageNamed: "hudNightVision")
+    let hudAltArrow=SKSpriteNode(imageNamed: "hudAltArrow")
+    let hudParkInfo=SKSpriteNode(imageNamed: "hudParkInfo")
+    
     
     
     // ShapeNodes - In Game HUD
@@ -114,6 +123,14 @@ class GameScene: SKScene {
     let hudTimeLabel=SKLabelNode(fontNamed: "Arial")
     let hudMsgLabel=SKLabelNode(fontNamed: "Arial")
     let hudTimeScaleLabel=SKLabelNode(fontNamed: "Arial")
+    let hudAltitudeLabel=SKLabelNode(fontNamed: "Arial")
+    let hudCoordLabel=SKLabelNode(fontNamed: "Arial")
+    let hudSpeedLabel=SKLabelNode(fontNamed: "Arial")
+    let hudPITotalAnimals=SKLabelNode(fontNamed: "Arial")
+    let hudPICheetah=SKLabelNode(fontNamed: "Arial")
+    let hudPISpringbok=SKLabelNode(fontNamed: "Arial")
+    let hudPIWarthog=SKLabelNode(fontNamed: "Arial")
+    let hudPIZebra=SKLabelNode(fontNamed: "Arial")
     
     
     
@@ -125,9 +142,19 @@ class GameScene: SKScene {
     var zoomOutPressed:Bool=false
     var zoomInPressed:Bool=false
     var nightVisionEnabled:Bool=true
+    var showParkInfo:Bool=false
+    
     
     // Camera
     var cam=SKCameraNode()
+    
+    // Vectors
+    var droneVec=CGVector(dx: 0, dy: 0)
+    
+    // NSDates
+    var lastParkInfoUpdate=NSDate()
+    
+    // Others
     
     
 
@@ -145,8 +172,8 @@ class GameScene: SKScene {
         light.shadowColor=NSColor.black
         light.name="playerLight"
         droneHUD.addChild(light)
+        myMap.info.map=myMap
         
-
         self.camera=cam
         addChild(cam)
         
@@ -242,21 +269,22 @@ class GameScene: SKScene {
         mmGenAnimalsLabel.text="Rescuing pit bulls: 0%"
         mmGenerating.addChild(mmGenAnimalsLabel)
         
-        hudTimeBG.position.x = -size.width/2+hudTimeBG.size.width/2
+        hudTimeBG.position.x = 0
         hudTimeBG.position.y = size.height/2-hudTimeBG.size.height/2
         hudTimeBG.isHidden=true
         hudTimeBG.zPosition=5000
         cam.addChild(hudTimeBG)
         
         hudTimeLabel.text="Time"
-        hudTimeLabel.fontSize=20
+        hudTimeLabel.fontSize=16
         hudTimeLabel.zPosition=5001
+        hudTimeLabel.position.y=hudTimeBG.size.height*0.35
         hudTimeBG.addChild(hudTimeLabel)
         
         hudTimeScaleLabel.text="TimeScale"
-        hudTimeScaleLabel.fontSize=20
+        hudTimeScaleLabel.fontSize=16
         hudTimeScaleLabel.zPosition=5001
-        hudTimeScaleLabel.position.y = -hudTimeBG.size.height*0.2
+        hudTimeScaleLabel.position.y = hudTimeBG.size.height*0.2
         hudTimeBG.addChild(hudTimeScaleLabel)
         
         hudMsgBG.position.x = -size.width/2+hudTimeBG.size.width/2
@@ -295,6 +323,78 @@ class GameScene: SKScene {
         droneHUD.name="droneHUD"
         cam.addChild(droneHUD)
         
+        hudAltArrow.zPosition=10000
+        hudAltArrow.alpha=0.7
+        hudAltArrow.name="hudAltArrow"
+        droneHUD.addChild(hudAltArrow)
+        hudAltArrow.position.x = -droneHUD.size.width*1.25
+        
+        hudAltitudeLabel.zPosition=10000
+        hudAltitudeLabel.name="hudAltLabel"
+        hudAltitudeLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
+        hudAltitudeLabel.text="Altitude: 200m"
+        droneHUD.addChild(hudAltitudeLabel)
+        hudAltitudeLabel.position.x = -droneHUD.size.height*1.75
+        
+        hudCoordLabel.zPosition=10000
+        hudCoordLabel.name="hudCoordLabel"
+        hudCoordLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
+        hudCoordLabel.text="Coordinates: 32x, 34y"
+        droneHUD.addChild(hudCoordLabel)
+        hudCoordLabel.position.y = -droneHUD.size.height*1.25
+        
+        hudSpeedLabel.zPosition=10000
+        hudSpeedLabel.name="hudSpeedLabel"
+        hudSpeedLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
+        hudSpeedLabel.text="Speed"
+        droneHUD.addChild(hudSpeedLabel)
+        hudSpeedLabel.position.y = droneHUD.size.height*1.35
+        
+        hudParkInfo.isHidden=true
+        hudParkInfo.position.x = -size.width/2+hudParkInfo.size.width/2
+        hudParkInfo.zPosition=10000
+        hudParkInfo.name="hudParkInfo"
+        cam.addChild(hudParkInfo)
+        
+        hudPITotalAnimals.zPosition=10001
+        hudPITotalAnimals.name="hudPITAnimals"
+        hudPITotalAnimals.fontColor=NSColor.white
+        hudPITotalAnimals.text="Total Animals"
+        hudPITotalAnimals.fontSize=18
+        hudParkInfo.addChild(hudPITotalAnimals)
+        hudPITotalAnimals.position.y = hudParkInfo.size.height*0.35
+        
+        hudPICheetah.zPosition=10001
+        hudPICheetah.name="hudPICheetah"
+        hudPICheetah.fontColor=NSColor.white
+        hudPICheetah.text="Cheetah: "
+        hudPICheetah.fontSize=18
+        hudParkInfo.addChild(hudPICheetah)
+        hudPICheetah.position.y = hudParkInfo.size.height*0.3
+        
+        hudPISpringbok.zPosition=10001
+        hudPISpringbok.name="hudPISpringbok"
+        hudPISpringbok.fontColor=NSColor.white
+        hudPISpringbok.text="Springbok:"
+        hudPISpringbok.fontSize=18
+        hudParkInfo.addChild(hudPISpringbok)
+        hudPISpringbok.position.y = hudParkInfo.size.height*0.25
+        
+        hudPIWarthog.zPosition=10001
+        hudPIWarthog.name="hudPIWarthog"
+        hudPIWarthog.fontColor=NSColor.white
+        hudPIWarthog.text="Warthog:"
+        hudPIWarthog.fontSize=18
+        hudParkInfo.addChild(hudPIWarthog)
+        hudPIWarthog.position.y = hudParkInfo.size.height*0.20
+        
+        hudPIZebra.zPosition=10001
+        hudPIZebra.name="hudPIZebra"
+        hudPIZebra.fontColor=NSColor.white
+        hudPIZebra.text="Warthog:"
+        hudPIZebra.fontSize=18
+        hudParkInfo.addChild(hudPIZebra)
+        hudPIZebra.position.y = hudParkInfo.size.height*0.15
         
     } // didMove
     
@@ -413,6 +513,18 @@ class GameScene: SKScene {
                 }
             }
             
+        case 34: // I
+            if currentState==inGameState
+            {
+                if hudParkInfo.isHidden
+                {
+                    hudParkInfo.isHidden=false
+                }
+                else
+                {
+                    hudParkInfo.isHidden=true
+                }
+            }
         case 37: // L
             if currentState==inGameState
             {
@@ -566,11 +678,25 @@ class GameScene: SKScene {
         } // if we need to spawn trees
         else if testEntitiesSpawned < TESTENTITYCOUNT
         {
+            let type=random(min: 0, max: 1.0)
+            
             mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(testEntitiesSpawned)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
-            spawnHerd(type: ENTITYHERD, loc: pos)
+            
+            if type > 0.6
+            {
+                spawnHerd(type: ENTITYHERD, loc: pos)
+            }
+            else if type > 0.4
+            {
+                spawnHerd(type: ZEBRAHERD, loc: pos)
+            }
+            else if type > 0
+            {
+                spawnHerd(type: SPRINGBOKHERD, loc: pos)
+            }
             testEntitiesSpawned += 1
 
             
@@ -595,6 +721,8 @@ class GameScene: SKScene {
             hudLightMask.isHidden=false
         } // if we're finished generating map
         
+        myMap.info.updateCounts()
+        myMap.info.archiveCounts(year: 0)
     } // genMapZones
     
     func checkKeys()
@@ -603,33 +731,55 @@ class GameScene: SKScene {
         {
             if upPressed
             {
-                cam.position.y += 25
+                let speed=hypot(droneVec.dy, droneVec.dx)
+                if speed < DRONEMAXSPEED
+                {
+                    droneVec.dy+=DRONEPOWER
+                }
             }
             if downPressed
             {
-                cam.position.y -= 25
+                let speed=hypot(droneVec.dy, droneVec.dx)
+                if speed < DRONEMAXSPEED
+                {
+                    droneVec.dy -= DRONEPOWER
+                }
             }
             if leftPressed
             {
-                cam.position.x -= 25
+                let speed=hypot(droneVec.dy, droneVec.dx)
+                if speed < DRONEMAXSPEED
+                {
+                    droneVec.dx -= DRONEPOWER
+                }
             }
             if rightPressed
             {
-                cam.position.x += 25
+                let speed=hypot(droneVec.dy, droneVec.dx)
+                if speed < DRONEMAXSPEED
+                {
+                    droneVec.dx += DRONEPOWER
+                }
             }
             
             if zoomOutPressed
             {
-                let currentScale=cam.xScale
-                cam.setScale(currentScale+0.01)
-            }
+                if cam.xScale < MINZOOM
+                {
+                    let currentScale=cam.xScale
+                    cam.setScale(currentScale+0.01)
+                } // if we can zoom out
+            } // if zoom out
             
             if zoomInPressed
             {
-                let currentScale=cam.xScale
-                cam.setScale(currentScale-0.01)
+                if cam.xScale > MAXZOOM
+                {
+                    let currentScale=cam.xScale
+                    cam.setScale(currentScale-0.01)
+                } // if we can zoom in
                 
-            }
+            } // if zoom in
             
         } // if we're in game
         
@@ -674,6 +824,58 @@ class GameScene: SKScene {
             } // for each member of the herd
             
         } // if we're spawning EntityClass
+        
+        if type==ZEBRAHERD
+        {
+
+            let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
+            //let herdsize=1
+            let tempLeader=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            print(tempLeader.name)
+            
+            tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            myMap.entList.append(tempLeader)
+            entityHerdCount+=1
+            
+            for _ in 1...herdsize
+            {
+                
+                let tempEnt=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                print(tempEnt.name)
+                
+                tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+                myMap.entList.append(tempEnt)
+                entityHerdCount+=1
+                
+            } // for each member of the herd
+            
+        } // if we're spawning zebras
+        
+        if type==SPRINGBOKHERD
+        {
+            
+            let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
+            //let herdsize=1
+            let tempLeader=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            print(tempLeader.name)
+            
+            tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            myMap.entList.append(tempLeader)
+            entityHerdCount+=1
+            
+            for _ in 1...herdsize
+            {
+                
+                let tempEnt=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                print(tempEnt.name)
+                
+                tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+                myMap.entList.append(tempEnt)
+                entityHerdCount+=1
+                
+            } // for each member of the herd
+            
+        } // if we're spawning springbok
         
         if type==BIRDFLOCK
         {
@@ -743,6 +945,22 @@ class GameScene: SKScene {
     
     func updateHUD()
     {
+        
+        // first update the drone
+        if !leftPressed && !rightPressed
+        {
+            droneVec.dx*=(1-DRONEINERTIA)
+
+        } // don't apply inertia if we're accelerating on that axis
+        
+        if !upPressed && !downPressed
+        {
+            droneVec.dy*=(1-DRONEINERTIA)
+        } // don't apply inertia if we're accelerating on that axis
+        cam.position.x+=droneVec.dx
+        cam.position.y+=droneVec.dy
+        
+        
         hudTimeLabel.text=myMap.getTimeAsString()
         hudTimeScaleLabel.text = "\(myMap.getTimeScale())x"
         
@@ -752,6 +970,39 @@ class GameScene: SKScene {
         hudMapMarker.position.x = dx*map.size.width/2
         hudMapMarker.position.y = -dy*map.size.height/2
         
+        // update altitude
+        let ratio=(cam.xScale-0.5)/2.0
+
+        let altArrowRatio=ratio-0.5
+        hudAltArrow.position.y=altArrowRatio*droneHUD.size.height*1.5
+        let alt=ratio*198+51
+        hudAltitudeLabel.text=String(format:"%2.0f m",alt)
+        hudAltitudeLabel.position.y = altArrowRatio*droneHUD.size.height*1.5 - hudAltitudeLabel.fontSize/2
+        
+        let piDelta = -lastParkInfoUpdate.timeIntervalSinceNow
+        if !hudParkInfo.isHidden && piDelta > PARKINFOUPDATEFREQ
+        {
+            myMap.info.updateCounts()
+
+            lastParkInfoUpdate=NSDate()
+            
+        }
+        
+
+        
+        hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
+        hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChange()) )"
+        hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChange()) )"
+        hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChange()) )"
+        hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChange()) )"
+        // update coords
+        let coordX=dx*myMap.MAPWIDTH
+        let coordY=dy*myMap.MAPWIDTH
+        hudCoordLabel.text=String(format: "X:%3.0f, Y:%3.0f",coordX,coordY)
+        
+        // update speed
+        let speed=hypot(droneVec.dy, droneVec.dx)
+        hudSpeedLabel.text=String(format: "Speed: %2.1f",speed)
         
         //print("Map Marker X: \(dx)")
         
@@ -812,25 +1063,33 @@ class GameScene: SKScene {
                 light.falloff = 5.0
             }
         }
-        else if myMap.getTimeOfDay() < 1200
+        else if myMap.getTimeOfDay() < 1200 // 8pm
         {
             light.ambientColor=NSColor.white
             hudLightMask.alpha=0
             light.falloff=5.0
             
         }
-        else if myMap.getTimeOfDay() < 1320
+        else if myMap.getTimeOfDay() < 1320 // 10pm
         {
-            let lightRatio = ((1320-myMap.getTimeOfDay())/120)
-            let b=lightRatio
-            var rg=lightRatio*1.5
+            let lightRatio = ((1260-myMap.getTimeOfDay())/60)
+            var b=lightRatio-0.5
+            var rg=lightRatio
             print("Ratio: \(lightRatio)")
             //print("RGB: \(rg), \(rg), \(b)")
             if rg > 1.0
             {
                 rg = 1.0
             }
-            light.ambientColor=NSColor(calibratedRed: rg, green: rg, blue: b, alpha: 1.0)
+            if b < 0
+            {
+                b=0
+            }
+            if rg < 0
+            {
+                rg=0
+            }
+            light.ambientColor=NSColor(calibratedRed: rg, green: b, blue: b, alpha: 1.0)
             light.falloff -= 0.01
             if light.falloff < 2.5
             {
@@ -870,7 +1129,7 @@ class GameScene: SKScene {
         case inGameState:
             myMap.timePlus()
             lastLightUpdate+=1
-            if lastLightUpdate > 4
+            if lastLightUpdate > 5
             {
                 adjustLighting()
                 lastLightUpdate=0

@@ -38,11 +38,11 @@ class TestClass:EntityClass
         scene=theScene
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "entity")
+        sprite=SKSpriteNode(imageNamed: "warthogArrow")
         sprite.position=pos
         
-        sprite.name=String(format:"entTest%04d", number)
-        name=String(format:"entTest%04d", number)
+        sprite.name=String(format:"entWarthog%04d", number)
+        name=String(format:"entWarthog%04d", number)
         sprite.zPosition=170
         sprite.lightingBitMask=1
         sprite.shadowedBitMask=0
@@ -75,11 +75,11 @@ class TestClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "entity")
+        sprite=SKSpriteNode(imageNamed: "warthogArrow")
         sprite.position=pos
         
-        sprite.name=String(format:"entTest%04d", number)
-        name=String(format:"entTest%04d", number)
+        sprite.name=String(format:"entWarthog%04d", number)
+        name=String(format:"entWarthog%04d", number)
         sprite.zPosition=170
         sprite.lightingBitMask=1
         sprite.shadowedBitMask=0
@@ -94,7 +94,7 @@ class TestClass:EntityClass
         WANDERANGLE=CGFloat.pi/8
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
-        followDistVar=random(min: 1, max: FOLLOWDIST)
+        followDistVar=random(min: -FOLLOWDIST*0.5, max: FOLLOWDIST*1.5)
         herdLeader=ldr
         isHerdLeader=false
         

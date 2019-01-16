@@ -229,6 +229,15 @@ class EntityClass
         
     } // getDistToEntity
     
+    
+    public func getAngleToEntity(ent: EntityClass) -> CGFloat
+    {
+        let dx=ent.sprite.position.x-sprite.position.x
+        let dy=ent.sprite.position.y-sprite.position.y
+        let angle=atan2(dy, dx)
+        return angle
+    }
+    
     public func changeMode(mode: Int, loc: CGPoint)
     {
         currentState=mode

@@ -16,6 +16,7 @@ class MapClass
     var birdList=[BirdClass]()
     var buzzardList=[BuzzardClass]()
     
+    
     public var mapBorder:CGFloat=0
     
     public var BOUNDARY:CGFloat=0   // width/height of map from origin
@@ -27,9 +28,9 @@ class MapClass
     
     
     var msg=MessageClass()
+    var info=InfoClass()
     
-    
-    private var timeOfDay:CGFloat=240 // time of day in minutes past midnight -- 300 = 5:00am
+    private var timeOfDay:CGFloat = 310 // time of day in minutes past midnight -- 300 = 5:00am
     
     private let TIMEINT:CGFloat = 0.033333
     // TIMEINT equals the amount of game seconds advanced PER FRAME
@@ -42,7 +43,7 @@ class MapClass
     private var timeScale:CGFloat=1.0 // for time acceleration
     private var day:Int=1 // days 1-3 of each year are wet season, days 4-6 are dry season
     private var year:Int=1 
-    private let MAXTIMESCALE:CGFloat=32
+    private let MAXTIMESCALE:CGFloat=128
     
     init()
     {
@@ -146,6 +147,7 @@ class MapClass
         if day > 6
         {
             day = 1
+            info.archiveCounts(year: year)
             year += 1
         } // if it's a new year
     } // func timePlus
