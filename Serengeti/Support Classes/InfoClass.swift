@@ -16,7 +16,16 @@ class InfoClass
     var numSpringbok:Int=0
     var numWarthog:Int=0
     var numZebra:Int=0
-
+    
+    var numCheetahBirths:Int=0
+    var numCheetahDeaths:Int=0
+    var numSpringbokBirths:Int=0
+    var numSpringbokDeaths:Int=0
+    var numWarthogBirths:Int=0
+    var numWarthogDeaths:Int=0
+    var numZebraBirths:Int=0
+    var numZebraDeaths:Int=0
+    
     var archive=[ArchiveClass]()
     
     var map:MapClass?
