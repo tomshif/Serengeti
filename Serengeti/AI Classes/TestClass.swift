@@ -195,7 +195,7 @@ class TestClass:EntityClass
             if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
             {
                 let babyChance=random(min: 0.0, max: 1.0)
-                if babyChance > 0.999775
+                if babyChance > 0.999875
                 {
                     // Hurray! We're having a baby!
                     let babyNumber=Int(random(min: 2, max: 5.999999))
@@ -281,7 +281,7 @@ class TestClass:EntityClass
             angleToLeader += CGFloat.pi*2
         }
         
-        //print("Angle: \(angleToLeader)")
+        
         turnToAngle=angleToLeader
         isTurning = true
         speed=herdLeader!.speed*1.05
@@ -448,7 +448,7 @@ class TestClass:EntityClass
                     
                     if ldrDist > FOLLOWDIST+followDistVar
                     {
-                        //print("Distance to leader: \(ldrDist)")
+                        
                         pursue()
                         
                     } // if we're out of range

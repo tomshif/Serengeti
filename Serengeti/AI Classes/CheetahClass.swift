@@ -40,7 +40,6 @@ class CheetahClass:EntityClass
         // sprite update
         sprite=SKSpriteNode(imageNamed: "cheetahArrow")
         sprite.position=pos
-        sprite.name="cheetah"
         sprite.name=String(format:"entCheetah%04d", number)
         name=String(format:"entCheetah%04d", number)
         sprite.zPosition=120
@@ -86,7 +85,6 @@ class CheetahClass:EntityClass
         // sprite update
         sprite=SKSpriteNode(imageNamed: "cheetahArrow")
         sprite.position=pos
-        sprite.name="cheetah"
         sprite.name=String(format:"entCheetah%04d", number)
         name=String(format:"entCheetah%04d", number)
         sprite.zPosition=120

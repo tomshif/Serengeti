@@ -71,7 +71,7 @@ class InfoClass
             {
                 numWarthog+=1
             }
-            else if crit.name.contains("Cheeteah")
+            else if crit.name.contains("Cheetah")
             {
                 numCheetah += 1
             }
@@ -128,7 +128,6 @@ class InfoClass
     {
         if archive.count > 0
         {
-            print("Archive Hogs: \(archive.last!.getWarthogCount())")
             
             return numWarthog - archive.last!.getWarthogCount()
         }

@@ -81,7 +81,7 @@ class GameScene: SKScene {
     var restZonesSpawned:Int=0
     var foodZonesSpawned:Int=0
     var currentCycle:Int=0
-    var testEntitiesSpawned:Int=0
+    var entityHerdSpawns:Int=0
     var lastLightUpdate:Int=0
     var buzzardsSpawned:Int=0
     var treesSpawned:Int=0
@@ -663,7 +663,7 @@ class GameScene: SKScene {
         {
             genWaterZone(theMap: myMap, theScene: self)
             waterZonesSpawned += 1
-            print("Water zone #\(waterZonesSpawned)")
+            
             mmGenSplinesLabel.text="Reticulating splines: 100%"
             mmGenWaterLabel.text=String(format: "Hitting the hot tub: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
             
@@ -672,14 +672,14 @@ class GameScene: SKScene {
         {
             genRestZone(theMap: myMap, theScene: self)
             restZonesSpawned += 1
-            print("Rest Zone # \(restZonesSpawned)")
+            
             mmGenRestLabel.text=String(format: "Taking a nap: %2.0f%%", (CGFloat(restZonesSpawned)/CGFloat(RESTZONECOUNT))*100)
         } // if we need to spawn a rest zone
         else if foodZonesSpawned < FOODZONECOUNT
         {
             genFoodZone(theMap: myMap, theScene: self)
             foodZonesSpawned += 1
-            print("Food Zone # \(foodZonesSpawned)")
+            
             mmGenFoodLabel.text=String(format: "Cooking dinner: %2.0f%%", (CGFloat(foodZonesSpawned)/CGFloat(FOODZONECOUNT))*100)
         } // if we need to spawn a food zone
         else if treesSpawned < TREECOUNT
@@ -689,11 +689,11 @@ class GameScene: SKScene {
             mmGenTreeLabel.text=String(format: "Tending the garden: %2.0f%%", (CGFloat(treesSpawned)/CGFloat(TREECOUNT))*100)
             
         } // if we need to spawn trees
-        else if myMap.entityCounter < TESTENTITYCOUNT
+        else if entityHerdSpawns < TESTENTITYCOUNT
         {
             let type=random(min: 0, max: 1.0)
             
-            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(myMap.entityCounter)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(entityHerdSpawns)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -702,22 +702,26 @@ class GameScene: SKScene {
             {
                 spawnHerd(type: ENTITYHERD, loc: pos)
             }
-            else if type > 0.4
+            else if type > 0.45
             {
                 spawnHerd(type: ZEBRAHERD, loc: pos)
             }
-            else if type > 0
+            else if type > 0.1
             {
                 spawnHerd(type: SPRINGBOKHERD, loc: pos)
             }
+            else
+            {
+                spawnHerd(type: CHEETAHHERD, loc: pos)
+            }
             
-            myMap.entityCounter += 1
+            entityHerdSpawns += 1
 
             
         } // if we need to spawn animals
         else if buzzardsSpawned < BUZZARDCOUNT
         {
-            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(myMap.entityCounter))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(entityHerdSpawns))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -820,21 +824,21 @@ class GameScene: SKScene {
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
             let tempLeader=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount)
-            print(tempLeader.name)
+           
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
             myMap.entList.append(tempLeader)
-            entityHerdCount+=1
+            myMap.entityCounter+=1
             
             for _ in 1...herdsize
             {
                 
                 let tempEnt=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, ldr: tempLeader)
-                print(tempEnt.name)
+               
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
                 myMap.entList.append(tempEnt)
-                entityHerdCount+=1
+                myMap.entityCounter+=1
                 
             } // for each member of the herd
             
@@ -846,21 +850,21 @@ class GameScene: SKScene {
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
             let tempLeader=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
-            print(tempLeader.name)
+           
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
             myMap.entList.append(tempLeader)
-            entityHerdCount+=1
+            myMap.entityCounter+=1
             
             for _ in 1...herdsize
             {
                 
                 let tempEnt=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
-                print(tempEnt.name)
+                
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
                 myMap.entList.append(tempEnt)
-                entityHerdCount+=1
+                myMap.entityCounter+=1
                 
             } // for each member of the herd
             
@@ -872,23 +876,62 @@ class GameScene: SKScene {
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
             let tempLeader=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
-            print(tempLeader.name)
+          
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
             myMap.entList.append(tempLeader)
-            entityHerdCount+=1
+            myMap.entityCounter+=1
             
             for _ in 1...herdsize
             {
                 
                 let tempEnt=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
-                print(tempEnt.name)
+              
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
                 myMap.entList.append(tempEnt)
-                entityHerdCount+=1
+                myMap.entityCounter+=1
                 
             } // for each member of the herd
+            
+        } // if we're spawning springbok
+        
+        if type==CHEETAHHERD
+        {
+            
+
+            let tempLeader=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            
+            
+            tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+            myMap.entList.append(tempLeader)
+            myMap.entityCounter+=1
+            let chance=random(min: 0, max: 1.0)
+            if chance > 0.95
+            {
+                for _ in 1...2
+                {
+                    
+                    let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                    
+                    
+                    tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+                    myMap.entList.append(tempEnt)
+                    myMap.entityCounter+=1
+                    
+                } // for each member of the herd
+            }
+            else if chance > 0.85
+            {
+                let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                
+                
+                tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
+                myMap.entList.append(tempEnt)
+                myMap.entityCounter+=1
+                
+            }
+
             
         } // if we're spawning springbok
         
@@ -1031,7 +1074,7 @@ class GameScene: SKScene {
         let speed=hypot(droneVec.dy, droneVec.dx)
         hudSpeedLabel.text=String(format: "Speed: %2.1f",speed)
         
-        //print("Map Marker X: \(dx)")
+       
         
         
         if myMap.msg.getUnreadCount() > 0
@@ -1075,8 +1118,7 @@ class GameScene: SKScene {
             {
                 gb = 0
             }
-            //print("Ratio: \(lightRatio)")
-            //print("RGB: \(r), \(gb), \(gb)")
+   
             light.ambientColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
             hudLightMask.fillColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
             hudLightMask.alpha -= 0.001*myMap.getTimeScale()
@@ -1102,8 +1144,8 @@ class GameScene: SKScene {
             let lightRatio = ((1260-myMap.getTimeOfDay())/60)
             var b=lightRatio-0.5
             var rg=lightRatio
-            print("Ratio: \(lightRatio)")
-            //print("RGB: \(rg), \(rg), \(b)")
+         
+           
             if rg > 1.0
             {
                 rg = 1.0
