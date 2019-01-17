@@ -1,36 +1,29 @@
 //
-//  Springbok.swift
+//  CheetahClass.swift
 //  AITestBed
 //
-//  Created by Game Design Shared on 1/9/19.
+//  Created by Game Design Shared on 1/7/19.
 //  Copyright © 2019 Liberty Game Dev. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
-
-class SpringbokClass:EntityClass
+class CheetahClass:EntityClass
 {
-    private var isPregnant:Bool=false
-    private var isFleeing:Bool=false
-    private var isCloseToCheetah:Bool=false  // is close to what?
-   
-    private var MAXHERD:Int=50
-    private var MINHERD:Int=15
-    private var MAXCHILD:Int=2
-    
-    internal var followDist:CGFloat=150
-    
-    
-    
-    
-    
-    
+    var MAXHERD:Int = 1
+    var MAXCHILD:Int = 2
+    var isPregnant:Bool = false
+    var isChasing:Bool = false
+    var lastMeal:Bool = false     // I would recommend doing this more as "var lastMeal:Int=0"
+    var isClose:Bool = false        // close to what?
+    var isTravel:Bool = false       // travel?
+    var cubs:Bool = false
+    var followDist:CGFloat = 400
     
     override init()
     {
         super.init()
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
     } // init
     
     
@@ -45,39 +38,44 @@ class SpringbokClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
         sprite.position=pos
-        sprite.name="springbokArrow"
-        sprite.name=String(format:"entSpringbok%04d", number)
-        name=String(format:"entSpringbok%04d", number)
-        sprite.zPosition=140
+        sprite.name="cheetah"
+        sprite.name=String(format:"entCheetah%04d", number)
+        name=String(format:"entCheetah%04d", number)
+        sprite.zPosition=120
         
         scene!.addChild(sprite)
         
         // Variable updates
-        MAXSPEED=2.2
+        MAXSPEED=3
         TURNRATE=0.15
-        TURNFREQ=1.0
-        WANDERANGLE=CGFloat.pi/2
+        TURNFREQ=3
         AICycle=0
-        MAXAGE=7*8640
+        MAXAGE=8*8640
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
+    
+        
         
     } // full init()
-    
     init(theScene:SKScene, theMap: MapClass, pos: CGPoint, number: Int, leader: EntityClass?)
     {
         super.init()
         
-        if leader==nil
+        MAXAGE=8*8640
+        MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
+
+        
+        if leader == nil
         {
             isHerdLeader = true
+            age=random(min: MAXAGE*0.3, max: MAXAGE*0.7)
         }
-        
         else
         {
-            herdLeader=leader
+            herdLeader = leader
+            age=random(min: 1.0, max: MAXAGE*0.1)
         }
         
         // set the passed references
@@ -86,24 +84,20 @@ class SpringbokClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
         sprite.position=pos
-        sprite.name="Springbok"
-        sprite.name=String(format:"entSpringbok%04d", number)
-        name=String(format:"entSpringbok%04d", number)
-        sprite.zPosition=140
+        sprite.name="cheetah"
+        sprite.name=String(format:"entCheetah%04d", number)
+        name=String(format:"entCheetah%04d", number)
+        sprite.zPosition=120
         
         scene!.addChild(sprite)
         
         // Variable updates
-        MAXSPEED=2.2
+        MAXSPEED=3
         TURNRATE=0.15
-        TURNFREQ=1
-        WANDERANGLE=CGFloat.pi/8
+        TURNFREQ=3
         AICycle=0
-        MAXAGE=7*8640
-        MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
-        age=random(min: 1.0, max: MAXAGE*0.7)
         
     } // full init()
     
@@ -116,12 +110,12 @@ class SpringbokClass:EntityClass
         }
         turnToAngle=angle
         isTurning=true
-        speed = herdLeader!.speed * 1.05
+        speed = MAXSPEED * 0.45
     }
     
     override func update(cycle: Int) -> Int
     {
-
+        
         
         var ret:Int = -1
         
@@ -171,10 +165,10 @@ class SpringbokClass:EntityClass
         return ret
         
     } // func update
-
-} // class SpringbokClass
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+} // CheetahClass

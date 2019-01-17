@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F47D204321EF77AD00A867A9 /* ZebraClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204221EF77AD00A867A9 /* ZebraClass.swift */; };
-		F47D204521EF77B500A867A9 /* SpringbokClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204421EF77B500A867A9 /* SpringbokClass.swift */; };
 		F47D204721EFA8E300A867A9 /* InfoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204621EFA8E300A867A9 /* InfoClass.swift */; };
 		F47D204A21EFC51200A867A9 /* ArchiveClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204921EFC51200A867A9 /* ArchiveClass.swift */; };
-		F49CCB4021EACC1F00527926 /* EntityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB3E21EACC1F00527926 /* EntityClass.swift */; };
-		F49CCB4121EACC1F00527926 /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB3F21EACC1F00527926 /* TestClass.swift */; };
+		F47D205021F11CD800A867A9 /* SpringbokClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204B21F11CD700A867A9 /* SpringbokClass.swift */; };
+		F47D205121F11CD800A867A9 /* EntityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204C21F11CD800A867A9 /* EntityClass.swift */; };
+		F47D205221F11CD800A867A9 /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204D21F11CD800A867A9 /* TestClass.swift */; };
+		F47D205321F11CD800A867A9 /* CheetahClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204E21F11CD800A867A9 /* CheetahClass.swift */; };
+		F47D205421F11CD800A867A9 /* ZebraClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204F21F11CD800A867A9 /* ZebraClass.swift */; };
 		F49CCB4421EACCF500527926 /* MapClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4221EACCF500527926 /* MapClass.swift */; };
 		F49CCB4521EACCF500527926 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4321EACCF500527926 /* MessageClass.swift */; };
 		F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4621EACD2100527926 /* BirdClass.swift */; };
@@ -31,12 +32,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F47D204221EF77AD00A867A9 /* ZebraClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZebraClass.swift; sourceTree = "<group>"; };
-		F47D204421EF77B500A867A9 /* SpringbokClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringbokClass.swift; sourceTree = "<group>"; };
 		F47D204621EFA8E300A867A9 /* InfoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoClass.swift; sourceTree = "<group>"; };
 		F47D204921EFC51200A867A9 /* ArchiveClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveClass.swift; sourceTree = "<group>"; };
-		F49CCB3E21EACC1F00527926 /* EntityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityClass.swift; sourceTree = "<group>"; };
-		F49CCB3F21EACC1F00527926 /* TestClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
+		F47D204B21F11CD700A867A9 /* SpringbokClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringbokClass.swift; sourceTree = "<group>"; };
+		F47D204C21F11CD800A867A9 /* EntityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityClass.swift; sourceTree = "<group>"; };
+		F47D204D21F11CD800A867A9 /* TestClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
+		F47D204E21F11CD800A867A9 /* CheetahClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheetahClass.swift; sourceTree = "<group>"; };
+		F47D204F21F11CD800A867A9 /* ZebraClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZebraClass.swift; sourceTree = "<group>"; };
 		F49CCB4221EACCF500527926 /* MapClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClass.swift; sourceTree = "<group>"; };
 		F49CCB4321EACCF500527926 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
 		F49CCB4621EACD2100527926 /* BirdClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirdClass.swift; sourceTree = "<group>"; };
@@ -102,11 +104,12 @@
 			isa = PBXGroup;
 			children = (
 				F49CCB4621EACD2100527926 /* BirdClass.swift */,
-				F49CCB3E21EACC1F00527926 /* EntityClass.swift */,
-				F49CCB3F21EACC1F00527926 /* TestClass.swift */,
+				F47D204E21F11CD800A867A9 /* CheetahClass.swift */,
+				F47D204C21F11CD800A867A9 /* EntityClass.swift */,
+				F47D204B21F11CD700A867A9 /* SpringbokClass.swift */,
+				F47D204D21F11CD800A867A9 /* TestClass.swift */,
+				F47D204F21F11CD800A867A9 /* ZebraClass.swift */,
 				F49CCB4821EB99DC00527926 /* BuzzardClass.swift */,
-				F47D204221EF77AD00A867A9 /* ZebraClass.swift */,
-				F47D204421EF77B500A867A9 /* SpringbokClass.swift */,
 			);
 			path = "AI Classes";
 			sourceTree = "<group>";
@@ -219,18 +222,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F47D205221F11CD800A867A9 /* TestClass.swift in Sources */,
 				F4D8422E21E182F500B9D0A8 /* random.swift in Sources */,
-				F49CCB4121EACC1F00527926 /* TestClass.swift in Sources */,
 				F4D8423821E26F1900B9D0A8 /* TerrainGen.swift in Sources */,
-				F49CCB4021EACC1F00527926 /* EntityClass.swift in Sources */,
 				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
+				F47D205121F11CD800A867A9 /* EntityClass.swift in Sources */,
 				F49CCB4421EACCF500527926 /* MapClass.swift in Sources */,
 				F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */,
+				F47D205421F11CD800A867A9 /* ZebraClass.swift in Sources */,
 				F49CCB4921EB99DC00527926 /* BuzzardClass.swift in Sources */,
 				F49CCB4521EACCF500527926 /* MessageClass.swift in Sources */,
 				F47D204A21EFC51200A867A9 /* ArchiveClass.swift in Sources */,
-				F47D204521EF77B500A867A9 /* SpringbokClass.swift in Sources */,
-				F47D204321EF77AD00A867A9 /* ZebraClass.swift in Sources */,
+				F47D205021F11CD800A867A9 /* SpringbokClass.swift in Sources */,
+				F47D205321F11CD800A867A9 /* CheetahClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
 				F47D204721EFA8E300A867A9 /* InfoClass.swift in Sources */,
 				F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */,

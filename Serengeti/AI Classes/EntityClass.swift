@@ -84,9 +84,7 @@ class EntityClass
         sprite.position=pos
         sprite.setScale(0.1)
         sprite.zPosition=160
-        sprite.lightingBitMask=1
-        sprite.shadowedBitMask=0
-        sprite.shadowCastBitMask=0
+        
         scene?.addChild(sprite)
     
         
@@ -141,11 +139,11 @@ class EntityClass
         {
             return "Elderly"
         }
-        else if ageRatio > 0.22
+        else if ageRatio > 0.2
         {
             return "Mature"
         }
-        else if ageRatio > 0.12
+        else if ageRatio > 0.10
         {
             return "Juvenile"
         }
@@ -229,7 +227,6 @@ class EntityClass
         
     } // getDistToEntity
     
-    
     public func getAngleToEntity(ent: EntityClass) -> CGFloat
     {
         let dx=ent.sprite.position.x-sprite.position.x
@@ -237,12 +234,6 @@ class EntityClass
         let angle=atan2(dy, dx)
         return angle
     }
-    
-    public func changeMode(mode: Int, loc: CGPoint)
-    {
-        currentState=mode
-        gotoPoint=loc
-    } // func changeMode
     
     public func wander()
     {
@@ -292,6 +283,7 @@ class EntityClass
             let turnDelta = -lastWanderTurn.timeIntervalSinceNow
             if turnDelta > TURNFREQ/Double(map!.getTimeScale())
             {
+                //print("Starting turn")
                 turnToAngle=sprite.zRotation + random(min: -WANDERANGLE, max: WANDERANGLE)
                 
                 // Adjust turn to angle to be 0-pi*2
@@ -322,10 +314,9 @@ class EntityClass
                 sprite.zRotation=turnToAngle
                 isTurning=false
                 lastWanderTurn=NSDate()
+                //print("Finished turn")
             } // if we can stop turning
-        
-        } // if we're turning
-        
+        }
         
         if isTurning
         {

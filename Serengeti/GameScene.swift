@@ -488,10 +488,12 @@ class GameScene: SKScene {
             if showYearlyChange
             {
                 showYearlyChange=false
+                myMap.msg.sendCustomMessage(message: "Showing total change.")
             }
             else
             {
                 showYearlyChange=true
+                myMap.msg.sendCustomMessage(message: "Showing annual change.")
             }
             
         case 27:
@@ -691,7 +693,7 @@ class GameScene: SKScene {
         {
             let type=random(min: 0, max: 1.0)
             
-            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(testEntitiesSpawned)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", (CGFloat(myMap.entityCounter)/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
@@ -708,13 +710,14 @@ class GameScene: SKScene {
             {
                 spawnHerd(type: SPRINGBOKHERD, loc: pos)
             }
+            
             myMap.entityCounter += 1
 
             
         } // if we need to spawn animals
         else if buzzardsSpawned < BUZZARDCOUNT
         {
-            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(testEntitiesSpawned))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
+            mmGenAnimalsLabel.text=String(format: "Rescuing pit bulls: %2.0f%%", ((CGFloat(buzzardsSpawned)+CGFloat(myMap.entityCounter))/(CGFloat(TESTENTITYCOUNT)+CGFloat(BUZZARDCOUNT))*100))
             let x=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
