@@ -44,7 +44,7 @@ class InfoClass
     
     public func archiveCounts(year: Int)
     {
-        let temp=ArchiveClass(che: numCheetah, spr: numSpringbok, war: numWarthog, zeb: numZebra, yea: year)
+        let temp=ArchiveClass(info: self, yea: year)
         archive.append(temp)
         
         
@@ -151,6 +151,54 @@ class InfoClass
             return 0
         }
 
+    }
+    
+    public func getSpringbokChangeTotal() -> Int
+    {
+        if archive.count > 0
+        {
+            return numSpringbok-archive[0].getSpringbokCount()
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+    public func getZebraChangeTotal() -> Int
+    {
+        if archive.count > 0
+        {
+            return numZebra-archive[0].getZebraCount()
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+    public func getCheetahChangeTotal() -> Int
+    {
+        if archive.count > 0
+        {
+            return numCheetah-archive[0].getCheetahCount()
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+    public func getWarthogChangeTotal() -> Int
+    {
+        if archive.count > 0
+        {
+            return numWarthog-archive[0].getWarthogCount()
+        }
+        else
+        {
+            return 0
+        }
     }
     
     public func getAnimalCount() -> Int

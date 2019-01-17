@@ -143,7 +143,7 @@ class GameScene: SKScene {
     var zoomInPressed:Bool=false
     var nightVisionEnabled:Bool=true
     var showParkInfo:Bool=false
-    
+    var showYearlyChange:Bool=true
     
     // Camera
     var cam=SKCameraNode()
@@ -348,7 +348,7 @@ class GameScene: SKScene {
         hudSpeedLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
         hudSpeedLabel.text="Speed"
         droneHUD.addChild(hudSpeedLabel)
-        hudSpeedLabel.position.y = droneHUD.size.height*1.35
+        hudSpeedLabel.position.y = droneHUD.size.height*1.15
         
         hudParkInfo.isHidden=true
         hudParkInfo.position.x = -size.width/2+hudParkInfo.size.width/2
@@ -481,6 +481,17 @@ class GameScene: SKScene {
             if currentState==inGameState
             {
                 upPressed=true
+            }
+            
+            
+        case 16: // Y
+            if showYearlyChange
+            {
+                showYearlyChange=false
+            }
+            else
+            {
+                showYearlyChange=true
             }
             
         case 27:
@@ -719,10 +730,11 @@ class GameScene: SKScene {
             map.isHidden=true
             hudTimeBG.isHidden=false
             hudLightMask.isHidden=false
+            myMap.info.updateCounts()
+            myMap.info.archiveCounts(year: 0)
         } // if we're finished generating map
         
-        myMap.info.updateCounts()
-        myMap.info.archiveCounts(year: 0)
+
     } // genMapZones
     
     func checkKeys()
@@ -989,12 +1001,24 @@ class GameScene: SKScene {
         }
         
 
-        
-        hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
-        hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChange()) )"
-        hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChange()) )"
-        hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChange()) )"
-        hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChange()) )"
+        if showYearlyChange
+        {
+            hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
+            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChange()) )"
+            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChange()) )"
+            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChange()) )"
+            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChange()) )"
+            
+        }
+        else
+        {
+            hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
+            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChangeTotal()) )"
+            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChangeTotal()) )"
+            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChangeTotal()) )"
+            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChangeTotal()) )"
+            
+        }
         // update coords
         let coordX=dx*myMap.MAPWIDTH
         let coordY=dy*myMap.MAPWIDTH
@@ -1148,11 +1172,7 @@ class GameScene: SKScene {
             
             
         case mapGenState:
-            mapGenDelay += 1
-            if mapGenDelay > 10
-            {
                 generateMap()
-            }
             
         case genMapZonesState:
             genMapZones()

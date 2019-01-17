@@ -40,13 +40,26 @@ class ArchiveClass
         year=yea
     } // init
     
-    init(info: InfoClass, year: Int)
+    init(info: InfoClass, yea: Int)
     {
         cheetah=info.numCheetah
         numCheetahBirths=info.numCheetahBirths
         numCheetahDeaths=info.numCheetahDeaths
         
-    }
+        springbok=info.numSpringbok
+        numSpringbokBirths=info.numSpringbokBirths
+        numSpringbokDeaths=info.numSpringbokDeaths
+        
+        warthog=info.numWarthog
+        numWarthogBirths=info.numWarthogBirths
+        numWarthogDeaths=info.numWarthogDeaths
+        
+        zebra=info.numZebra
+        numZebraBirths=info.numZebraBirths
+        numZebraDeaths=info.numZebraDeaths
+        
+        year=yea
+    } // init with InfoClass
     public func getZebraCount() -> Int
     {
         return zebra
