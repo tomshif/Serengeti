@@ -141,11 +141,11 @@ class EntityClass
         {
             return "Elderly"
         }
-        else if ageRatio > 0.4
+        else if ageRatio > 0.22
         {
             return "Mature"
         }
-        else if ageRatio > 0.2
+        else if ageRatio > 0.15
         {
             return "Juvenile"
         }

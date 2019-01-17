@@ -24,6 +24,8 @@ class TestClass:EntityClass
     public static let WATERZONE:Int=2
     public static let RESTZONE:Int=4
     
+    private var lastBabyYear:Int=0
+    
     override init()
     {
         super.init()
@@ -55,11 +57,13 @@ class TestClass:EntityClass
         TURNFREQ=0.8
         AICycle=3
         WANDERANGLE=CGFloat.pi/6
+        MAXAGE=34560
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         currentState=WANDERSTATE
         followDistVar=random(min: 1, max: FOLLOWDIST)
         isHerdLeader=true
+        isMale=true
         
     } // leader init()
     
@@ -97,9 +101,123 @@ class TestClass:EntityClass
         followDistVar=random(min: -FOLLOWDIST*0.5, max: FOLLOWDIST*1.5)
         herdLeader=ldr
         isHerdLeader=false
+        let chance=random(min: 0.0, max: 1.0)
+        if chance > 0.75
+        {
+            isMale=true
+        }
         
     } // full init()
     
+    init(theScene:SKScene, theMap: MapClass, pos: CGPoint, number: Int, ldr: EntityClass, isBaby: Bool)
+    {
+        super.init()
+        
+        // set the passed references
+        map=theMap
+        scene=theScene
+        
+        
+        // sprite update
+        sprite=SKSpriteNode(imageNamed: "warthogArrow")
+        sprite.position=pos
+        
+        sprite.name=String(format:"entWarthog%04d", number)
+        name=String(format:"entWarthog%04d", number)
+        sprite.zPosition=170
+        scene!.addChild(sprite)
+        
+        // Variable updates
+        MAXSPEED=1.2
+        TURNRATE=0.15
+        TURNFREQ=0.5
+        AICycle=3
+        let chance=random(min: 0.0, max: 1.0)
+        if chance > 0.75
+        {
+            isMale=true
+        }
+        
+        WANDERANGLE=CGFloat.pi/8
+        MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
+        if isBaby
+        {
+            age=1
+        }
+        else
+        {
+            age=random(min: 1.0, max: MAXAGE*0.7)
+        }
+        followDistVar=random(min: -FOLLOWDIST*0.5, max: FOLLOWDIST*1.5)
+        herdLeader=ldr
+        isHerdLeader=false
+        
+    } // full init()
+    
+    
+    override func ageEntity() -> Bool
+    {
+        age += map!.getTimeInterval()*map!.getTimeScale()
+        if age > MAXAGE
+        {
+            map!.msg.sendMessage(type: 8, from: name)
+            sprite.removeFromParent()
+            alive=false
+            return false
+        } // if we die of old age
+        else
+        {
+            let ageRatio=age/(MAXAGE*0.5)
+            var scale:CGFloat=ageRatio
+            if scale < MINSCALE
+            {
+                scale=MINSCALE
+            }
+            if scale > MAXSCALE
+            {
+                scale = MAXSCALE
+            }
+            sprite.setScale(scale)
+            
+            if getAgeString() == "Juvenile"
+            {
+                if herdLeader != nil
+                {
+                    if !herdLeader!.isMale && herdLeader!.herdLeader != nil
+                    {
+                        herdLeader=herdLeader!.herdLeader
+                        
+                    } // if momma's our leader and her leader is valid
+                } // if our herd leader is valid
+            } // if we're at juvenile stage
+            
+            if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
+            {
+                let babyChance=random(min: 0.0, max: 1.0)
+                if babyChance > 0.999775
+                {
+                    // Hurray! We're having a baby!
+                    let babyNumber=Int(random(min: 2, max: 5.999999))
+                    for _ in 1...babyNumber
+                    {
+                        let baby=TestClass(theScene: scene!, theMap: map!, pos: self.sprite.position, number: map!.entityCounter+1, ldr: self, isBaby: true)
+                        map!.entList.append(baby)
+                        map!.entityCounter+=1
+                        
+                    } // for each baby
+                    lastBabyYear=map!.getYear()
+                    map!.msg.sendMessage(type: 20, from: self.name)
+                    
+                } // if we're having a baby
+                
+                
+                
+            } // if it's dry season and we're female and we're "mature" and we have a herd leader and we haven't had babies this year
+            
+            
+            return true
+        } // if we're still alive
+    }
 
     
     private func goTo()

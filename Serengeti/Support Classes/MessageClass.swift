@@ -18,7 +18,7 @@ class MessageClass
     let DEATH_STARVATION:Int=4
     let DEATH_THIRST:Int=6
     let DEATH_AGE:Int=8
-    let BORN:Int=20
+    let BIRTH:Int=20
     let NEWHERDLEADER:Int=22
     
     
@@ -49,6 +49,10 @@ class MessageClass
             
         case 8:
             let temp="\(from) died of old age."
+            unreadQueue.append(temp)
+            
+        case 20:
+            let temp="\(from) had a baby!"
             unreadQueue.append(temp)
             
         case 22:

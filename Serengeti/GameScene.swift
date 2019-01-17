@@ -59,7 +59,7 @@ class GameScene: SKScene {
     let WATERZONECOUNT:Int=25
     let RESTZONECOUNT:Int=10
     let FOODZONECOUNT:Int=50
-    let TESTENTITYCOUNT:Int=250
+    let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
     let TREECOUNT:Int=1000
     
@@ -676,7 +676,7 @@ class GameScene: SKScene {
             mmGenTreeLabel.text=String(format: "Tending the garden: %2.0f%%", (CGFloat(treesSpawned)/CGFloat(TREECOUNT))*100)
             
         } // if we need to spawn trees
-        else if testEntitiesSpawned < TESTENTITYCOUNT
+        else if myMap.entityCounter < TESTENTITYCOUNT
         {
             let type=random(min: 0, max: 1.0)
             
@@ -697,7 +697,7 @@ class GameScene: SKScene {
             {
                 spawnHerd(type: SPRINGBOKHERD, loc: pos)
             }
-            testEntitiesSpawned += 1
+            myMap.entityCounter += 1
 
             
         } // if we need to spawn animals
