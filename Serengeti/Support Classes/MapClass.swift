@@ -60,6 +60,18 @@ class MapClass
     } // func getTimeAsString
 
     
+    public func isRainySeason() -> Bool
+    {
+        if day <= 3
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
+    } // func isRainySeason
+    
     public func cleanUpEntities()
     {
         // clean up entList

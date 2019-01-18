@@ -57,7 +57,7 @@ class TestClass:EntityClass
         TURNFREQ=0.8
         AICycle=3
         WANDERANGLE=CGFloat.pi/6
-        MAXAGE=34560
+        MAXAGE=77760
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: MAXAGE*0.4, max: MAXAGE*0.7)
         currentState=WANDERSTATE
@@ -96,8 +96,9 @@ class TestClass:EntityClass
         TURNFREQ=0.5
         AICycle=3
         WANDERANGLE=CGFloat.pi/8
+        MAXAGE=77760
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
-        age=random(min: 1.0, max: MAXAGE*0.7)
+        age=random(min: 1.0, max: MAXAGE*0.95)
         followDistVar=random(min: -FOLLOWDIST*0.5, max: FOLLOWDIST*1.5)
         herdLeader=ldr
         isHerdLeader=false
@@ -139,6 +140,7 @@ class TestClass:EntityClass
         }
         
         WANDERANGLE=CGFloat.pi/8
+        MAXAGE=77760
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         if isBaby
         {
@@ -160,7 +162,7 @@ class TestClass:EntityClass
         age += map!.getTimeInterval()*map!.getTimeScale()
         if age > MAXAGE
         {
-            map!.msg.sendMessage(type: 8, from: name)
+            map!.msg.sendMessage(type: 8, info: Int(self.age), from: name)
             sprite.removeFromParent()
             alive=false
             return false
@@ -192,10 +194,10 @@ class TestClass:EntityClass
             } // if we're at juvenile stage
             
             // Baby time!
-            if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
+            if map!.isRainySeason() && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
             {
                 let babyChance=random(min: 0.0, max: 1.0)
-                if babyChance > 0.999875
+                if babyChance > 0.99993
                 {
                     // Hurray! We're having a baby!
                     let babyNumber=Int(random(min: 2, max: 5.999999))
@@ -207,13 +209,13 @@ class TestClass:EntityClass
                         
                     } // for each baby
                     lastBabyYear=map!.getYear()
-                    map!.msg.sendMessage(type: 20, from: self.name)
+                    map!.msg.sendMessage(type: 20, info: babyNumber, from: self.name)
                     
                 } // if we're having a baby
                 
                 
                 
-            } // if it's dry season and we're female and we're "mature" and we have a herd leader and we haven't had babies this year
+            } // if it's rainy season and we're female and we're "mature" and we have a herd leader and we haven't had babies this year
             
             
             return true

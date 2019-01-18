@@ -72,6 +72,7 @@ class GameScene: SKScene {
     let DRONEPOWER:CGFloat=0.3
     let DRONEMAXSPEED:CGFloat=30.0
     let DRONEINERTIA:CGFloat=0.025
+    var nextLightning:Double=32.00
     
     var myMap=MapClass()
     
@@ -97,13 +98,13 @@ class GameScene: SKScene {
     let mmHowPlay=SKSpriteNode(imageNamed: "mmHowToPlay")
     
     // SpriteNodes - In Game HUD
-    let droneHUD=SKSpriteNode(imageNamed: "hudReticleOverlay")
-    let hudTimeBG=SKSpriteNode(imageNamed: "hudTimeFrame")
-    let hudMsgBG=SKSpriteNode(imageNamed: "hudTimeBG")
+    let droneHUD=SKSpriteNode(imageNamed: "hudReticle")
+    let hudTimeBG=SKSpriteNode(imageNamed: "hudTextbox")
+    let hudMsgBG=SKSpriteNode(imageNamed: "hudTextbox")
     let hudNVG=SKSpriteNode(imageNamed: "hudNightVision")
     let hudAltArrow=SKSpriteNode(imageNamed: "hudAltArrow")
     let hudParkInfo=SKSpriteNode(imageNamed: "hudParkInfo")
-    
+    let hudAltBar=SKSpriteNode(imageNamed: "hudAltBar")
     
     
     // ShapeNodes - In Game HUD
@@ -133,6 +134,8 @@ class GameScene: SKScene {
     let hudPIZebra=SKLabelNode(fontNamed: "Arial")
     
     
+    // Sounds
+    let thunder01=SKAudioNode(fileNamed: "thunder01")
     
     // Booleans
     var leftPressed:Bool=false
@@ -151,12 +154,16 @@ class GameScene: SKScene {
     // Vectors
     var droneVec=CGVector(dx: 0, dy: 0)
     
+    // Particle Effects
+    let rainNode=SKEmitterNode(fileNamed: "rainTest01.sks")
+    
     // NSDates
     var lastParkInfoUpdate=NSDate()
+    var lastLightning=NSDate()
     
     // Others
     
-    
+    var lightningAction=SKAction()
 
     
     
@@ -176,6 +183,12 @@ class GameScene: SKScene {
         
         self.camera=cam
         addChild(cam)
+        
+        rainNode!.particleBirthRate=0
+        rainNode!.zPosition=4998
+        rainNode!.targetNode=scene
+        cam.addChild(rainNode!)
+
         
         let hudLightMaskRect=CGRect(x: -size.width/2, y: -size.height/2, width: size.width, height: size.height)
         hudLightMask=SKShapeNode(rect: hudLightMaskRect)
@@ -276,15 +289,15 @@ class GameScene: SKScene {
         cam.addChild(hudTimeBG)
         
         hudTimeLabel.text="Time"
-        hudTimeLabel.fontSize=16
+        hudTimeLabel.fontSize=22
         hudTimeLabel.zPosition=5001
-        hudTimeLabel.position.y=hudTimeBG.size.height*0.35
+        hudTimeLabel.position.y=hudTimeBG.size.height*0.25
         hudTimeBG.addChild(hudTimeLabel)
         
         hudTimeScaleLabel.text="TimeScale"
-        hudTimeScaleLabel.fontSize=16
+        hudTimeScaleLabel.fontSize=22
         hudTimeScaleLabel.zPosition=5001
-        hudTimeScaleLabel.position.y = hudTimeBG.size.height*0.2
+        hudTimeScaleLabel.position.y = -hudTimeBG.size.height*0.1
         hudTimeBG.addChild(hudTimeScaleLabel)
         
         hudMsgBG.position.x = -size.width/2+hudTimeBG.size.width/2
@@ -296,6 +309,8 @@ class GameScene: SKScene {
         hudMsgLabel.text="Message"
         hudMsgLabel.fontSize=16
         hudMsgLabel.zPosition=5001
+        hudMsgLabel.numberOfLines=5
+        hudMsgLabel.preferredMaxLayoutWidth=hudMsgBG.size.width*0.85
         hudMsgBG.addChild(hudMsgLabel)
         
         hudMapMarker.zPosition=10001
@@ -319,36 +334,46 @@ class GameScene: SKScene {
         droneHUD.isHidden=true
         droneHUD.zPosition=10000
         droneHUD.alpha=0.7
-        droneHUD.setScale(0.5)
+        droneHUD.setScale(1.0)
         droneHUD.name="droneHUD"
         cam.addChild(droneHUD)
+        
+        hudAltBar.zPosition=10000
+        hudAltBar.alpha=0.7
+        hudAltArrow.name="hudAltBar"
+        droneHUD.addChild(hudAltBar)
+        hudAltBar.position.x = -droneHUD.size.width/2-hudAltBar.size.width
+        
         
         hudAltArrow.zPosition=10000
         hudAltArrow.alpha=0.7
         hudAltArrow.name="hudAltArrow"
         droneHUD.addChild(hudAltArrow)
-        hudAltArrow.position.x = -droneHUD.size.width*1.25
+        hudAltArrow.position.x = -droneHUD.size.width/2-hudAltBar.size.width/2-hudAltArrow.size.width
         
         hudAltitudeLabel.zPosition=10000
         hudAltitudeLabel.name="hudAltLabel"
         hudAltitudeLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
         hudAltitudeLabel.text="Altitude: 200m"
+        hudAltitudeLabel.fontSize=16
         droneHUD.addChild(hudAltitudeLabel)
-        hudAltitudeLabel.position.x = -droneHUD.size.height*1.75
+        hudAltitudeLabel.position.x = -droneHUD.size.width*0.82
         
         hudCoordLabel.zPosition=10000
         hudCoordLabel.name="hudCoordLabel"
         hudCoordLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
         hudCoordLabel.text="Coordinates: 32x, 34y"
+        hudCoordLabel.fontSize=16
         droneHUD.addChild(hudCoordLabel)
-        hudCoordLabel.position.y = -droneHUD.size.height*1.25
+        hudCoordLabel.position.y = -droneHUD.size.height*0.58
         
         hudSpeedLabel.zPosition=10000
         hudSpeedLabel.name="hudSpeedLabel"
         hudSpeedLabel.fontColor=NSColor(calibratedRed: 0.314, green: 1.0, blue: 1.0, alpha: 1.0)
         hudSpeedLabel.text="Speed"
+        hudSpeedLabel.fontSize=16
         droneHUD.addChild(hudSpeedLabel)
-        hudSpeedLabel.position.y = droneHUD.size.height*1.15
+        hudSpeedLabel.position.y = droneHUD.size.height/2
         
         hudParkInfo.isHidden=true
         hudParkInfo.position.x = -size.width/2+hudParkInfo.size.width/2
@@ -396,6 +421,13 @@ class GameScene: SKScene {
         hudParkInfo.addChild(hudPIZebra)
         hudPIZebra.position.y = hudParkInfo.size.height*0.15
         
+        thunder01.autoplayLooped=false
+        addChild(thunder01)
+        thunder01.run(SKAction.stop())
+        
+        
+        
+
     } // didMove
     
     
@@ -552,6 +584,9 @@ class GameScene: SKScene {
                     hudLightMask.isHidden=true
                 }
             }
+            
+        case 39: // '
+            flashLightning()
             
         case 45: // N
             if currentState==inGameState
@@ -823,7 +858,7 @@ class GameScene: SKScene {
         {
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
-            let tempLeader=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount)
+            let tempLeader=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter)
            
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -833,7 +868,7 @@ class GameScene: SKScene {
             for _ in 1...herdsize
             {
                 
-                let tempEnt=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, ldr: tempLeader)
+                let tempEnt=TestClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, ldr: tempLeader)
                
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -849,7 +884,7 @@ class GameScene: SKScene {
 
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
-            let tempLeader=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            let tempLeader=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: nil)
            
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -859,7 +894,7 @@ class GameScene: SKScene {
             for _ in 1...herdsize
             {
                 
-                let tempEnt=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                let tempEnt=ZebraClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: tempLeader)
                 
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -875,7 +910,7 @@ class GameScene: SKScene {
             
             let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
             //let herdsize=1
-            let tempLeader=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            let tempLeader=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: nil)
           
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -885,7 +920,7 @@ class GameScene: SKScene {
             for _ in 1...herdsize
             {
                 
-                let tempEnt=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                let tempEnt=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: tempLeader)
               
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -900,7 +935,7 @@ class GameScene: SKScene {
         {
             
 
-            let tempLeader=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: nil)
+            let tempLeader=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: nil)
             
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -912,7 +947,7 @@ class GameScene: SKScene {
                 for _ in 1...2
                 {
                     
-                    let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                    let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: tempLeader)
                     
                     
                     tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -923,7 +958,7 @@ class GameScene: SKScene {
             }
             else if chance > 0.85
             {
-                let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: entityHerdCount, leader: tempLeader)
+                let tempEnt=CheetahClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: tempLeader)
                 
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
@@ -981,6 +1016,77 @@ class GameScene: SKScene {
         
     } // func checkAmbientSpawns
     
+    func flashLightning()
+    {
+        let currentColor=self.hudLightMask.fillColor
+        let currentAlpha=self.hudLightMask.alpha
+        var nv:Bool=false
+        var flashColor=NSColor()
+    
+        if (myMap.getTimeOfDay() < 5*60 || myMap.getTimeOfDay() > 22*60)
+        {
+            if nightVisionEnabled
+            {
+                flashColor=NSColor.green
+                nv=true
+            }
+            else
+            {
+                flashColor=NSColor.white
+            }
+            
+        }
+        else
+        {
+            flashColor=NSColor.white
+        }
+        
+        let flashOn=SKAction.run {
+            self.nightVisionEnabled=false
+            self.hudLightMask.fillColor=flashColor
+            print(flashColor)
+            
+        }
+        let flashOff=SKAction.run {
+            self.nightVisionEnabled=nv
+            self.hudLightMask.fillColor=currentColor
+        }
+        
+        let num=Int(random(min: 1, max: 2.99))
+        let sequence=SKAction.sequence([flashOn, SKAction.fadeAlpha(to: 0.6, duration: TimeInterval(random(min: 0.01, max: 0.1))),  SKAction.wait(forDuration: TimeInterval(random(min: 0.01, max: 0.1))), SKAction.fadeAlpha(to: currentAlpha, duration: TimeInterval(random(min: 0.01, max: 0.14))), flashOff])
+        var numSeq=SKAction()
+        if num==1
+        {
+            numSeq=sequence
+        }
+        else if num==2
+        {
+            numSeq=SKAction.sequence([sequence, SKAction.wait(forDuration: TimeInterval(random(min: 0.01, max: 0.8))),sequence])
+        }
+        
+        hudLightMask.run(numSeq)
+        
+        /*
+        lightningAction=SKAction.run {
+
+            if self.nightVisionEnabled==true && (self.myMap.getTimeOfDay() < 5 || self.myMap.getTimeOfDay() > 22)
+            {
+                self.hudLightMask.fillColor=NSColor.init(calibratedRed: 0, green: 1.0, blue: 0, alpha: 0)
+                
+            }
+            else
+            {
+                self.hudLightMask.fillColor=NSColor.init(calibratedRed: 1, green: 1, blue: 1, alpha: 0)
+            }
+            self.hudLightMask.alpha=0.1
+            self.run(SKAction.wait(forDuration: TimeInterval(random(min: 0.1, max: 0.3))))
+            self.hudLightMask.fillColor=currentColor
+            self.hudLightMask.alpha=currentAlpha
+            self.run(SKAction.wait(forDuration: TimeInterval(random(min: 0.1, max: 0.3))))
+        }
+        */
+    }
+    
     func updateAnimals()
     {
         for i in 0..<myMap.entList.count
@@ -1032,10 +1138,10 @@ class GameScene: SKScene {
         let ratio=(cam.xScale-0.5)/2.0
 
         let altArrowRatio=ratio-0.5
-        hudAltArrow.position.y=altArrowRatio*droneHUD.size.height*1.5
+        hudAltArrow.position.y=altArrowRatio*hudAltBar.size.height*0.92
         let alt=ratio*198+51
         hudAltitudeLabel.text=String(format:"%2.0f m",alt)
-        hudAltitudeLabel.position.y = altArrowRatio*droneHUD.size.height*1.5 - hudAltitudeLabel.fontSize/2
+        hudAltitudeLabel.position.y = altArrowRatio*hudAltBar.size.height*0.92
         
         let piDelta = -lastParkInfoUpdate.timeIntervalSinceNow
         if !hudParkInfo.isHidden && piDelta > PARKINFOUPDATEFREQ
@@ -1049,20 +1155,84 @@ class GameScene: SKScene {
 
         if showYearlyChange
         {
+            var sign:String=""
             hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
-            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChange()) )"
-            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChange()) )"
-            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChange()) )"
-            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChange()) )"
+            
+            if myMap.info.getCheetahChange() > 0
+            {
+                sign="+"
+            }
+            
+            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) (\(sign)\(myMap.info.getCheetahChange()))"
+            if myMap.info.getWarthogChange() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(sign)\(myMap.info.getWarthogChange()) )"
+            if myMap.info.getSpringbokChange() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(sign)\(myMap.info.getSpringbokChange()) )"
+            if myMap.info.getZebraChange() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(sign)\(myMap.info.getZebraChange()) )"
             
         }
         else
         {
+            var sign:String=""
             hudPITotalAnimals.text="Animals: \(myMap.info.getAnimalCount())"
-            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) ( \(myMap.info.getCheetahChangeTotal()) )"
-            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(myMap.info.getWarthogChangeTotal()) )"
-            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(myMap.info.getSpringbokChangeTotal()) )"
-            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(myMap.info.getZebraChangeTotal()) )"
+            
+            if myMap.info.getCheetahChangeTotal() > 0
+            {
+                sign="+"
+            }
+            
+            hudPICheetah.text="Cheetah: \(myMap.info.getCheetahCount()) (\(sign)\(myMap.info.getCheetahChangeTotal()))"
+            if myMap.info.getWarthogChangeTotal() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPIWarthog.text="Warthogs: \(myMap.info.getWarthogCount()) ( \(sign)\(myMap.info.getWarthogChangeTotal()) )"
+            if myMap.info.getSpringbokChangeTotal() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPISpringbok.text="Springbok: \(myMap.info.getSpringbokCount()) ( \(sign)\(myMap.info.getSpringbokChangeTotal()) )"
+            if myMap.info.getZebraChangeTotal() > 0
+            {
+                sign="+"
+            }
+            else
+            {
+                sign=""
+            }
+            hudPIZebra.text="Zebra: \(myMap.info.getZebraCount()) ( \(sign)\(myMap.info.getZebraChangeTotal()) )"
+            
+
             
         }
         // update coords
@@ -1200,8 +1370,11 @@ class GameScene: SKScene {
             lastLightUpdate+=1
             if lastLightUpdate > 5
             {
-                adjustLighting()
-                lastLightUpdate=0
+                if !hudLightMask.hasActions()
+                {
+                    adjustLighting()
+                    lastLightUpdate=0
+                } //
             }
             currentCycle+=1
             if currentCycle > MAXUPDATECYCLES
@@ -1213,7 +1386,21 @@ class GameScene: SKScene {
             checkKeys()
             checkAmbientSpawns()
             updateAnimals()
-            
+            if myMap.isRainySeason()
+            {
+                
+                rainNode!.particleBirthRate=1400
+                if -lastLightning.timeIntervalSinceNow > nextLightning
+                {
+                    flashLightning()
+                    nextLightning=Double(random(min: 15, max: 40))
+                    lastLightning=NSDate()
+                }
+            }
+            else
+            {
+                rainNode!.particleBirthRate=0
+            }
             
             
         case mapGenState:

@@ -192,7 +192,7 @@ class EntityClass
         age += map!.getTimeInterval()*map!.getTimeScale()
         if age > MAXAGE
         {
-            map!.msg.sendMessage(type: 8, from: name)
+            map!.msg.sendMessage(type: 8, info: Int(self.age), from: name)
             sprite.removeFromParent()
             alive=false
             return false

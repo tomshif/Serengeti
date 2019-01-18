@@ -27,6 +27,50 @@ class MessageClass
         
     }
     
+    public func sendMessage(type: Int, info: Int, from: String)
+    {
+        switch type
+        {
+        case 0:
+            let temp="\(from) was killed by a predator."
+            unreadQueue.append(temp)
+            
+        case 2:
+            let temp="\(from) died of disease."
+            unreadQueue.append(temp)
+            
+        case 4:
+            let temp="\(from) died of starvation."
+            unreadQueue.append(temp)
+            
+        case 6:
+            let temp="\(from) died of thirst."
+            unreadQueue.append(temp)
+            
+        case 8:
+            let name=from.dropFirst(3)
+            let age = CGFloat(info)/8640
+            let temp=String(format: "\(name) died of natural causes at %2.1f years old.", age)
+            
+            unreadQueue.append(temp)
+            
+        case 20:
+            
+            let name=from.dropFirst(3)
+            let temp="\(name) had \(info) babies!"
+            
+            
+            unreadQueue.append(temp)
+            
+        case 22:
+            let temp="\(from) found a new herd leader."
+            unreadQueue.append(temp)
+            
+        default:
+            break
+        } // switch
+    } // func sendMessage()
+    
     public func sendMessage(type: Int, from: String)
     {
         switch type
@@ -52,7 +96,11 @@ class MessageClass
             unreadQueue.append(temp)
             
         case 20:
-            let temp="\(from) had a baby!"
+
+            let name=from.dropFirst(3)
+            let temp="\(name) had a baby!"
+
+            
             unreadQueue.append(temp)
             
         case 22:
