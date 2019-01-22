@@ -417,7 +417,7 @@ class TestClass:EntityClass
         
         for i in 1..<map!.entList.count
         {
-            if map!.entList[i].getAgeString()=="Mature" && map!.entList[i].isAlive() && map!.entList[i].isMale
+            if map!.entList[i].getAgeString()=="Mature" && map!.entList[i].isAlive() && map!.entList[i].isMale && map!.entList[i].name.contains("Warthog")
             {
                 let dist=getDistToEntity(ent: map!.entList[i])
                 

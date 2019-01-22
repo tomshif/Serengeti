@@ -30,7 +30,7 @@ class SpringbokClass:EntityClass
     override init()
     {
         super.init()
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "springbokAdultSprite")
     } // init
     
     
@@ -45,7 +45,7 @@ class SpringbokClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "springbokAdultSprite")
         sprite.position=pos
         sprite.name="springbokArrow"
         sprite.name=String(format:"entSpringbok%04d", number)
@@ -86,7 +86,7 @@ class SpringbokClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "springbokArrow")
+        sprite=SKSpriteNode(imageNamed: "springbokAdultSprite")
         sprite.position=pos
         sprite.name="Springbok"
         sprite.name=String(format:"entSpringbok%04d", number)

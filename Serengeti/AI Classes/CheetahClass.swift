@@ -23,7 +23,7 @@ class CheetahClass:EntityClass
     override init()
     {
         super.init()
-        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahSprite")
     } // init
     
     
@@ -38,7 +38,7 @@ class CheetahClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahSprite")
         sprite.position=pos
         sprite.name=String(format:"entCheetah%04d", number)
         name=String(format:"entCheetah%04d", number)
@@ -83,7 +83,7 @@ class CheetahClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "cheetahArrow")
+        sprite=SKSpriteNode(imageNamed: "cheetahSprite")
         sprite.position=pos
         sprite.name=String(format:"entCheetah%04d", number)
         name=String(format:"entCheetah%04d", number)
@@ -119,7 +119,7 @@ class CheetahClass:EntityClass
         
         doTurn()
         updateGraphics()
-        
+    
         if alive
         {
             if !ageEntity()
