@@ -15,8 +15,8 @@ class SpringbokClass:EntityClass
     private var isFleeing:Bool=false
     private var isCloseToCheetah:Bool=false  // is close to what?
    
-    private var MAXHERD:Int=50
-    private var MINHERD:Int=15
+    public var MAXHERD:Int=50
+    public var MINHERD:Int=15
     private var MAXCHILD:Int=2
     
     internal var followDist:CGFloat=150

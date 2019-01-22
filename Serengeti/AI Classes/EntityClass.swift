@@ -124,7 +124,8 @@ class EntityClass
     public func die()
     {
         alive=false
-        removeSprite()
+        let deathAction=SKAction.sequence([SKAction.fadeOut(withDuration: 2.5),SKAction.removeFromParent()])
+        sprite.run(deathAction)
         
         // remove all reference pointers
         

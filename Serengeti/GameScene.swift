@@ -73,6 +73,7 @@ class GameScene: SKScene {
     let DRONEMAXSPEED:CGFloat=30.0
     let DRONEINERTIA:CGFloat=0.025
     var nextLightning:Double=32.00
+    var rainChange:Double=0.00
     
     var myMap=MapClass()
     
@@ -132,6 +133,7 @@ class GameScene: SKScene {
     let hudPISpringbok=SKLabelNode(fontNamed: "Arial")
     let hudPIWarthog=SKLabelNode(fontNamed: "Arial")
     let hudPIZebra=SKLabelNode(fontNamed: "Arial")
+    let hudSeasonLabel=SKLabelNode(fontNamed: "Arial")
     
     
     // Sounds
@@ -147,6 +149,8 @@ class GameScene: SKScene {
     var nightVisionEnabled:Bool=true
     var showParkInfo:Bool=false
     var showYearlyChange:Bool=true
+    var isRaining:Bool=false
+    
     
     // Camera
     var cam=SKCameraNode()
@@ -160,6 +164,7 @@ class GameScene: SKScene {
     // NSDates
     var lastParkInfoUpdate=NSDate()
     var lastLightning=NSDate()
+    var lastRainChange=NSDate()
     
     // Others
     
@@ -171,14 +176,9 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        light.ambientColor=NSColor.black
-        light.lightColor=NSColor.yellow
-        light.isEnabled=false
-        light.falloff=1.5
-        light.categoryBitMask=1
-        light.shadowColor=NSColor.black
-        light.name="playerLight"
-        droneHUD.addChild(light)
+        rainChange=Double(random(min: 5, max: 60.00))
+        
+
         myMap.info.map=myMap
         
         self.camera=cam
@@ -200,8 +200,10 @@ class GameScene: SKScene {
         hudLightMask.zPosition=4999
         cam.addChild(hudLightMask)
         
-        center.zPosition = -100
+        
+        //center.colorBlendFactor=0.5
         addChild(center)
+        center.zPosition = -1000
         
         //Init main menu
         
@@ -294,10 +296,16 @@ class GameScene: SKScene {
         hudTimeLabel.position.y=hudTimeBG.size.height*0.25
         hudTimeBG.addChild(hudTimeLabel)
         
+        hudSeasonLabel.text="Wet Season"
+        hudSeasonLabel.fontSize=22
+        hudSeasonLabel.zPosition=5001
+        hudSeasonLabel.position.y = 0
+        hudTimeBG.addChild(hudSeasonLabel)
+        
         hudTimeScaleLabel.text="TimeScale"
         hudTimeScaleLabel.fontSize=22
         hudTimeScaleLabel.zPosition=5001
-        hudTimeScaleLabel.position.y = -hudTimeBG.size.height*0.1
+        hudTimeScaleLabel.position.y = -hudTimeBG.size.height*0.25
         hudTimeBG.addChild(hudTimeScaleLabel)
         
         hudMsgBG.position.x = -size.width/2+hudTimeBG.size.width/2
@@ -570,20 +578,7 @@ class GameScene: SKScene {
                     hudParkInfo.isHidden=true
                 }
             }
-        case 37: // L
-            if currentState==inGameState
-            {
-                if light.isEnabled
-                {
-                    light.isEnabled=false
-                    hudLightMask.isHidden=false
-                }
-                else
-                {
-                    light.isEnabled=true
-                    hudLightMask.isHidden=true
-                }
-            }
+
             
         case 39: // '
             flashLightning()
@@ -908,11 +903,11 @@ class GameScene: SKScene {
         if type==SPRINGBOKHERD
         {
             
-            let herdsize=Int(random(min: ENTITYHERDSIZE*0.5, max: ENTITYHERDSIZE*1.5))
+            
             //let herdsize=1
             let tempLeader=SpringbokClass(theScene: self, theMap: myMap, pos: CGPoint(x: random(min: loc.x-size.width/10, max: loc.x+size.width/10), y: random(min: loc.y-size.height/10, max: loc.y+size.height/10)), number: myMap.entityCounter, leader: nil)
           
-            
+            let herdsize=Int(random(min: CGFloat(tempLeader.MINHERD), max: CGFloat(tempLeader.MAXHERD)*0.5))
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
             myMap.entList.append(tempLeader)
             myMap.entityCounter+=1
@@ -1044,7 +1039,6 @@ class GameScene: SKScene {
         let flashOn=SKAction.run {
             self.nightVisionEnabled=false
             self.hudLightMask.fillColor=flashColor
-            print(flashColor)
             
         }
         let flashOff=SKAction.run {
@@ -1064,28 +1058,13 @@ class GameScene: SKScene {
             numSeq=SKAction.sequence([sequence, SKAction.wait(forDuration: TimeInterval(random(min: 0.01, max: 0.8))),sequence])
         }
         
+        
         hudLightMask.run(numSeq)
         
-        /*
-        lightningAction=SKAction.run {
+        let thunderSound=Int(random(min: 1.0, max: 4.999999999))
+        hudLightMask.run(SKAction.playSoundFileNamed("thunder0\(thunderSound).wav", waitForCompletion: false))
 
-            if self.nightVisionEnabled==true && (self.myMap.getTimeOfDay() < 5 || self.myMap.getTimeOfDay() > 22)
-            {
-                self.hudLightMask.fillColor=NSColor.init(calibratedRed: 0, green: 1.0, blue: 0, alpha: 0)
-                
-            }
-            else
-            {
-                self.hudLightMask.fillColor=NSColor.init(calibratedRed: 1, green: 1, blue: 1, alpha: 0)
-            }
-            self.hudLightMask.alpha=0.1
-            self.run(SKAction.wait(forDuration: TimeInterval(random(min: 0.1, max: 0.3))))
-            self.hudLightMask.fillColor=currentColor
-            self.hudLightMask.alpha=currentAlpha
-            self.run(SKAction.wait(forDuration: TimeInterval(random(min: 0.1, max: 0.3))))
-        }
-        */
-    }
+    } // flashLightning
     
     func updateAnimals()
     {
@@ -1126,6 +1105,14 @@ class GameScene: SKScene {
         
         
         hudTimeLabel.text=myMap.getTimeAsString()
+        if myMap.isRainySeason()
+        {
+            hudSeasonLabel.text="Rainy Season"
+        }
+        else
+        {
+            hudSeasonLabel.text="Dry Season"
+        }
         hudTimeScaleLabel.text = "\(myMap.getTimeScale())x"
         
         let dx=((myMap.BOUNDARY+cam.position.x)/myMap.BOUNDARY)-1
@@ -1262,8 +1249,7 @@ class GameScene: SKScene {
     {
         if myMap.getTimeOfDay() < 300
         {
-            light.ambientColor=NSColor.black
-            light.falloff=1.5
+
             if nightVisionEnabled
             {
                 hudLightMask.fillColor=NSColor(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
@@ -1289,24 +1275,20 @@ class GameScene: SKScene {
                 gb = 0
             }
    
-            light.ambientColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
+
             hudLightMask.fillColor=NSColor(calibratedRed: r, green: gb, blue: gb, alpha: 1.0)
             hudLightMask.alpha -= 0.001*myMap.getTimeScale()
             if hudLightMask.alpha < 0
             {
                 hudLightMask.alpha=0
             }
-            light.falloff+=0.01
-            if light.falloff > 5.0
-            {
-                light.falloff = 5.0
-            }
-        }
+
+        } // else
         else if myMap.getTimeOfDay() < 1200 // 8pm
         {
-            light.ambientColor=NSColor.white
+            
             hudLightMask.alpha=0
-            light.falloff=5.0
+            
             
         }
         else if myMap.getTimeOfDay() < 1320 // 10pm
@@ -1328,12 +1310,7 @@ class GameScene: SKScene {
             {
                 rg=0
             }
-            light.ambientColor=NSColor(calibratedRed: rg, green: b, blue: b, alpha: 1.0)
-            light.falloff -= 0.01
-            if light.falloff < 2.5
-            {
-                light.falloff=5.0
-            }
+
             hudLightMask.alpha += 0.002*myMap.getTimeScale()
             if hudLightMask.alpha > 0.9
             {
@@ -1344,8 +1321,7 @@ class GameScene: SKScene {
         } // if between 8pm - 10pm
         else
         {
-            light.ambientColor=NSColor.black
-            light.falloff = 1.5
+
             if nightVisionEnabled
             {
                 hudLightMask.fillColor=NSColor(calibratedRed: 0, green: 0.5, blue: 0, alpha: 1.0)
@@ -1359,6 +1335,53 @@ class GameScene: SKScene {
             
         } // if between 10pm and midnight
     } // func adjustLighting
+    
+    func updateWeather()
+    {
+        if myMap.isRainySeason()
+        {
+            center.color=NSColor.green
+            if -lastRainChange.timeIntervalSinceNow > rainChange
+            {
+                if isRaining
+                {
+                    isRaining=false
+                    rainChange=Double(random(min: 15, max: 35))
+                    lastRainChange=NSDate()
+                }
+                else
+                {
+                    isRaining=true
+                    rainChange=Double(random(min: 15, max: 35))
+                    lastRainChange=NSDate()
+                }
+            } // if it's time to change the rain
+            
+        } // if it's rainy season
+        else
+        {
+            isRaining=false
+            center.color=NSColor.white
+        } // if it's not rainy season
+        
+        if isRaining
+        {
+            rainNode!.particleBirthRate=1400
+            if -lastLightning.timeIntervalSinceNow > nextLightning
+            {
+                flashLightning()
+                nextLightning=Double(random(min: 15, max: 40))
+                lastLightning=NSDate()
+            } // if it's time for lightning
+            
+            
+        } // if it's raining
+        else
+        {
+            rainNode!.particleBirthRate=0
+        } // if it's not raining
+        
+    } // updateWeather
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -1386,22 +1409,7 @@ class GameScene: SKScene {
             checkKeys()
             checkAmbientSpawns()
             updateAnimals()
-            if myMap.isRainySeason()
-            {
-                
-                rainNode!.particleBirthRate=1400
-                if -lastLightning.timeIntervalSinceNow > nextLightning
-                {
-                    flashLightning()
-                    nextLightning=Double(random(min: 15, max: 40))
-                    lastLightning=NSDate()
-                }
-            }
-            else
-            {
-                rainNode!.particleBirthRate=0
-            }
-            
+            updateWeather()
             
         case mapGenState:
                 generateMap()

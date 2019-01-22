@@ -115,18 +115,15 @@ func drawMap()
         tile.position.x = CGFloat(-CGFloat(offset) + (CGFloat(mapx)*tile.size.width))
         tile.position.y = CGFloat(CGFloat(offset) - (CGFloat(mapy)*tile.size.width))
         tile.isHidden=false
-        tile.zPosition=1
-        tile.lightingBitMask=1
-        tile.shadowedBitMask=0
-        tile.shadowCastBitMask=0
-        //tile.colorBlendFactor=((value+1)/4)
+
+        //tile.colorBlendFactor=0.5
         //tile.color=NSColor(calibratedRed: 1.00, green: 1.0, blue: 1.0, alpha: 0)
         //tile.lightingBitMask=1
         //tile.shadowedBitMask=0
         //tile.shadowCastBitMask=0
         tile.name="tile0\(ground)"
         center.addChild(tile)
-       
+        tile.zPosition=1
         
         //print("\(mapx),\(mapy) - \(tile.texture)")
 

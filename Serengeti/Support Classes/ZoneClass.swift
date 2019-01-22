@@ -22,7 +22,7 @@ class ZoneClass
     private var scene:SKScene?
     internal var sprite=SKSpriteNode(imageNamed: "zoneFood01")
     
-    private let waterTexture=SKTexture(imageNamed: "zoneWater01")
+    private let waterTexture=SKTexture(imageNamed: "zoneWater02")
     private let restTexture=SKTexture(imageNamed: "zoneRest01")
     private let foodTexture=SKTexture(imageNamed: "zoneFood01")
     
