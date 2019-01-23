@@ -9,6 +9,13 @@
 import SpriteKit
 import GameplayKit
 
+extension String {
+    var westernArabicNumeralsOnly: String {
+        let pattern = UnicodeScalar("0")..."9"
+        return String(unicodeScalars
+            .compactMap { pattern ~= $0 ? Character($0) : nil })
+    }
+}
 
 // Globals //
 let mapDims:Double=172
@@ -311,6 +318,7 @@ class GameScene: SKScene {
         hudMsgBG.position.x = -size.width/2+hudTimeBG.size.width/2
         hudMsgBG.position.y = -size.height/2+hudTimeBG.size.height/2
         hudMsgBG.alpha=0.0
+        hudMsgBG.name="hudMsgBG"
         hudMsgBG.zPosition=5000
         cam.addChild(hudMsgBG)
         
@@ -472,9 +480,45 @@ class GameScene: SKScene {
                 {
                     mmHowPlay.isHidden=true
                 } // if it's the how to play pop up
+                
+            
             } // for each node
             
+            
+            
         } // if we're at the main menu
+        
+        
+        if currentState==inGameState
+        {
+            print("Click")
+            for thisNode in nodes(at: pos)
+            {
+                if thisNode.name=="hudMsgBG" || thisNode.name=="hudMsgLabel"
+                {
+                    print("Msg Click")
+                    let index=myMap.msg.getArchivedCount()
+                    var message=myMap.msg.readArchivedMessage(index: index-1)
+                    var ent=message.westernArabicNumeralsOnly
+                    let entNum=ent.prefix(4)
+                    print("Entity Num: \(entNum)")
+                    for ents in myMap.entList
+                    {
+                        if ents.name.contains(entNum)
+                        {
+                            // compute distance to point
+                            let dx=ents.sprite.position.x-cam.position.x
+                            let dy=ents.sprite.position.y-cam.position.y
+                            let dist=hypot(dy, dx)
+                            let time=dist/DRONEMAXSPEED/60
+                            cam.run(SKAction.move(to: ents.sprite.position, duration: TimeInterval(time)))
+                            break
+                        } // if we can pull the entity from the entList
+                    } // for each entity
+                    
+                } // if we click on the hudMessage
+            } // for each node
+        } // if we're in game
         
     } // touchDown
     
