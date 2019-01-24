@@ -161,7 +161,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
             {
                 if thisOne.name=="tile01"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree01")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation1")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
@@ -170,7 +170,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                 } // if we're on tile01
                 else if thisOne.name=="tile02"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree02")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation2")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
@@ -180,7 +180,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                 } // if we're on tile 02
                 else if thisOne.name=="tile04"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree04")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation3")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
@@ -202,7 +202,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
             {
                 if thisOne.name=="tile01"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree01")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation5")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
@@ -211,7 +211,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                 } // if we're on tile01
                 else if thisOne.name=="tile02"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree02")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation6")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
@@ -221,7 +221,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                 } // if we're on tile 02
                 else if thisOne.name=="tile04"
                 {
-                    let tempTree=SKSpriteNode(imageNamed: "tree04")
+                    let tempTree=SKSpriteNode(imageNamed: "treeVariation1")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
                     tempTree.zPosition=101
