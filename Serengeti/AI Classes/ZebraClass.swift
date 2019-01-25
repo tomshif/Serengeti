@@ -11,15 +11,15 @@ import SpriteKit
 
 class ZebraClass:EntityClass
 {
-    
+    var counter:Int=0
     var alert:Int=0
     var temper:Int=0
     var MAXHERD:Int=30
     var MAXCHILDRENBORN:Int=2
     
     var followDistance:CGFloat=150
-    
-    
+    var lastBaby:CGFloat=0
+
     
     var isSick:Bool=false
     var isFemale:Bool=false
@@ -27,8 +27,8 @@ class ZebraClass:EntityClass
     var isPregnant:Bool=false
     var isTranqued:Bool=false
     
-    var babyTexture=SKTexture(imageNamed: "zebraVariation1Sprite")
-    var adultTexture=SKTexture(imageNamed: "zebraVariation2Sprite")
+    let adultTexture=SKTexture(imageNamed: "zebraVariation2Sprite")
+    let babyTexture=SKTexture(imageNamed: "zebraVariation1Sprite")
 
     
     override init()
@@ -63,13 +63,11 @@ class ZebraClass:EntityClass
         AICycle=1
         WANDERANGLE=CGFloat.pi/7
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
-        age=random(min: 1.0, max: MAXAGE*0.95)
-        
+        age=random(min: 1.0, max: MAXAGE*0.7)
         if age < MAXAGE*0.2
         {
             sprite.texture=babyTexture
         }
-        
     } // full init()
     
     init(theScene:SKScene, theMap: MapClass, pos: CGPoint, number: Int, leader:EntityClass?)
@@ -107,7 +105,13 @@ class ZebraClass:EntityClass
         WANDERANGLE=CGFloat.pi/7
         MAXAGE=8640*10
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
-        age=random(min: 1.0, max: MAXAGE*0.95)
+        age=random(min: 1.0, max: MAXAGE*0.7)
+        
+        let maleChance=random(min: 0, max: 1)
+        if maleChance > 0.75 || leader == nil
+        {
+            isMale=true
+        }
         if age < MAXAGE*0.2
         {
             sprite.texture=babyTexture
@@ -129,18 +133,95 @@ class ZebraClass:EntityClass
                                 // that we can catch up
     }//func catch up
     
+    
+    
+    func findNewHerdLeader()
+    {
+        var maleIndex:Int = -1
+        var maleDist:CGFloat=300000
+        var nearbyLeaderDist:CGFloat=300000
+        var nearbyLeaderIndex:Int = -1
+        
+        if !isHerdLeader
+        {
+            for i in 0..<map!.entList.count
+            {
+                if map!.entList[i].getAgeString()=="Mature" && map!.entList[i].isAlive() && map!.entList[i].name.contains("Zebra")
+                {
+                    let dist=getDistToEntity(ent: map!.entList[i])
+                    if map!.entList[i].isHerdLeader
+                    {
+                        if dist<nearbyLeaderDist
+                        {
+                            nearbyLeaderDist=dist
+                            nearbyLeaderIndex=i
+                        }// if distance to leader is lower than max distance
+
+                    }// if map entlist leader
+                    else if map!.entList[i].isMale
+                    {
+                        if dist < maleDist
+                        {
+                            maleDist=dist
+                            maleIndex=i
+                        }// male distance is lower than max distance
+                    }// else
+                }//if map entlist
+            }// for i in map!
+            if nearbyLeaderDist<3000 && nearbyLeaderIndex > -1
+            {
+                herdLeader=map!.entList[nearbyLeaderIndex]
+                
+            }// if leader dist less than 300000
+            else if maleIndex > -1
+            {
+                herdLeader=map!.entList[maleIndex]
+                map!.entList[maleIndex].isHerdLeader=true
+            }//else male leader was found
+            else
+            {
+                isHerdLeader=true
+                herdLeader=nil
+            } // failover to make self leader
+            
+        }// if no leader and am not leader
+    }//func new herd leader
+    
+    
+    
+    func giveBirth()
+    {
+        if !isMale && getAgeString()=="Mature" && age-lastBaby > 8640
+        {
+            
+            let spawnChance:CGFloat=random(min: 0, max: 1.00)
+            if spawnChance > 0.9999875
+            {
+                print("Baby!")
+                let baby=ZebraClass(theScene: scene!, theMap: map!, pos: sprite.position, number: map!.entityCounter, leader: self)
+                map!.entList.append(baby)
+                map!.msg.sendMessage(type: map!.msg.BIRTH, from: name)
+                map!.entityCounter+=1
+                lastBaby=age
+                
+            }
+        }
+
+    }// func give birth
+    
+    
+    
    override internal func update(cycle: Int) -> Int
     {
         var ret:Int = -1
-        
+        giveBirth()
         doTurn()
+        updateGraphics()
         
         if age > MAXAGE*0.2 && sprite.texture==babyTexture
         {
             sprite.texture=adultTexture
         }
-        
-        updateGraphics()
         
         if alive
         {
@@ -173,6 +254,17 @@ class ZebraClass:EntityClass
                     wander()
                 }// else wander
             }//if current state = wander state
+            
+
+            if herdLeader != nil
+            {
+                if !herdLeader!.isAlive()
+                {
+                    findNewHerdLeader()
+                    
+                }
+            }
+
             
             // fix it if our rotation is more than pi*2 or less than 0
             if sprite.zRotation > CGFloat.pi*2

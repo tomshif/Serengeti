@@ -161,9 +161,16 @@ func drawTree(theMap: MapClass, theScene: SKScene)
             {
                 if thisOne.name=="tile01"
                 {
+
+                    
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation1")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
                     tempTree.zRotation=random(min: 0, max: CGFloat.pi)
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
@@ -179,7 +186,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.zPosition=zPos
                     tempTree.position=point
                     theScene.addChild(tempTree)
-                    
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile 02
                 else if thisOne.name=="tile04"
                 {
@@ -190,7 +201,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.zPosition=zPos
                     tempTree.position=point
                     theScene.addChild(tempTree)
-                    
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're tile 04
             } // for each node
         } // if we have nodes
@@ -213,6 +228,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.zPosition=zPos
                     tempTree.position=point
                     theScene.addChild(tempTree)
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile01
                 else if thisOne.name=="tile02"
                 {
@@ -223,7 +243,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.zPosition=zPos
                     tempTree.position=point
                     theScene.addChild(tempTree)
-                    
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile 02
                 else if thisOne.name=="tile04"
                 {
@@ -234,7 +258,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.zPosition=zPos
                     tempTree.position=point
                     theScene.addChild(tempTree)
-                    
+                    let rV=random(min: 0.7, max: 1)
+                    let gV=random(min: 0.7, max: 1)
+                    let bV=random(min: 0.7, max: 1)
+                    tempTree.colorBlendFactor=1
+                    tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're tile 04
             } // for each node
         } // if we have nodes

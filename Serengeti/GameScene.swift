@@ -74,6 +74,9 @@ class GameScene: SKScene {
     
     var mapGenDelay:Int=0
     
+    var currentSelection:EntityClass?
+    
+    
     let MAXZOOM:CGFloat=0.5
     let MINZOOM:CGFloat=2.5
     let DRONEPOWER:CGFloat=0.3
@@ -113,7 +116,9 @@ class GameScene: SKScene {
     let hudAltArrow=SKSpriteNode(imageNamed: "hudAltArrow")
     let hudParkInfo=SKSpriteNode(imageNamed: "hudParkInfo")
     let hudAltBar=SKSpriteNode(imageNamed: "hudAltBar")
-    
+    let hudSelectSquare=SKSpriteNode(imageNamed: "hudSelectSquare")
+    let hudSelectArrow=SKSpriteNode(imageNamed: "hudSelectArrow")
+    let hudAnimalInfoBG=SKSpriteNode(imageNamed: "hudAnimalInfo")
     
     // ShapeNodes - In Game HUD
     let hudMapMarker=SKShapeNode(circleOfRadius: 5)
@@ -141,6 +146,9 @@ class GameScene: SKScene {
     let hudPIWarthog=SKLabelNode(fontNamed: "Arial")
     let hudPIZebra=SKLabelNode(fontNamed: "Arial")
     let hudSeasonLabel=SKLabelNode(fontNamed: "Arial")
+    let hudAnimalName=SKLabelNode(fontNamed: "Arial")
+    let hudAnimalGender=SKLabelNode(fontNamed: "Arial")
+    let hudAnimalAge=SKLabelNode(fontNamed: "Arial")
     
     
     // Sounds
@@ -189,11 +197,13 @@ class GameScene: SKScene {
         myMap.info.map=myMap
         
         self.camera=cam
+        cam.name="cam"
         addChild(cam)
         
         rainNode!.particleBirthRate=0
         rainNode!.zPosition=4998
         rainNode!.targetNode=scene
+        rainNode!.name="rainNode"
         cam.addChild(rainNode!)
 
         
@@ -203,13 +213,14 @@ class GameScene: SKScene {
         hudLightMask.strokeColor=NSColor.systemGreen
         hudLightMask.alpha=0.5
         hudLightMask.isHidden=true
-        
+        hudLightMask.name="hudLightMask"
         hudLightMask.zPosition=4999
         cam.addChild(hudLightMask)
         
         
         //center.colorBlendFactor=0.5
         addChild(center)
+        center.name="center"
         center.zPosition = -1000
         
         //Init main menu
@@ -253,60 +264,70 @@ class GameScene: SKScene {
         
         mmGenerating.zPosition=2
         mmGenerating.isHidden=true
+        mmGenerating.name="mmGenerating"
         mmBG.addChild(mmGenerating)
         
         mmGenSplinesLabel.zPosition=3
         mmGenSplinesLabel.fontSize=22
         mmGenSplinesLabel.position.y = mmGenerating.size.height*0.10
         mmGenSplinesLabel.text="Reticulating Splines: 0%"
+        mmGenSplinesLabel.name="mmGenSplinesLabel"
         mmGenerating.addChild(mmGenSplinesLabel)
         
         mmGenWaterLabel.zPosition=3
         mmGenWaterLabel.fontSize=22
         mmGenWaterLabel.position.y = 0
         mmGenWaterLabel.text="Hitting the hot tub: 0%"
+        mmGenWaterLabel.name="mmGenWaterLabel"
         mmGenerating.addChild(mmGenWaterLabel)
         
         mmGenRestLabel.zPosition=3
         mmGenRestLabel.fontSize=22
         mmGenRestLabel.position.y = -mmGenerating.size.height*0.1
         mmGenRestLabel.text="Taking a nap: 0%"
+        mmGenRestLabel.name="mmGenRestLabel"
         mmGenerating.addChild(mmGenRestLabel)
         
         mmGenFoodLabel.zPosition=3
         mmGenFoodLabel.fontSize=22
         mmGenFoodLabel.position.y = -mmGenerating.size.height*0.2
         mmGenFoodLabel.text="Cooking dinner: 0%"
+        mmGenFoodLabel.name="mmGenFoodLabel"
         mmGenerating.addChild(mmGenFoodLabel)
 
         mmGenTreeLabel.zPosition=3
         mmGenTreeLabel.fontSize=22
         mmGenTreeLabel.position.y = -mmGenerating.size.height*0.3
         mmGenTreeLabel.text="Tending the garden: 0%"
+        mmGenTreeLabel.name="mmGenTreeLabel"
         mmGenerating.addChild(mmGenTreeLabel)
         
         mmGenAnimalsLabel.zPosition=3
         mmGenAnimalsLabel.fontSize=22
         mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.4
         mmGenAnimalsLabel.text="Rescuing pit bulls: 0%"
+        mmGenAnimalsLabel.name="mmGenAnimalsLabel"
         mmGenerating.addChild(mmGenAnimalsLabel)
         
         hudTimeBG.position.x = 0
         hudTimeBG.position.y = size.height/2-hudTimeBG.size.height/2
         hudTimeBG.isHidden=true
         hudTimeBG.zPosition=5000
+        hudTimeBG.name="hudTimeBG"
         cam.addChild(hudTimeBG)
         
         hudTimeLabel.text="Time"
         hudTimeLabel.fontSize=22
         hudTimeLabel.zPosition=5001
         hudTimeLabel.position.y=hudTimeBG.size.height*0.25
+        hudTimeLabel.name="hudTimeLabel"
         hudTimeBG.addChild(hudTimeLabel)
         
         hudSeasonLabel.text="Wet Season"
         hudSeasonLabel.fontSize=22
         hudSeasonLabel.zPosition=5001
         hudSeasonLabel.position.y = 0
+        hudTimeLabel.name="hudTimeLabel"
         hudTimeBG.addChild(hudSeasonLabel)
         
         hudTimeScaleLabel.text="TimeScale"
@@ -336,6 +357,7 @@ class GameScene: SKScene {
         hudNVG.isHidden=true
         hudNVG.zPosition=5000
         hudNVG.alpha=0.9
+        hudNVG.name="hudNVG"
         cam.addChild(hudNVG)
         
         // Temp
@@ -441,7 +463,47 @@ class GameScene: SKScene {
         addChild(thunder01)
         thunder01.run(SKAction.stop())
         
+        hudSelectSquare.isHidden=true
+        hudSelectSquare.zPosition=10001
+        hudSelectSquare.name="hudSelectSquare"
+        addChild(hudSelectSquare)
         
+        hudSelectArrow.zPosition=10001
+        hudSelectArrow.name="hudSelectArrow"
+        hudSelectArrow.alpha=0.8
+        droneHUD.addChild(hudSelectArrow)
+        
+        hudAnimalInfoBG.zPosition=10000
+        hudAnimalInfoBG.position.x=size.width/2-hudAnimalInfoBG.size.width/2
+        hudAnimalInfoBG.position.y = -size.height/2+hudAnimalInfoBG.size.height/2
+        hudAnimalInfoBG.name="hudAnimalInfoBG"
+        hudAnimalInfoBG.isHidden=true
+        
+        cam.addChild(hudAnimalInfoBG)
+        
+        hudAnimalName.zPosition=10001
+        hudAnimalName.position.y=hudAnimalInfoBG.size.height*0.3
+        hudAnimalName.fontSize=18
+        hudAnimalName.text="hudAnimalName"
+        hudAnimalName.name="hudAnimalName"
+        hudAnimalName.fontColor=NSColor.white
+        hudAnimalInfoBG.addChild(hudAnimalName)
+        
+        hudAnimalGender.zPosition=10001
+        hudAnimalGender.position.y=hudAnimalInfoBG.size.height*0.2
+        hudAnimalGender.fontSize=18
+        hudAnimalGender.text="hudAnimalGender"
+        hudAnimalGender.name="hudAnimalGender"
+        hudAnimalGender.fontColor=NSColor.white
+        hudAnimalInfoBG.addChild(hudAnimalGender)
+        
+        hudAnimalAge.zPosition=10001
+        hudAnimalAge.position.y=hudAnimalInfoBG.size.height*0.1
+        hudAnimalAge.fontSize=18
+        hudAnimalAge.text="hudAnimalAge"
+        hudAnimalAge.name="hudAnimalAge"
+        hudAnimalAge.fontColor=NSColor.white
+        hudAnimalInfoBG.addChild(hudAnimalAge)
         
 
     } // didMove
@@ -491,12 +553,12 @@ class GameScene: SKScene {
         
         if currentState==inGameState
         {
-            print("Click")
+            currentSelection=nil
             for thisNode in nodes(at: pos)
             {
                 if thisNode.name=="hudMsgBG" || thisNode.name=="hudMsgLabel"
                 {
-                    print("Msg Click")
+                    
                     let index=myMap.msg.getArchivedCount()
                     var message=myMap.msg.readArchivedMessage(index: index-1)
                     var ent=message.westernArabicNumeralsOnly
@@ -506,17 +568,31 @@ class GameScene: SKScene {
                     {
                         if ents.name.contains(entNum)
                         {
-                            // compute distance to point
-                            let dx=ents.sprite.position.x-cam.position.x
-                            let dy=ents.sprite.position.y-cam.position.y
-                            let dist=hypot(dy, dx)
-                            let time=dist/DRONEMAXSPEED/60
-                            cam.run(SKAction.move(to: ents.sprite.position, duration: TimeInterval(time)))
-                            break
+                            // if we click on the message, select that entity (if it's not dead)
+                            if ents.isAlive()
+                            {
+                                currentSelection=ents
+                            }
                         } // if we can pull the entity from the entList
                     } // for each entity
-                    
                 } // if we click on the hudMessage
+                else if thisNode.name != nil
+                {
+                    if thisNode.name!.contains("ent")
+                    {
+                        for ents in myMap.entList
+                        {
+                            if ents.name==thisNode.name
+                            {
+                                print("You clicked on \(thisNode.name!)")
+                                currentSelection=ents
+                                print("Selected: \(currentSelection!.name)")
+                                break
+                            } // if we find the entity
+                        } // for each entity
+                    } // if we've clicked on an entity
+                } // if the name isn't nil
+ 
             } // for each node
         } // if we're in game
         
@@ -1275,7 +1351,54 @@ class GameScene: SKScene {
         let speed=hypot(droneVec.dy, droneVec.dx)
         hudSpeedLabel.text=String(format: "Speed: %2.1f",speed)
         
-       
+       // update Selection
+        if currentSelection != nil
+        {
+            hudSelectSquare.isHidden=false
+            hudSelectArrow.isHidden=false
+            hudAnimalInfoBG.isHidden=false
+            hudSelectSquare.position=currentSelection!.sprite.position
+            // updateArrow
+            let dx=currentSelection!.sprite.position.x-cam.position.x
+            let dy=currentSelection!.sprite.position.y-cam.position.y
+            let angle=atan2(dy, dx)
+            let dist=hypot(dy, dx)
+            hudSelectArrow.zRotation=angle
+            hudSelectArrow.position.x=cos(angle)*droneHUD.size.width*0.7
+            hudSelectArrow.position.y=sin(angle)*droneHUD.size.width*0.7
+            var scale=1-((5000-dist)/5000)
+            if scale > 1
+            {
+                scale=1
+            }
+            if scale < 0.2
+            {
+                scale=0.2
+            }
+            hudSelectArrow.setScale(scale)
+            
+            
+           
+            // update Animal Info
+            let name=currentSelection!.name.dropFirst(3)
+            hudAnimalName.text="RFID Name: \(name)"
+            if currentSelection!.isMale
+            {
+                hudAnimalGender.text="Gender: Male"
+            }
+            else
+            {
+                hudAnimalGender.text="Gender: Female"
+            }
+            hudAnimalAge.text=String(format: "Age: %2.1f years", currentSelection!.getAge()/8640)
+            
+        } // if we have something selected
+        else
+        {
+            hudSelectSquare.isHidden=true
+            hudSelectArrow.isHidden=true
+            hudAnimalInfoBG.isHidden=true
+        } // if nothing is selected
         
         
         if myMap.msg.getUnreadCount() > 0
@@ -1287,6 +1410,9 @@ class GameScene: SKScene {
             hudMsgBG.run(runAction)
             //msgBG.run(SKAction.fadeOut(withDuration: 5.0))
         } // if we have unread messages
+        
+        
+        
     } // func updateHUD
     
     func adjustLighting()

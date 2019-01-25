@@ -57,7 +57,7 @@ class TestClass:EntityClass
         TURNFREQ=0.8
         AICycle=3
         WANDERANGLE=CGFloat.pi/6
-        MAXAGE=77760
+        MAXAGE=60480
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: MAXAGE*0.4, max: MAXAGE*0.7)
         currentState=WANDERSTATE
@@ -96,7 +96,7 @@ class TestClass:EntityClass
         TURNFREQ=0.5
         AICycle=3
         WANDERANGLE=CGFloat.pi/8
-        MAXAGE=77760
+        MAXAGE=60480
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.95)
         followDistVar=random(min: -FOLLOWDIST*0.5, max: FOLLOWDIST*1.5)
@@ -140,7 +140,7 @@ class TestClass:EntityClass
         }
         
         WANDERANGLE=CGFloat.pi/8
-        MAXAGE=77760
+        MAXAGE=60480
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         if isBaby
         {
@@ -193,7 +193,7 @@ class TestClass:EntityClass
             if map!.isRainySeason() && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
             {
                 let babyChance=random(min: 0.0, max: 1.0)
-                if babyChance > 0.99993
+                if babyChance > 0.999985
                 {
                     // Hurray! We're having a baby!
                     let babyNumber=Int(random(min: 2, max: 5.999999))
