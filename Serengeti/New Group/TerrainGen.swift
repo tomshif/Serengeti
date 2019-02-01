@@ -39,8 +39,8 @@ func generateTerrainMap() -> Int32
     noiseMap = GKNoiseMap(noise, size: mapSize, origin: mapCenter, sampleCount: mapSamples, seamless: false)
     let texture = SKTexture(noiseMap: noiseMap)
     mapTexture=texture
-    map.texture=texture
-    map.yScale *= -1
+    // map.texture=texture
+    //map.yScale *= -1
     
     seed = Int32(random(min:0, max: 50000))
     
@@ -53,6 +53,101 @@ func generateTerrainMap() -> Int32
     
     return seed
 } // func generateTerrainMap
+
+func genTileMap()
+{
+    
+    let tMap=SKNode()
+    tMap.zPosition=0
+    center.addChild(tMap)
+    var topLayer=SKTileMapNode()
+    let tileSet = SKTileSet(named: "Sample Grid Tile Set")!
+    let tileSize = CGSize(width: 128, height: 128)
+    let columns = Int(mapDims)
+    let rows = Int(mapDims)
+    let waterTiles = tileSet.tileGroups.first { $0.name == "Water" }
+    let grassTiles = tileSet.tileGroups.first { $0.name == "Grass"}
+    let deadGrass = tileSet.tileGroups.first { $0.name == "Cobblestone"}
+    let grass01Tiles = tileSet.tileGroups.first { $0.name == "Sand"}
+    
+    let bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
+    bottomLayer.fill(with: grass01Tiles)
+    bottomLayer.zPosition=0
+    tMap.name="tMap"
+    tMap.addChild(bottomLayer)
+    bottomLayer.name="Bottom Layer"
+    // create the noise map
+    noiseMap=makeNoiseMap(columns: columns, rows: rows)
+    let mapT=SKTexture(noiseMap: noiseMap)
+    map.yScale*=1
+    map.zRotation=CGFloat.pi/2
+    map.texture=mapT
+    
+    
+    
+
+    // create our grass/water layer
+    topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
+    topLayer.zPosition=0
+    
+    // make SpriteKit do the work of placing specific tiles
+    topLayer.enableAutomapping = true
+    topLayer.name="Top Layer"
+    // add the grass/water layer to our main map node
+    tMap.addChild(topLayer)
+    
+    for column in 0 ..< columns {
+        for row in 0 ..< rows {
+            let location = vector2(Int32(row), Int32(column))
+            let terrainHeight = noiseMap.value(at: location)
+            
+            if terrainHeight < -0.55 {
+                topLayer.setTileGroup(waterTiles, forColumn: column, row: row)
+            } else if terrainHeight < 0.5{
+                topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
+            }
+            else
+            {
+                topLayer.setTileGroup(deadGrass, forColumn: column, row: row)
+            }
+        }
+    }
+    // return animated tiles in a single layer
+    var mapSize=vector_double2()
+    mapSize.x=mapDims-1
+    mapSize.y=mapDims-1
+    
+    var mapCenter=vector_double2()
+    mapCenter.x=0
+    mapCenter.y=0
+    var mapSamples=vector_int2()
+    mapSamples.x=sampleDims-1
+    mapSamples.y=sampleDims-1
+    
+    let seed = Int32(random(min:0, max: 50000))
+    
+    // generate biome map
+    let biomeNoise = GKNoise(GKBillowNoiseSource(frequency: 0.01, octaveCount: 1, persistence: 0.1, lacunarity: 0.1, seed: seed))
+    
+    biomeMap=GKNoiseMap(biomeNoise, size: mapSize, origin: mapCenter, sampleCount: mapSamples, seamless: false)
+    biomeTexture=SKTexture(noiseMap: biomeMap)
+    
+} // func genTileMap
+
+func makeNoiseMap(columns: Int, rows: Int) -> GKNoiseMap {
+    
+    let seed=Int32(random(min: 1, max: 50000))
+    let source = GKBillowNoiseSource(frequency: 0.015, octaveCount: 2, persistence: 0.2, lacunarity: 0.005, seed: seed)
+    //source.persistence = 0.8
+    
+    let noise = GKNoise(source)
+    let sizeRange=random(min: 3.5, max: 6.0)
+    let size = vector2(Double(columns), Double(rows))
+    let origin = vector2(0.0, 0.0)
+    let sampleCount = vector2(Int32(columns), Int32(rows))
+    
+    return GKNoiseMap(noise, size: size, origin: origin, sampleCount: sampleCount, seamless: true)
+} // func makeNoiseMap
 
 func genMap()
 {
@@ -143,15 +238,19 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     // first pick a random spot
     for _ in 1...10
     {
-    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9), y: random(min: -theMap.BOUNDARY*0.9, max: theMap.BOUNDARY*0.9))
+    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.85, max: theMap.BOUNDARY*0.85), y: random(min: -theMap.BOUNDARY*0.85, max: theMap.BOUNDARY*0.85))
+
+
+    var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH), Int32(point.y)/Int32(theMap.MAPWIDTH))
 
     
-    var loc=vector_int2()
-    loc.x = Int32(point.x)/Int32(theMap.MAPWIDTH)
-    loc.y = Int32(point.y)/Int32(theMap.MAPWIDTH)
+    let location = vector2(Int32(loc.x), Int32(loc.y))
+    let terrainHeight = noiseMap.value(at: location)
     
     // check the spot on the biome map to see what kind of tree
     let alt=biomeMap.value(at: loc)
+    let mapAlt=noiseMap.value(at: location)
+        
     if alt > 0.5
     {
         let nodes=theScene.nodes(at: point)
@@ -159,7 +258,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
         {
             for thisOne in nodes
             {
-                if thisOne.name=="tile01"
+                if mapAlt > 0.5
                 {
 
                     
@@ -177,7 +276,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     theScene.addChild(tempTree)
                     
                 } // if we're on tile01
-                else if thisOne.name=="tile02"
+                else if mapAlt > 0.25
                 {
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation2")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
@@ -192,7 +291,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.colorBlendFactor=1
                     tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile 02
-                else if thisOne.name=="tile04"
+                else if mapAlt > 0.0
                 {
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation3")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
@@ -219,7 +318,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
         {
             for thisOne in nodes
             {
-                if thisOne.name=="tile01"
+                if thisOne.name=="Bottom Layer"
                 {
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation5")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
@@ -234,7 +333,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.colorBlendFactor=1
                     tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile01
-                else if thisOne.name=="tile02"
+                else if thisOne.name=="Bottom Layer"
                 {
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation6")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
@@ -249,7 +348,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.colorBlendFactor=1
                     tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile 02
-                else if thisOne.name=="tile04"
+                else if thisOne.name=="Bottom Layer"
                 {
                     let tempTree=SKSpriteNode(imageNamed: "treeVariation1")
                     tempTree.setScale(random(min: 0.5, max: 1.2))
@@ -291,7 +390,7 @@ func genRestZone(theMap: MapClass, theScene: SKScene)
             for thisOne in theNodes
             {
                 // check the terrain tile for the right terrain
-                if thisOne.name=="tile02"
+                if thisOne.name != "Map"
                 {
                     // Check distances to water zones
                     for ii in 0..<theMap.zoneList.count
@@ -339,7 +438,7 @@ func genFoodZone(theMap: MapClass, theScene: SKScene)
             for thisOne in theNodes
             {
                 // check the terrain tile for the right terrain
-                if thisOne.name=="tile01"
+                if thisOne.name != "Bob"
                 {
                     // Check distances to water zones
                     for ii in 0..<theMap.zoneList.count
@@ -378,7 +477,7 @@ func genWaterZone(theMap: MapClass, theScene: SKScene)
     {
         // pick a spot
         checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY),y: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY))
-        
+        print("Point: \(checkPoint)")
         // check to see if it's the right kind of terrain
         let theNodes = theScene.nodes(at: checkPoint)
         if theNodes.count > 0
@@ -386,7 +485,7 @@ func genWaterZone(theMap: MapClass, theScene: SKScene)
             for thisOne in theNodes
             {
                 // check to see if w're on the right tile
-                if thisOne.name=="tile04"
+                if thisOne.name != "Bob"
                 {
                     // assume we've found a spot
                     foundSpot=true

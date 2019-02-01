@@ -16,6 +16,7 @@
 		F47D205221F11CD800A867A9 /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204D21F11CD800A867A9 /* TestClass.swift */; };
 		F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47D205621F25B9E00A867A9 /* rainTest01.sks */; };
 		F47D205921F25B9E00A867A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F47D205721F25B9E00A867A9 /* Assets.xcassets */; };
+		F47E9A8B2203517400AB8B3C /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47E9A8A2203517400AB8B3C /* MyTileSet.sks */; };
 		F489901721F2902B00E4B83B /* thunder01.wav in Resources */ = {isa = PBXBuildFile; fileRef = F489901621F2902B00E4B83B /* thunder01.wav */; };
 		F489901B21F2926500E4B83B /* thunder02.wav in Resources */ = {isa = PBXBuildFile; fileRef = F489901821F2926500E4B83B /* thunder02.wav */; };
 		F489901C21F2926500E4B83B /* thunder03.wav in Resources */ = {isa = PBXBuildFile; fileRef = F489901921F2926500E4B83B /* thunder03.wav */; };
@@ -47,6 +48,7 @@
 		F47D204D21F11CD800A867A9 /* TestClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
 		F47D205621F25B9E00A867A9 /* rainTest01.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = rainTest01.sks; sourceTree = "<group>"; };
 		F47D205721F25B9E00A867A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F47E9A8A2203517400AB8B3C /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
 		F489901621F2902B00E4B83B /* thunder01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = thunder01.wav; sourceTree = "<group>"; };
 		F489901821F2926500E4B83B /* thunder02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = thunder02.wav; sourceTree = "<group>"; };
 		F489901921F2926500E4B83B /* thunder03.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = thunder03.wav; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				F4D8422621E1814100B9D0A8 /* AI Classes */,
 				F4D8423921E2C48300B9D0A8 /* Support Classes */,
 				F4D8422721E182D500B9D0A8 /* Support Files */,
+				F47E9A8A2203517400AB8B3C /* MyTileSet.sks */,
 			);
 			path = Serengeti;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */,
+				F47E9A8B2203517400AB8B3C /* MyTileSet.sks in Resources */,
 				F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */,
 				F489901721F2902B00E4B83B /* thunder01.wav in Resources */,
 				F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */,

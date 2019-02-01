@@ -18,13 +18,13 @@ extension String {
 }
 
 // Globals //
-let mapDims:Double=172
+let mapDims:Double=512
 
-let sampleDims:Int32=172
+let sampleDims:Int32=512
 
 var map = SKSpriteNode(imageNamed: "map")
 var center = SKSpriteNode(imageNamed: "tile01")
-
+//let tileSet = SKTileSet(named: "MyTileSet")!
 
 var biomeTexture = SKTexture()
 var mapTexture=SKTexture()
@@ -33,6 +33,7 @@ var noiseMap=GKNoiseMap()
 var biomeMap=GKNoiseMap()
 
 var mapList=[mapTile]()
+
 
 let BIRDCOUNT:Int=100
 
@@ -63,9 +64,9 @@ class GameScene: SKScene {
     let genMapZonesState:Int=6
     let MAXUPDATECYCLES:Int=8
     
-    let WATERZONECOUNT:Int=25
+    let WATERZONECOUNT:Int=10
     let RESTZONECOUNT:Int=10
-    let FOODZONECOUNT:Int=50
+    let FOODZONECOUNT:Int=10
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
     let TREECOUNT:Int=20000
@@ -77,8 +78,8 @@ class GameScene: SKScene {
     var currentSelection:EntityClass?
     
     
-    let MAXZOOM:CGFloat=0.5
-    let MINZOOM:CGFloat=2.5
+    let MAXZOOM:CGFloat=1
+    let MINZOOM:CGFloat=3
     let DRONEPOWER:CGFloat=0.3
     let DRONEMAXSPEED:CGFloat=30.0
     let DRONEINERTIA:CGFloat=0.025
@@ -352,6 +353,7 @@ class GameScene: SKScene {
         
         hudMapMarker.zPosition=10001
         hudMapMarker.alpha=0.75
+        hudMapMarker.zPosition = -CGFloat.pi/2
         map.addChild(hudMapMarker)
         
         hudNVG.isHidden=true
@@ -801,20 +803,25 @@ class GameScene: SKScene {
     
     func generateMap()
     {
-        myMap.seed=generateTerrainMap()
-        genMap()
-        drawMap()
+        //myMap.seed=generateTerrainMap()
+        genTileMap()
+        //drawMap()
         currentState=genMapZonesState
     } // func generateMap
     
     func genMapZones()
     {
-        if waterZonesSpawned < WATERZONECOUNT
+        if waterZonesSpawned==0
+        {
+            mmGenSplinesLabel.text="Reticulating splines: 100%"
+            waterZonesSpawned += 1
+        }
+        else if waterZonesSpawned < WATERZONECOUNT
         {
             genWaterZone(theMap: myMap, theScene: self)
             waterZonesSpawned += 1
             
-            mmGenSplinesLabel.text="Reticulating splines: 100%"
+            
             mmGenWaterLabel.text=String(format: "Hitting the hot tub: %2.0f%%", (CGFloat(waterZonesSpawned)/CGFloat(WATERZONECOUNT))*100)
             
         } // if we need to spawn a water zone
@@ -1238,15 +1245,15 @@ class GameScene: SKScene {
         let dx=((myMap.BOUNDARY+cam.position.x)/myMap.BOUNDARY)-1
         let dy = ((myMap.BOUNDARY+cam.position.y)/myMap.BOUNDARY)-1
         
-        hudMapMarker.position.x = dx*map.size.width/2
-        hudMapMarker.position.y = -dy*map.size.height/2
+        hudMapMarker.position.x = dy*map.size.width/2
+        hudMapMarker.position.y = -dx*map.size.height/2
         
         // update altitude
-        let ratio=(cam.xScale-0.5)/2.0
+        let ratio=(cam.xScale-MAXZOOM)/2.0
 
         let altArrowRatio=ratio-0.5
         hudAltArrow.position.y=altArrowRatio*hudAltBar.size.height*0.92
-        let alt=ratio*198+51
+        let alt=ratio*198+101
         hudAltitudeLabel.text=String(format:"%2.0f m",alt)
         hudAltitudeLabel.position.y = altArrowRatio*hudAltBar.size.height*0.92
         
@@ -1371,9 +1378,9 @@ class GameScene: SKScene {
             {
                 scale=1
             }
-            if scale < 0.2
+            if scale < 0.05
             {
-                scale=0.2
+                scale=0.05
             }
             hudSelectArrow.setScale(scale)
             
@@ -1559,6 +1566,7 @@ class GameScene: SKScene {
         switch currentState
         {
         case inGameState:
+            center.isPaused=true
             myMap.timePlus()
             lastLightUpdate+=1
             if lastLightUpdate > 5

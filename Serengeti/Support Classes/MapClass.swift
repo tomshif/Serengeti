@@ -21,8 +21,8 @@ class MapClass
     
     public var BOUNDARY:CGFloat=0   // width/height of map from origin
     
-    public let TILESIZE:CGFloat=256 // width/height of each ground tile
-    public let MAPWIDTH:CGFloat=172 // this needs to match mapDims in GameScene
+    public let TILESIZE:CGFloat=128 // width/height of each ground tile
+    public let MAPWIDTH:CGFloat=512 // this needs to match mapDims in GameScene
     public var seed:Int32=0
     public var entityCounter:Int=0
     
