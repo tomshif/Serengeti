@@ -96,6 +96,11 @@ class ZebraClass:EntityClass
         sprite.zPosition=100
         
         scene!.addChild(sprite)
+        let rC=random(min: 0.75, max: 1.0)
+        let gC=random(min: 0.75, max: 1.0)
+        let bC=random(min: 0.75, max: 1.0)
+        sprite.colorBlendFactor=1.0
+        sprite.color=NSColor(calibratedRed: rC, green: gC, blue: bC, alpha: 1.0)
         
         // Variable updates
         MAXSPEED=2.0

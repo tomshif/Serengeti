@@ -109,6 +109,11 @@ class SpringbokClass:EntityClass
         sprite.zPosition=140
         
         scene!.addChild(sprite)
+        let rC=random(min: 0.65, max: 1.0)
+        let gC=random(min: 0.65, max: 1.0)
+        let bC=random(min: 0.65, max: 1.0)
+        sprite.colorBlendFactor=1.0
+        sprite.color=NSColor(calibratedRed: rC, green: gC, blue: bC, alpha: 1.0)
         
         // Variable updates
         MAXSPEED=2.2

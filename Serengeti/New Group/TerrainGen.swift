@@ -102,14 +102,11 @@ func genTileMap()
             let terrainHeight = noiseMap.value(at: location)
             
             if terrainHeight < -0.55 {
-                topLayer.setTileGroup(waterTiles, forColumn: column, row: row)
-            } else if terrainHeight < 0.5{
+                topLayer.setTileGroup(deadGrass, forColumn: column, row: row)
+            } else {
                 topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
             }
-            else
-            {
-                topLayer.setTileGroup(deadGrass, forColumn: column, row: row)
-            }
+
         }
     }
     // return animated tiles in a single layer
@@ -171,6 +168,38 @@ func genMap()
     
     print(mapList.count)
     
+}
+
+func getQuadrant(pos: CGPoint) -> Int
+{
+    // returns 1-4 for the quadrant that the point is in
+    
+    // 1|2
+    // -+-
+    // 3|4
+    
+    if pos.x < 0
+    {
+        if pos.y >= 0
+        {
+            return 1
+        }
+        else
+        {
+            return 3
+        }
+    } // if we're -x axis
+    else
+    {
+        if pos.y >= 0
+        {
+            return 2
+        }
+        else
+        {
+            return 4
+        }
+    }
 }
 
 func drawMap()
@@ -238,7 +267,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     // first pick a random spot
     for _ in 1...10
     {
-    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.85, max: theMap.BOUNDARY*0.85), y: random(min: -theMap.BOUNDARY*0.85, max: theMap.BOUNDARY*0.85))
+    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95), y: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95))
 
 
     var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH), Int32(point.y)/Int32(theMap.MAPWIDTH))
@@ -248,7 +277,7 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     let terrainHeight = noiseMap.value(at: location)
     
     // check the spot on the biome map to see what kind of tree
-    let alt=biomeMap.value(at: loc)
+    let alt=noiseMap.value(at: loc)
     let mapAlt=noiseMap.value(at: location)
         
     if alt > 0.5
@@ -273,8 +302,32 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
-                    
+                    tempTree.name="tempTree"
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                 } // if we're on tile01
                 else if mapAlt > 0.25
                 {
@@ -284,10 +337,35 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
                     let bV=random(min: 0.7, max: 1)
+                    tempTree.name="tempTree"
                     tempTree.colorBlendFactor=1
                     tempTree.color=NSColor(calibratedRed: rV, green: gV, blue: bV, alpha: 1.0)
                 } // if we're on tile 02
@@ -299,7 +377,31 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
                     let bV=random(min: 0.7, max: 1)
@@ -326,7 +428,31 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
                     let bV=random(min: 0.7, max: 1)
@@ -341,7 +467,31 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
                     let bV=random(min: 0.7, max: 1)
@@ -356,7 +506,31 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     let zPos=(tempTree.xScale/7*10)+300
                     tempTree.zPosition=zPos
                     tempTree.position=point
-                    theScene.addChild(tempTree)
+                    let quad=getQuadrant(pos: point)
+                    if quad == 1
+                    {
+                        treeNode1.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==2
+                    {
+                        treeNode2.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
+                    }
+                    else if quad==3
+                    {
+                        treeNode3.addChild(tempTree)
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
+                    else if quad==4
+                    {
+                        treeNode4.addChild(tempTree)
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y += theMap.BOUNDARY/2
+                    }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
                     let bV=random(min: 0.7, max: 1)
@@ -381,7 +555,7 @@ func genRestZone(theMap: MapClass, theScene: SKScene)
     while !foundSpot
     {
         // pick a spot
-        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY),y: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY))
+        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8),y: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8))
         
         // check to see if it's the right kind of terrain
         let theNodes = theScene.nodes(at: checkPoint)
@@ -429,7 +603,7 @@ func genFoodZone(theMap: MapClass, theScene: SKScene)
     while !foundSpot
     {
         // pick a spot
-        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY),y: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY))
+        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8),y: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8))
         
         // check to see if it's the right kind of terrain
         let theNodes = theScene.nodes(at: checkPoint)
@@ -476,7 +650,7 @@ func genWaterZone(theMap: MapClass, theScene: SKScene)
     while !foundSpot
     {
         // pick a spot
-        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY),y: random(min: -theMap.BOUNDARY, max: theMap.BOUNDARY))
+        checkPoint=CGPoint(x: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8),y: random(min: -theMap.BOUNDARY*0.8, max: theMap.BOUNDARY*0.8))
         print("Point: \(checkPoint)")
         // check to see if it's the right kind of terrain
         let theNodes = theScene.nodes(at: checkPoint)

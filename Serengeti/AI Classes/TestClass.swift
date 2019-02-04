@@ -40,7 +40,7 @@ class TestClass:EntityClass
         scene=theScene
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "warthogArrow")
+        sprite=SKSpriteNode(imageNamed: "warthog")
         sprite.position=pos
         
         sprite.name=String(format:"entWarthog%04d", number)
@@ -79,7 +79,7 @@ class TestClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "warthogArrow")
+        sprite=SKSpriteNode(imageNamed: "warthog")
         sprite.position=pos
         
         sprite.name=String(format:"entWarthog%04d", number)
@@ -89,6 +89,15 @@ class TestClass:EntityClass
         sprite.shadowedBitMask=0
         sprite.shadowCastBitMask=0
         scene!.addChild(sprite)
+        
+        let rC=random(min: 0.7, max: 1.0)
+        let gC=random(min: 0.7, max: 1.0)
+        let bC=random(min: 0.7, max: 1.0)
+        sprite.colorBlendFactor=1.0
+        sprite.color=NSColor(calibratedRed: rC, green: gC, blue: bC, alpha: 1.0)
+        
+        
+        
         
         // Variable updates
         MAXSPEED=1.2
@@ -120,7 +129,7 @@ class TestClass:EntityClass
         
         
         // sprite update
-        sprite=SKSpriteNode(imageNamed: "warthogArrow")
+        sprite=SKSpriteNode(imageNamed: "warthog")
         sprite.position=pos
         
         sprite.name=String(format:"entWarthog%04d", number)
@@ -138,6 +147,12 @@ class TestClass:EntityClass
         {
             isMale=true
         }
+        let rC=random(min: 0.7, max: 1.0)
+        let gC=random(min: 0.7, max: 1.0)
+        let bC=random(min: 0.7, max: 1.0)
+        sprite.colorBlendFactor=1.0
+        sprite.color=NSColor(calibratedRed: rC, green: gC, blue: bC, alpha: 1.0)
+        
         
         WANDERANGLE=CGFloat.pi/8
         MAXAGE=60480

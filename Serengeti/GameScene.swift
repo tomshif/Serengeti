@@ -18,13 +18,18 @@ extension String {
 }
 
 // Globals //
-let mapDims:Double=512
+let mapDims:Double=256
 
-let sampleDims:Int32=512
+let sampleDims:Int32=256
 
 var map = SKSpriteNode(imageNamed: "map")
-var center = SKSpriteNode(imageNamed: "tile01")
+var center = SKNode()
 //let tileSet = SKTileSet(named: "MyTileSet")!
+var treeNode1=SKNode()
+var treeNode2=SKNode()
+var treeNode3=SKNode()
+var treeNode4=SKNode()
+
 
 var biomeTexture = SKTexture()
 var mapTexture=SKTexture()
@@ -64,12 +69,12 @@ class GameScene: SKScene {
     let genMapZonesState:Int=6
     let MAXUPDATECYCLES:Int=8
     
-    let WATERZONECOUNT:Int=10
-    let RESTZONECOUNT:Int=10
-    let FOODZONECOUNT:Int=10
+    let WATERZONECOUNT:Int=20
+    let RESTZONECOUNT:Int=20
+    let FOODZONECOUNT:Int=20
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=20000
+    let TREECOUNT:Int=10000
     
     let PARKINFOUPDATEFREQ:Double=2.0
     
@@ -119,6 +124,7 @@ class GameScene: SKScene {
     let hudAltBar=SKSpriteNode(imageNamed: "hudAltBar")
     let hudSelectSquare=SKSpriteNode(imageNamed: "hudSelectSquare")
     let hudSelectArrow=SKSpriteNode(imageNamed: "hudSelectArrow")
+    let hudFollowIcon=SKSpriteNode(imageNamed: "hudFollowIcon02")
     let hudAnimalInfoBG=SKSpriteNode(imageNamed: "hudAnimalInfo")
     
     // ShapeNodes - In Game HUD
@@ -166,6 +172,8 @@ class GameScene: SKScene {
     var showParkInfo:Bool=false
     var showYearlyChange:Bool=true
     var isRaining:Bool=false
+    var treeLayerCreated:Bool=false
+    var followModeOn:Bool=false
     
     
     // Camera
@@ -223,87 +231,115 @@ class GameScene: SKScene {
         addChild(center)
         center.name="center"
         center.zPosition = -1000
+        print("Map Boundary: \(myMap.BOUNDARY)")
         
+
+        treeNode1.name="treeNode1"
+        treeNode1.zPosition=300
+        treeNode1.position.x = -myMap.BOUNDARY/2
+        treeNode1.position.y = myMap.BOUNDARY/2
+        addChild(treeNode1)
+        
+        
+        treeNode2.name="treeNode2"
+        treeNode2.zPosition=300
+        treeNode2.position.x = myMap.BOUNDARY/2
+        treeNode2.position.y = myMap.BOUNDARY/2
+        addChild(treeNode2)
+        
+        
+        treeNode3.name="treeNode3"
+        treeNode3.zPosition=300
+        treeNode3.position.x = -myMap.BOUNDARY/2
+        treeNode3.position.y = -myMap.BOUNDARY/2
+        addChild(treeNode3)
+        
+        
+        treeNode4.name="treeNode4"
+        treeNode4.zPosition=300
+        treeNode4.position.x = myMap.BOUNDARY/2
+        treeNode4.position.y = -myMap.BOUNDARY/2
+        addChild(treeNode4)
         //Init main menu
         
         mmBG.name="mmBG"
-        mmBG.zPosition=0
+        mmBG.zPosition=10000
         addChild(mmBG)
         
         mmPlayButton.position.x = size.width*0.3
         mmPlayButton.position.y = size.height*0.1
         mmPlayButton.name="mmPlayButton"
-        mmPlayButton.zPosition=1
+        mmPlayButton.zPosition=10001
         mmPlayButton.alpha=0.00001
         mmBG.addChild(mmPlayButton)
         
         mmLoadButton.position.x = size.width*0.3
         mmLoadButton.position.y = -size.height*0.05
-        mmLoadButton.zPosition=1
+        mmLoadButton.zPosition=10001
         mmLoadButton.name="mmLoadButton"
         mmLoadButton.alpha=0.00001
         mmBG.addChild(mmLoadButton)
         
         mmHowButton.position.x = size.width*0.3
         mmHowButton.position.y = -size.height*0.15
-        mmHowButton.zPosition=1
+        mmHowButton.zPosition=10001
         mmHowButton.name="mmHowButton"
         mmHowButton.alpha=0.00001
         mmBG.addChild(mmHowButton)
         
-        mmHowPlay.zPosition=3
+        mmHowPlay.zPosition=10002
         mmHowPlay.isHidden=true
         mmHowPlay.name="mmHowToPlay"
         mmBG.addChild(mmHowPlay)
         
         
-        mmLogo.zPosition=1
+        mmLogo.zPosition=10001
         mmLogo.name="mmLogo"
         mmLogo.position.x = -size.width*0.166
         mmLogo.position.y = size.height*0.333
         mmBG.addChild(mmLogo)
         
-        mmGenerating.zPosition=2
+        mmGenerating.zPosition=10002
         mmGenerating.isHidden=true
         mmGenerating.name="mmGenerating"
         mmBG.addChild(mmGenerating)
         
-        mmGenSplinesLabel.zPosition=3
+        mmGenSplinesLabel.zPosition=10003
         mmGenSplinesLabel.fontSize=22
         mmGenSplinesLabel.position.y = mmGenerating.size.height*0.10
         mmGenSplinesLabel.text="Reticulating Splines: 0%"
         mmGenSplinesLabel.name="mmGenSplinesLabel"
         mmGenerating.addChild(mmGenSplinesLabel)
         
-        mmGenWaterLabel.zPosition=3
+        mmGenWaterLabel.zPosition=10003
         mmGenWaterLabel.fontSize=22
         mmGenWaterLabel.position.y = 0
         mmGenWaterLabel.text="Hitting the hot tub: 0%"
         mmGenWaterLabel.name="mmGenWaterLabel"
         mmGenerating.addChild(mmGenWaterLabel)
         
-        mmGenRestLabel.zPosition=3
+        mmGenRestLabel.zPosition=10003
         mmGenRestLabel.fontSize=22
         mmGenRestLabel.position.y = -mmGenerating.size.height*0.1
         mmGenRestLabel.text="Taking a nap: 0%"
         mmGenRestLabel.name="mmGenRestLabel"
         mmGenerating.addChild(mmGenRestLabel)
         
-        mmGenFoodLabel.zPosition=3
+        mmGenFoodLabel.zPosition=10003
         mmGenFoodLabel.fontSize=22
         mmGenFoodLabel.position.y = -mmGenerating.size.height*0.2
         mmGenFoodLabel.text="Cooking dinner: 0%"
         mmGenFoodLabel.name="mmGenFoodLabel"
         mmGenerating.addChild(mmGenFoodLabel)
 
-        mmGenTreeLabel.zPosition=3
+        mmGenTreeLabel.zPosition=10003
         mmGenTreeLabel.fontSize=22
         mmGenTreeLabel.position.y = -mmGenerating.size.height*0.3
         mmGenTreeLabel.text="Tending the garden: 0%"
         mmGenTreeLabel.name="mmGenTreeLabel"
         mmGenerating.addChild(mmGenTreeLabel)
         
-        mmGenAnimalsLabel.zPosition=3
+        mmGenAnimalsLabel.zPosition=10003
         mmGenAnimalsLabel.fontSize=22
         mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.4
         mmGenAnimalsLabel.text="Rescuing pit bulls: 0%"
@@ -420,6 +456,13 @@ class GameScene: SKScene {
         hudParkInfo.zPosition=10000
         hudParkInfo.name="hudParkInfo"
         cam.addChild(hudParkInfo)
+        
+        hudFollowIcon.setScale(0.5)
+        droneHUD.addChild(hudFollowIcon)
+        hudFollowIcon.position.y = droneHUD.size.height/2+hudFollowIcon.size.height*1.1
+        hudFollowIcon.colorBlendFactor=1.0
+        hudFollowIcon.color=NSColor(calibratedRed: 0.422, green: 0.734, blue: 0.863, alpha: 1.0)
+        
         
         hudPITotalAnimals.zPosition=10001
         hudPITotalAnimals.name="hudPITAnimals"
@@ -586,9 +629,10 @@ class GameScene: SKScene {
                         {
                             if ents.name==thisNode.name
                             {
-                                print("You clicked on \(thisNode.name!)")
+                                //print("You clicked on \(thisNode.name!)")
                                 currentSelection=ents
-                                print("Selected: \(currentSelection!.name)")
+                                followModeOn=false
+                                //print("Selected: \(currentSelection!.name)")
                                 break
                             } // if we find the entity
                         } // for each entity
@@ -638,6 +682,37 @@ class GameScene: SKScene {
             {
                 downPressed=true
             }
+            
+        case 3:
+            if currentState == inGameState
+            {
+                if followModeOn
+                {
+                    followModeOn=false
+                }
+                else
+                {
+                    if currentSelection != nil
+                    {
+                        let dx=currentSelection!.sprite.position.x - cam.position.x
+                        let dy=currentSelection!.sprite.position.y - cam.position.y
+                        let dist = hypot(dy, dx)
+                        if dist < 350
+                        {
+                            followModeOn=true
+                            myMap.msg.sendCustomMessage(message: "Follow mode on")
+                        }
+                        else
+                        {
+                            myMap.msg.sendCustomMessage(message: "Too far from target to enter follow mode.")
+                        }
+                    } // if we have something selected
+                    else
+                    {
+                        myMap.msg.sendCustomMessage(message: "Must have animal selected for follow mode.")
+                    }
+                }
+            } // if we're in game
             
         case 13:
             if currentState==inGameState
@@ -844,8 +919,58 @@ class GameScene: SKScene {
             drawTree(theMap: myMap, theScene: self)
             treesSpawned+=10
             mmGenTreeLabel.text=String(format: "Tending the garden: %2.0f%%", (CGFloat(treesSpawned)/CGFloat(TREECOUNT))*100)
-            
+
         } // if we need to spawn trees
+        else if !treeLayerCreated
+        {
+            
+            // create tree layers
+            if let treeLayerTexture1 = self.view!.texture(from: treeNode1)
+            {
+                let treeLayer1=SKSpriteNode(texture: treeLayerTexture1)
+                treeLayer1.name="TreeLayer1"
+                treeLayer1.position.x = -myMap.BOUNDARY/2
+                treeLayer1.position.y = myMap.BOUNDARY/2
+                addChild(treeLayer1)
+                treeLayer1.zPosition=300
+            }
+            treeNode1.removeFromParent()
+            if let treeLayerTexture2 = self.view!.texture(from: treeNode2)
+            {
+                let treeLayer2=SKSpriteNode(texture: treeLayerTexture2)
+                treeLayer2.name="TreeLayer2"
+                treeLayer2.position.x = myMap.BOUNDARY/2
+                treeLayer2.position.y = myMap.BOUNDARY/2
+                addChild(treeLayer2)
+                treeLayer2.zPosition=300
+            }
+            treeNode2.removeFromParent()
+            
+            if let treeLayerTexture3 = self.view!.texture(from: treeNode3)
+            {
+                let treeLayer3=SKSpriteNode(texture: treeLayerTexture3)
+                treeLayer3.name="TreeLayer3"
+                treeLayer3.position.x = -myMap.BOUNDARY/2
+                treeLayer3.position.y = -myMap.BOUNDARY/2
+                addChild(treeLayer3)
+                treeLayer3.zPosition=300
+            }
+            treeNode3.removeFromParent()
+            
+            if let treeLayerTexture4 = self.view!.texture(from: treeNode4)
+            {
+                let treeLayer4=SKSpriteNode(texture: treeLayerTexture4)
+                treeLayer4.name="TreeLayer4"
+                treeLayer4.position.x = myMap.BOUNDARY/2
+                treeLayer4.position.y = -myMap.BOUNDARY/2
+                addChild(treeLayer4)
+                treeLayer4.zPosition=300
+            }
+            treeNode4.removeFromParent()
+            
+            treeLayerCreated=true
+            
+        }
         else if entityHerdSpawns < TESTENTITYCOUNT
         {
             let type=random(min: 0, max: 1.0)
@@ -1230,6 +1355,38 @@ class GameScene: SKScene {
         cam.position.x+=droneVec.dx
         cam.position.y+=droneVec.dy
         
+        if cam.position.x > myMap.BOUNDARY*0.9
+        {
+            cam.position.x = myMap.BOUNDARY*0.9
+            droneVec.dx=0
+        }
+        
+        if cam.position.x < -myMap.BOUNDARY*0.9
+        {
+            cam.position.x = -myMap.BOUNDARY*0.9
+            droneVec.dx=0
+        }
+        
+        if cam.position.y > myMap.BOUNDARY*0.9
+        {
+            cam.position.y = myMap.BOUNDARY*0.9
+            droneVec.dy=0
+        }
+        
+        if cam.position.y < -myMap.BOUNDARY*0.9
+        {
+            cam.position.y = -myMap.BOUNDARY*0.9
+            droneVec.dy=0
+        }
+        
+        if followModeOn
+        {
+            hudFollowIcon.isHidden=false
+        }
+        else
+        {
+            hudFollowIcon.isHidden=true
+        }
         
         hudTimeLabel.text=myMap.getTimeAsString()
         if myMap.isRainySeason()
@@ -1517,7 +1674,7 @@ class GameScene: SKScene {
     {
         if myMap.isRainySeason()
         {
-            center.color=NSColor.green
+            
             if -lastRainChange.timeIntervalSinceNow > rainChange
             {
                 if isRaining
@@ -1538,7 +1695,7 @@ class GameScene: SKScene {
         else
         {
             isRaining=false
-            center.color=NSColor.white
+            
         } // if it's not rainy season
         
         if isRaining
@@ -1588,7 +1745,19 @@ class GameScene: SKScene {
             checkAmbientSpawns()
             updateAnimals()
             updateWeather()
-            
+            if followModeOn
+            {
+                if currentSelection != nil
+                {
+                    cam.position=currentSelection!.sprite.position
+                }
+                else
+                {
+                    followModeOn=false
+                    
+                }
+                
+            }
         case mapGenState:
                 generateMap()
             
