@@ -267,9 +267,10 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     // first pick a random spot
     for _ in 1...10
     {
-    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95), y: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95))
-
-
+    //let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95), y: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95))
+        let point=CGPoint(x: random(min: -6000, max: 6000), y: random(min: -6000, max: 6000))
+        print("Tree Point: \(point)")
+        print("Quad: \(getQuadrant(pos: point))")
     var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH), Int32(point.y)/Int32(theMap.MAPWIDTH))
 
     
@@ -304,29 +305,34 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                     tempTree.position=point
                     tempTree.name="tempTree"
                     let quad=getQuadrant(pos: point)
+                    
                     if quad == 1
                     {
+                        tempTree.position.x += theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
                         treeNode1.addChild(tempTree)
-                        tempTree.position.x += theMap.BOUNDARY/2
-                        tempTree.position.y -= theMap.BOUNDARY/2
+                        
                     }
-                    else if quad==2
+                    else if quad == 2
                     {
+                        tempTree.position.x -= theMap.BOUNDARY/2
+                        tempTree.position.y -= theMap.BOUNDARY/2
                         treeNode2.addChild(tempTree)
-                        tempTree.position.x -= theMap.BOUNDARY/2
-                        tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
-                    else if quad==3
+                    else if quad == 3
                     {
-                        treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        treeNode3.addChild(tempTree)
+                        print("Node 3")
                     }
-                    else if quad==4
+                    else if quad == 4
                     {
-                        treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        treeNode4.addChild(tempTree)
+                        print("Node 4")
                     }
                 } // if we're on tile01
                 else if mapAlt > 0.25
@@ -343,24 +349,28 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                         treeNode1.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 1")
                     }
-                    else if quad==2
+                    else if quad == 2
                     {
                         treeNode2.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
-                    else if quad==3
+                    else if quad == 3
                     {
                         treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 3")
                     }
-                    else if quad==4
+                    else if quad == 4
                     {
                         treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 4")
                     }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
@@ -383,24 +393,28 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                         treeNode1.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 1")
                     }
                     else if quad==2
                     {
                         treeNode2.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
                     else if quad==3
                     {
                         treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 3")
                     }
                     else if quad==4
                     {
                         treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 4")
                     }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
@@ -434,24 +448,28 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                         treeNode1.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 1")
                     }
                     else if quad==2
                     {
                         treeNode2.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
                     else if quad==3
                     {
                         treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 3")
                     }
                     else if quad==4
                     {
                         treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 4")
                     }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
@@ -473,24 +491,28 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                         treeNode1.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 1")
                     }
                     else if quad==2
                     {
                         treeNode2.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
                     else if quad==3
                     {
                         treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 3")
                     }
                     else if quad==4
                     {
                         treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 4")
                     }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)
@@ -512,24 +534,28 @@ func drawTree(theMap: MapClass, theScene: SKScene)
                         treeNode1.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 1")
                     }
                     else if quad==2
                     {
                         treeNode2.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y -= theMap.BOUNDARY/2
+                        print("Node 2")
                     }
                     else if quad==3
                     {
                         treeNode3.addChild(tempTree)
                         tempTree.position.x += theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 3")
                     }
                     else if quad==4
                     {
                         treeNode4.addChild(tempTree)
                         tempTree.position.x -= theMap.BOUNDARY/2
                         tempTree.position.y += theMap.BOUNDARY/2
+                        print("Node 4")
                     }
                     let rV=random(min: 0.7, max: 1)
                     let gV=random(min: 0.7, max: 1)

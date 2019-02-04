@@ -74,7 +74,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=20
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=10000
+    let TREECOUNT:Int=1000
     
     let PARKINFOUPDATEFREQ:Double=2.0
     
