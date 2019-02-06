@@ -74,7 +74,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=20
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=1000
+    let TREECOUNT:Int=2000
     
     let PARKINFOUPDATEFREQ:Double=2.0
     
@@ -934,7 +934,7 @@ class GameScene: SKScene {
                 addChild(treeLayer1)
                 treeLayer1.zPosition=300
             }
-            treeNode1.removeFromParent()
+            //treeNode1.removeFromParent()
             if let treeLayerTexture2 = self.view!.texture(from: treeNode2)
             {
                 let treeLayer2=SKSpriteNode(texture: treeLayerTexture2)
@@ -944,7 +944,7 @@ class GameScene: SKScene {
                 addChild(treeLayer2)
                 treeLayer2.zPosition=300
             }
-            treeNode2.removeFromParent()
+            //treeNode2.removeFromParent()
             
             if let treeLayerTexture3 = self.view!.texture(from: treeNode3)
             {
@@ -955,7 +955,7 @@ class GameScene: SKScene {
                 addChild(treeLayer3)
                 treeLayer3.zPosition=300
             }
-            treeNode3.removeFromParent()
+            //treeNode3.removeFromParent()
             
             if let treeLayerTexture4 = self.view!.texture(from: treeNode4)
             {
@@ -1355,27 +1355,27 @@ class GameScene: SKScene {
         cam.position.x+=droneVec.dx
         cam.position.y+=droneVec.dy
         
-        if cam.position.x > myMap.BOUNDARY*0.9
+        if cam.position.x > myMap.BOUNDARY*0.95
         {
-            cam.position.x = myMap.BOUNDARY*0.9
+            cam.position.x = myMap.BOUNDARY*0.95
             droneVec.dx=0
         }
         
-        if cam.position.x < -myMap.BOUNDARY*0.9
+        if cam.position.x < -myMap.BOUNDARY*0.95
         {
-            cam.position.x = -myMap.BOUNDARY*0.9
+            cam.position.x = -myMap.BOUNDARY*0.95
             droneVec.dx=0
         }
         
-        if cam.position.y > myMap.BOUNDARY*0.9
+        if cam.position.y > myMap.BOUNDARY*0.95
         {
-            cam.position.y = myMap.BOUNDARY*0.9
+            cam.position.y = myMap.BOUNDARY*0.95
             droneVec.dy=0
         }
         
-        if cam.position.y < -myMap.BOUNDARY*0.9
+        if cam.position.y < -myMap.BOUNDARY*0.95
         {
-            cam.position.y = -myMap.BOUNDARY*0.9
+            cam.position.y = -myMap.BOUNDARY*0.95
             droneVec.dy=0
         }
         

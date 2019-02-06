@@ -267,8 +267,8 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     // first pick a random spot
     for _ in 1...10
     {
-    //let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95), y: random(min: -theMap.BOUNDARY*0.95, max: theMap.BOUNDARY*0.95))
-        let point=CGPoint(x: random(min: -6000, max: 6000), y: random(min: -6000, max: 6000))
+    let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.45, max: theMap.BOUNDARY*0.45), y: random(min: -theMap.BOUNDARY*0.45, max: theMap.BOUNDARY*0.45))
+        //let point=CGPoint(x: random(min: -6000, max: 6000), y: random(min: -6000, max: 6000))
         print("Tree Point: \(point)")
         print("Quad: \(getQuadrant(pos: point))")
     var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH), Int32(point.y)/Int32(theMap.MAPWIDTH))
