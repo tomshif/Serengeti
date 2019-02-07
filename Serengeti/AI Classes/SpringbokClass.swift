@@ -12,10 +12,9 @@ import SpriteKit
 class SpringbokClass:EntityClass
 {
     private var isPregnant:Bool=false
-    private var isFleeing:Bool=false
     private var isCloseToCheetah:Bool=false  // is close to what?
    
-    public var MAXHERD:Int=20
+    public var MAXHERD:Int=50
     public var MINHERD:Int=15
     private var MAXCHILD:Int=2
     
@@ -55,11 +54,12 @@ class SpringbokClass:EntityClass
         scene!.addChild(sprite)
         
         // Variable updates
-        MAXSPEED=2.2
+        MAXSPEED=5.1
         TURNRATE=0.15
         TURNFREQ=1.0
         WANDERANGLE=CGFloat.pi/2
         AICycle=0
+        ACCELERATION=0.25
         MAXAGE=7*8640
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
@@ -109,19 +109,23 @@ class SpringbokClass:EntityClass
         sprite.zPosition=140
         
         scene!.addChild(sprite)
-        let rC=random(min: 0.65, max: 1.0)
-        let gC=random(min: 0.65, max: 1.0)
-        let bC=random(min: 0.65, max: 1.0)
+        
+        let rC=random(min: 0.85, max: 1.0)
+        let gC=random(min: 0.85, max: 1.0)
+        let bC=random(min: 0.85, max: 1.0)
         sprite.colorBlendFactor=1.0
-        sprite.color=NSColor(calibratedRed: rC, green: gC, blue: bC, alpha: 1.0)
+        sprite.color=NSColor(calibratedRed: rC, green: bC, blue: bC, alpha: 1.0)
+        
         
         // Variable updates
-        MAXSPEED=2.2
-        TURNRATE=0.15
+        MAXSPEED=5.1
+        TURNRATE=0.1
         TURNFREQ=1
         WANDERANGLE=CGFloat.pi/8
         AICycle=0
+        ACCELERATION=0.325
         MAXAGE=7*8640
+        TURNSPEEDLOST=0.15
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         
@@ -189,6 +193,140 @@ class SpringbokClass:EntityClass
     
     }//check herdleader
     
+    override func catchDisease()
+    {
+        
+    }
+    
+    
+    
+    
+    private func flee()
+    {
+        if predTarget != nil
+        {
+            var angle=getAngleToEntity(ent: predTarget!)
+            speed+=ACCELERATION
+            if speed > MAXSPEED
+            {
+                speed = MAXSPEED
+            }
+             if -lastFleeTurn.timeIntervalSinceNow > 1.0
+             {
+                if angle > CGFloat.pi*2
+                {
+                    angle -= CGFloat.pi * 2
+                }
+                if angle < 0
+                {
+                    angle += CGFloat.pi*2
+                }
+                angle += CGFloat.pi
+                turnToAngle=angle
+                isTurning=true
+                
+                
+
+                
+                
+                
+                let offset:CGFloat=random(min: -CGFloat.pi/2, max: CGFloat.pi/2)
+                lastFleeTurn=NSDate()
+                    var tempAngle=offset + angle
+                
+                
+               if tempAngle > CGFloat.pi*2
+               {
+                tempAngle -= CGFloat.pi*2
+                }
+                if tempAngle < 0
+                {
+                    tempAngle += CGFloat.pi*2
+                }
+                isTurning=true
+                turnToAngle=tempAngle
+            
+            }
+            
+        }
+    }
+    
+    func offMap()
+    {
+        if isHerdLeader==true && currentState != GOTOSTATE
+        {
+            if sprite.position.x > map!.BOUNDARY*0.95
+            {
+                gotoLastState = currentState
+                currentState = GOTOSTATE
+                gotoPoint.y = sprite.position.y
+                gotoPoint.x = sprite.position.x*0.9 - 200
+            }
+            if sprite.position.x < -map!.BOUNDARY*0.95
+            {
+                gotoLastState = currentState
+                currentState = GOTOSTATE
+                gotoPoint.y = sprite.position.y
+                gotoPoint.x = sprite.position.x*0.9 + 200
+            }
+            if sprite.position.y > map!.BOUNDARY*0.95
+            {
+                gotoLastState = currentState
+                currentState = GOTOSTATE
+                gotoPoint.y = sprite.position.y*0.9 - 200
+                gotoPoint.x = sprite.position.x
+            }
+            if sprite.position.y < -map!.BOUNDARY*0.95
+            {
+                gotoLastState = currentState
+                currentState = GOTOSTATE
+                gotoPoint.y = sprite.position.y*0.9 + 200
+                gotoPoint.x = sprite.position.x
+            }
+        }
+        
+        
+        
+        
+        
+        
+    }
+    
+    
+    private func checkPredators()
+    {
+        
+        var closest:CGFloat=50000000000
+        var closestIndex:Int = -1
+        
+        if map!.predList.count > 0
+        {
+            for i in 0...map!.predList.count - 1
+            {
+                if map!.predList[i].name.contains("Cheetah")
+                {
+                    let dist = getDistToEntity(ent: map!.predList[i])
+                    if dist<closest
+                    {
+                        closest=dist
+                        closestIndex=i
+                    }
+                }
+            } // for each predator
+            
+            if closestIndex > -1 && closest < 800
+            {
+                isFleeing = true
+                predTarget=map!.predList[closestIndex]
+                //print("Predator is close")
+            }
+            else
+            {
+                isFleeing=false
+                predTarget=nil
+            }
+        } // if predators exist
+    } // func checkPredators
     
     override func ageEntity() -> Bool
     {
@@ -218,10 +356,10 @@ class SpringbokClass:EntityClass
             
             
             // Baby time!
-            if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0
+            if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0 && isFleeing==false
             {
                 let babyChance=random(min: 0.0, max: 1.0)
-                if babyChance > 0.999985
+                if babyChance > 0.999994
                 {
                     // Hurray! We're having a baby!
                     let babyNumber=Int(random(min: 2, max: 5.999999))
@@ -254,6 +392,9 @@ class SpringbokClass:EntityClass
             return true
         } // if we're still alive
     } // func ageEntity
+    
+    
+    
     func catchUp()
     {
         var angle = getAngleToEntity(ent: herdLeader!)
@@ -275,6 +416,12 @@ class SpringbokClass:EntityClass
               checkHerdLeader()
             }
         }
+        
+        if isFleeing && predTarget != nil
+        {
+            flee()
+        }
+        
         var ret:Int = -1
         if age > MAXAGE*0.2 && sprite.texture==babyTexture
         {
@@ -292,7 +439,14 @@ class SpringbokClass:EntityClass
         } // if we're alive
         if cycle==AICycle
         {
-            if currentState==WANDERSTATE
+            if -lastPredCheck.timeIntervalSinceNow > 1.0
+            {
+                checkPredators()
+                lastPredCheck=NSDate()
+            }
+            offMap()
+
+            if currentState==WANDERSTATE && !isFleeing
             {
                 if herdLeader != nil && !isHerdLeader
                 {
@@ -309,6 +463,11 @@ class SpringbokClass:EntityClass
                 {
                     wander()
                 }
+               
+            }
+            else if currentState == GOTOSTATE
+            {
+                goTo()
             }
             
             // fix it if our rotation is more than pi*2 or less than 0
@@ -320,6 +479,7 @@ class SpringbokClass:EntityClass
             {
                 sprite.zRotation += CGFloat.pi*2
             }
+            
             
         } // if it's our update cycle
         

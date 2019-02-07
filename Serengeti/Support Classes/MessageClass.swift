@@ -18,8 +18,10 @@ class MessageClass
     let DEATH_STARVATION:Int=4
     let DEATH_THIRST:Int=6
     let DEATH_AGE:Int=8
-    let BIRTH:Int=20
+    let BORN:Int=20
     let NEWHERDLEADER:Int=22
+    let HUNTFAILED:Int=24
+    let INFECTED:Int=26
     
     
     init()
@@ -27,84 +29,45 @@ class MessageClass
         
     }
     
-    public func sendMessage(type: Int, info: Int, from: String)
-    {
-        switch type
-        {
-        case 0:
-            let temp="\(from) was killed by a predator."
-            unreadQueue.append(temp)
-            
-        case 2:
-            let temp="\(from) died of disease."
-            unreadQueue.append(temp)
-            
-        case 4:
-            let temp="\(from) died of starvation."
-            unreadQueue.append(temp)
-            
-        case 6:
-            let temp="\(from) died of thirst."
-            unreadQueue.append(temp)
-            
-        case 8:
-            let name=from.dropFirst(3)
-            let age = CGFloat(info)/8640
-            let temp=String(format: "\(name) died of natural causes at %2.1f years old.", age)
-            
-            unreadQueue.append(temp)
-            
-        case 20:
-            
-            let name=from.dropFirst(3)
-            let temp="\(name) had \(info) babies!"
-            
-            
-            unreadQueue.append(temp)
-            
-        case 22:
-            let temp="\(from) found a new herd leader."
-            unreadQueue.append(temp)
-            
-        default:
-            break
-        } // switch
-    } // func sendMessage()
-    
     public func sendMessage(type: Int, from: String)
     {
+        let name=from.dropFirst(3)
+        
         switch type
         {
         case 0:
-            let temp="\(from) was killed by a predator."
+            
+            let temp="\(name) was killed by a predator."
             unreadQueue.append(temp)
             
         case 2:
-            let temp="\(from) died of disease."
+            let temp="\(name) died of disease."
             unreadQueue.append(temp)
             
         case 4:
-            let temp="\(from) died of starvation."
+            let temp="\(name) died of starvation."
             unreadQueue.append(temp)
             
         case 6:
-            let temp="\(from) died of thirst."
+            let temp="\(name) died of thirst."
             unreadQueue.append(temp)
             
         case 8:
-            let temp="\(from) died of old age."
+            let temp="\(name) died of old age."
             unreadQueue.append(temp)
             
         case 20:
-
-            let name=from.dropFirst(3)
-            let temp="\(name) had a baby!"
-
-            
+            let temp="\(name) had a baby!!"
+            //unreadQueue.append(temp)
+        case 22:
+            let temp="\(name) found a new herd leader."
+            unreadQueue.append(temp)
+        case 24:
+            let temp="\(name) failed on a hunt."
             unreadQueue.append(temp)
             
-        case 22:
-            let temp="\(from) found a new herd leader."
+        case 26:
+            let temp="\(name) got a disease."
             unreadQueue.append(temp)
             
         default:

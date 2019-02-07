@@ -13,9 +13,10 @@ class MapClass
 {
     var zoneList=[ZoneClass]()
     var entList=[EntityClass]()
+    var predList=[EntityClass]()
+    
     var birdList=[BirdClass]()
     var buzzardList=[BuzzardClass]()
-    
     
     public var mapBorder:CGFloat=0
     
@@ -23,15 +24,15 @@ class MapClass
     
     public let TILESIZE:CGFloat=128 // width/height of each ground tile
     public let MAPWIDTH:CGFloat=256 // this needs to match mapDims in GameScene
-    public var seed:Int32=0
+    
     public var entityCounter:Int=0
-    
-    
+
+    public var info=InfoClass()
     
     var msg=MessageClass()
-    var info=InfoClass()
     
-    private var timeOfDay:CGFloat = 310 // time of day in minutes past midnight -- 300 = 5:00am
+    
+    private var timeOfDay:CGFloat=300 // time of day in minutes past midnight -- 300 = 5:00am
     
     private let TIMEINT:CGFloat = 0.033333
     // TIMEINT equals the amount of game seconds advanced PER FRAME
@@ -51,15 +52,6 @@ class MapClass
         BOUNDARY=(TILESIZE*MAPWIDTH)/2
     }
     
-    public func getTimeAsString() -> String
-    {
-        let hour = Int(timeOfDay/60)
-        let minute = Int(timeOfDay)%60
-        let temp=String(format: "Year: %1d Day: %1d %02d:%02d",year, day, hour, minute)
-        return temp
-    } // func getTimeAsString
-
-    
     public func isRainySeason() -> Bool
     {
         if day <= 3
@@ -72,6 +64,15 @@ class MapClass
         }
     } // func isRainySeason
     
+    public func getTimeAsString() -> String
+    {
+        let hour = Int(timeOfDay/60)
+        let minute = Int(timeOfDay)%60
+        let temp=String(format: "Year: %1d Day: %1d %02d:%02d",year, day, hour, minute)
+        return temp
+    } // func getTimeAsString
+
+    
     public func cleanUpEntities()
     {
         // clean up entList
@@ -80,6 +81,15 @@ class MapClass
             if !entList[i].isAlive()
             {
                 entList.remove(at: i)
+                break
+            }
+        } // for each entity
+        
+        for i in 0..<predList.count
+        {
+            if !predList[i].isAlive()
+            {
+                predList.remove(at: i)
                 break
             }
         } // for each entity
@@ -160,7 +170,6 @@ class MapClass
         if day > 6
         {
             day = 1
-            info.archiveCounts(year: year)
             year += 1
         } // if it's a new year
     } // func timePlus
@@ -178,6 +187,10 @@ class MapClass
             ent.sprite.removeFromParent()
         }
         
+        for ent in predList
+        {
+            ent.die()
+        }
         
         zoneList.removeAll()
         entList.removeAll()

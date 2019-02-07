@@ -21,6 +21,10 @@ class EntityClass
     public var age:CGFloat=1.0
     internal var hunger:CGFloat=1.0
     internal var thirst:CGFloat=1.0
+    public var stamina:CGFloat=1.0
+    
+
+    
     internal var turnToAngle:CGFloat=0.0
     
     public var MAXAGE:CGFloat=25920.0   // In game time minutes -- One year = 8640
@@ -33,7 +37,14 @@ class EntityClass
     
     public var currentState:Int=0
     public var AICycle:Int=0
+    internal var gotoLastState:Int = 0
     
+    public var predTarget:EntityClass?
+    public var isFleeing:Bool=false
+    public var ACCELERATION:CGFloat=0.5
+    public var TURNSPEEDLOST:CGFloat=0.1
+    
+    public var isDiseased:Bool=false
     
     public var isTurning:Bool=false
     public var alive:Bool=true
@@ -43,14 +54,14 @@ class EntityClass
     internal var isDrinking:Bool=false
     internal var isResting:Bool=false
     
-    
     public var herdLeader:EntityClass?
     
     var hash:String
     var name:String=""
     
     public var lastWanderTurn=NSDate()
-    
+    public var lastPredCheck=NSDate()
+    public var lastFleeTurn=NSDate()
     
     internal var gotoPoint=CGPoint(x: 0, y: 0)
     
@@ -60,7 +71,7 @@ class EntityClass
     let EATSTATE:Int=4
     let DRINKSTATE:Int=6
     let RESTSTATE:Int=8
-    
+    let HUNTSTATE:Int=10
     
     init()
     {
@@ -103,6 +114,11 @@ class EntityClass
         
     } // init
     
+    public func catchDisease()
+    {
+        
+    }
+    
     public func updateGraphics()
     {
         let dx=cos(sprite.zRotation)*speed*map!.getTimeScale()
@@ -124,8 +140,7 @@ class EntityClass
     public func die()
     {
         alive=false
-        let deathAction=SKAction.sequence([SKAction.fadeOut(withDuration: 2.5),SKAction.removeFromParent()])
-        sprite.run(deathAction)
+        removeSprite()
         
         // remove all reference pointers
         
@@ -193,7 +208,7 @@ class EntityClass
         age += map!.getTimeInterval()*map!.getTimeScale()
         if age > MAXAGE
         {
-            map!.msg.sendMessage(type: 8, info: Int(self.age), from: name)
+            map!.msg.sendMessage(type: 8, from: name)
             sprite.removeFromParent()
             alive=false
             return false
@@ -310,17 +325,37 @@ class EntityClass
     {
         if isTurning
         {
+            if (isFleeing || currentState==HUNTSTATE) && speed > MAXSPEED*0.5
+            {
+                speed-=TURNSPEEDLOST
+                if speed < 0
+                {
+                    speed=0
+                }
+            }
+            
             if abs(turnToAngle-sprite.zRotation) < TURNRATE*2*speed
             {
                 sprite.zRotation=turnToAngle
                 isTurning=false
                 lastWanderTurn=NSDate()
+                
                 //print("Finished turn")
             } // if we can stop turning
         }
         
         if isTurning
         {
+            if turnToAngle > CGFloat.pi*2
+            {
+                turnToAngle -= CGFloat.pi*2
+            }
+            if turnToAngle < 0
+            {
+                turnToAngle += CGFloat.pi*2
+            }
+            
+            
             var angleDiff = turnToAngle-sprite.zRotation
             
             if angleDiff > CGFloat.pi*2
@@ -331,12 +366,12 @@ class EntityClass
             {
                 angleDiff += CGFloat.pi*2
             }
-            
+
             if angleDiff < CGFloat.pi || angleDiff < -CGFloat.pi
             {
                 // turning left
                 sprite.zRotation += TURNRATE*speed
-                
+
             } // if turn left
             else if angleDiff > -CGFloat.pi || angleDiff > CGFloat.pi
             {
@@ -350,6 +385,55 @@ class EntityClass
         
     } // func doTurn
     
+    internal func goTo()
+    {
+        let dx=gotoPoint.x-sprite.position.x
+        let dy=gotoPoint.y-sprite.position.y
+        let dist=hypot(dy, dx)
+        
+        if dist > 50
+        {
+            var angleToPoint=atan2(dy, dx)
+            if angleToPoint < 0
+            {
+                angleToPoint+=CGFloat.pi*2
+            }
+            
+            turnToAngle=angleToPoint
+            
+            isTurning=true
+            
+            let speedChance=random(min: 0, max: 1.0)
+            if speedChance > 0.75
+            {
+                speed+=0.1
+                if speed > MAXSPEED*0.7
+                {
+                    speed=MAXSPEED*0.7
+                }
+            } // if we speed up
+            else if speedChance > 0.5
+            {
+                speed -= 0.1
+                if speed < MAXSPEED*0.5
+                {
+                    speed=MAXSPEED*0.5
+                    
+                } // if speed drops below zero
+                
+                
+            } // if we slow down
+            
+        } // if we're still far enough away
+        else
+        {
+            
+            currentState=gotoLastState
+            
+        } // if we're close enough
+        
+    } // func goTo()
+
     internal func update(cycle: Int) -> Int
     {
         var ret:Int = -1
@@ -369,6 +453,11 @@ class EntityClass
             if currentState==WANDERSTATE
             {
                     wander()
+            }
+            
+            if currentState==GOTOSTATE
+            {
+                goTo()
             }
             
             // fix it if our rotation is more than pi*2 or less than 0

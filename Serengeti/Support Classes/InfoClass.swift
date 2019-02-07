@@ -71,11 +71,16 @@ class InfoClass
             {
                 numWarthog+=1
             }
-            else if crit.name.contains("Cheetah")
+        } // for each critter in the list
+        
+        for crit in map!.predList
+        {
+            if crit.name.contains("Cheetah")
             {
                 numCheetah += 1
             }
-        } // for each critter in the list
+            
+        }
     } // func updateCounts
     
     public func getCheetahCount() -> Int

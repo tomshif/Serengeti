@@ -74,7 +74,7 @@ class GameScene: SKScene {
     let FOODZONECOUNT:Int=20
     let TESTENTITYCOUNT:Int=100
     let BUZZARDCOUNT:Int=24
-    let TREECOUNT:Int=2000
+    let TREECOUNT:Int=3000
     
     let PARKINFOUPDATEFREQ:Double=2.0
     
@@ -636,6 +636,18 @@ class GameScene: SKScene {
                                 break
                             } // if we find the entity
                         } // for each entity
+                        if currentSelection == nil
+                        {
+                            for ents in myMap.predList
+                            {
+                                if ents.name == thisNode.name
+                                {
+                                    currentSelection=ents
+                                    followModeOn=false
+                                    break
+                                } // if we have a match
+                            } // for each ent
+                        } // if we didn't find it in entList, check predList
                     } // if we've clicked on an entity
                 } // if the name isn't nil
  
@@ -934,7 +946,7 @@ class GameScene: SKScene {
                 addChild(treeLayer1)
                 treeLayer1.zPosition=300
             }
-            //treeNode1.removeFromParent()
+            //
             if let treeLayerTexture2 = self.view!.texture(from: treeNode2)
             {
                 let treeLayer2=SKSpriteNode(texture: treeLayerTexture2)
@@ -944,7 +956,7 @@ class GameScene: SKScene {
                 addChild(treeLayer2)
                 treeLayer2.zPosition=300
             }
-            //treeNode2.removeFromParent()
+            //
             
             if let treeLayerTexture3 = self.view!.texture(from: treeNode3)
             {
@@ -955,7 +967,7 @@ class GameScene: SKScene {
                 addChild(treeLayer3)
                 treeLayer3.zPosition=300
             }
-            //treeNode3.removeFromParent()
+            //
             
             if let treeLayerTexture4 = self.view!.texture(from: treeNode4)
             {
@@ -966,7 +978,7 @@ class GameScene: SKScene {
                 addChild(treeLayer4)
                 treeLayer4.zPosition=300
             }
-            treeNode4.removeFromParent()
+            
             
             treeLayerCreated=true
             
@@ -1009,7 +1021,10 @@ class GameScene: SKScene {
             let pos = CGPoint(x: x, y: y)
             spawnHerd(type: BUZZARDFLOCK, loc: pos)
             buzzardsSpawned += 1
-    
+            
+            
+            
+            
         } // if we need to spawn buzzards
         else
         {
@@ -1021,6 +1036,10 @@ class GameScene: SKScene {
             hudLightMask.isHidden=false
             myMap.info.updateCounts()
             myMap.info.archiveCounts(year: 0)
+            treeNode1.removeFromParent()
+            treeNode2.removeFromParent()
+            treeNode3.removeFromParent()
+            treeNode4.removeFromParent()
         } // if we're finished generating map
         
 
@@ -1186,7 +1205,7 @@ class GameScene: SKScene {
             
             
             tempLeader.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
-            myMap.entList.append(tempLeader)
+            myMap.predList.append(tempLeader)
             myMap.entityCounter+=1
             let chance=random(min: 0, max: 1.0)
             if chance > 0.95
@@ -1198,7 +1217,7 @@ class GameScene: SKScene {
                     
                     
                     tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
-                    myMap.entList.append(tempEnt)
+                    myMap.predList.append(tempEnt)
                     myMap.entityCounter+=1
                     
                 } // for each member of the herd
@@ -1209,7 +1228,7 @@ class GameScene: SKScene {
                 
                 
                 tempEnt.sprite.zRotation=random(min: 0, max: CGFloat.pi*2)
-                myMap.entList.append(tempEnt)
+                myMap.predList.append(tempEnt)
                 myMap.entityCounter+=1
                 
             }
@@ -1324,6 +1343,11 @@ class GameScene: SKScene {
         {
             let updateReturn=myMap.entList[i].update(cycle: currentCycle)
         }
+        
+        for i in 0..<myMap.predList.count
+        {
+            let updateReturn=myMap.predList[i].update(cycle: currentCycle)
+        }
         // update birds
         for i in 0..<myMap.birdList.count
         {
@@ -1355,27 +1379,27 @@ class GameScene: SKScene {
         cam.position.x+=droneVec.dx
         cam.position.y+=droneVec.dy
         
-        if cam.position.x > myMap.BOUNDARY*0.95
+        if cam.position.x > myMap.BOUNDARY*0.9
         {
-            cam.position.x = myMap.BOUNDARY*0.95
+            cam.position.x = myMap.BOUNDARY*0.9
             droneVec.dx=0
         }
         
-        if cam.position.x < -myMap.BOUNDARY*0.95
+        if cam.position.x < -myMap.BOUNDARY*0.9
         {
-            cam.position.x = -myMap.BOUNDARY*0.95
+            cam.position.x = -myMap.BOUNDARY*0.9
             droneVec.dx=0
         }
         
-        if cam.position.y > myMap.BOUNDARY*0.95
+        if cam.position.y > myMap.BOUNDARY*0.9
         {
-            cam.position.y = myMap.BOUNDARY*0.95
+            cam.position.y = myMap.BOUNDARY*0.9
             droneVec.dy=0
         }
         
-        if cam.position.y < -myMap.BOUNDARY*0.95
+        if cam.position.y < -myMap.BOUNDARY*0.9
         {
-            cam.position.y = -myMap.BOUNDARY*0.95
+            cam.position.y = -myMap.BOUNDARY*0.9
             droneVec.dy=0
         }
         
