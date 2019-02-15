@@ -334,7 +334,7 @@ class EntityClass
                 }
             }
             
-            if abs(turnToAngle-sprite.zRotation) < TURNRATE*2*speed
+            if abs(turnToAngle-sprite.zRotation) < TURNRATE*2.25*speed
             {
                 sprite.zRotation=turnToAngle
                 isTurning=false

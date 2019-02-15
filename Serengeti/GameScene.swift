@@ -106,7 +106,9 @@ class GameScene: SKScene {
     
     // SpriteNodes - Main Menu
     
-    let mmBG=SKSpriteNode(imageNamed: "mmBGMockup")
+    let mmBG01=SKSpriteNode(imageNamed: "mm01")
+    let mmBG02=SKSpriteNode(imageNamed: "mm02")
+    let mmBG03=SKSpriteNode(imageNamed: "mm03")
     let mmPlayButton=SKSpriteNode(imageNamed: "playButton")
     let mmLoadButton=SKSpriteNode(imageNamed: "loadButton")
     let mmHowButton=SKSpriteNode(imageNamed: "loadButton")
@@ -262,47 +264,55 @@ class GameScene: SKScene {
         addChild(treeNode4)
         //Init main menu
         
-        mmBG.name="mmBG"
-        mmBG.zPosition=10000
-        addChild(mmBG)
+        mmBG01.name="mmBG"
+        mmBG01.zPosition=10000
+        addChild(mmBG01)
+        
+        mmBG02.name="mmBG02"
+        mmBG02.zPosition=10001
+        mmBG01.addChild(mmBG02)
+        
+        mmBG03.name="mmBG03"
+        mmBG03.zPosition=10002
+        mmBG01.addChild(mmBG03)
         
         mmPlayButton.position.x = size.width*0.3
         mmPlayButton.position.y = size.height*0.1
         mmPlayButton.name="mmPlayButton"
         mmPlayButton.zPosition=10001
         mmPlayButton.alpha=0.00001
-        mmBG.addChild(mmPlayButton)
+        mmBG01.addChild(mmPlayButton)
         
         mmLoadButton.position.x = size.width*0.3
         mmLoadButton.position.y = -size.height*0.05
         mmLoadButton.zPosition=10001
         mmLoadButton.name="mmLoadButton"
         mmLoadButton.alpha=0.00001
-        mmBG.addChild(mmLoadButton)
+        mmBG01.addChild(mmLoadButton)
         
         mmHowButton.position.x = size.width*0.3
         mmHowButton.position.y = -size.height*0.15
         mmHowButton.zPosition=10001
         mmHowButton.name="mmHowButton"
         mmHowButton.alpha=0.00001
-        mmBG.addChild(mmHowButton)
+        mmBG01.addChild(mmHowButton)
         
         mmHowPlay.zPosition=10002
         mmHowPlay.isHidden=true
         mmHowPlay.name="mmHowToPlay"
-        mmBG.addChild(mmHowPlay)
+        mmBG01.addChild(mmHowPlay)
         
         
         mmLogo.zPosition=10001
         mmLogo.name="mmLogo"
         mmLogo.position.x = -size.width*0.166
         mmLogo.position.y = size.height*0.333
-        mmBG.addChild(mmLogo)
+        mmBG01.addChild(mmLogo)
         
         mmGenerating.zPosition=10002
         mmGenerating.isHidden=true
         mmGenerating.name="mmGenerating"
-        mmBG.addChild(mmGenerating)
+        mmBG01.addChild(mmGenerating)
         
         mmGenSplinesLabel.zPosition=10003
         mmGenSplinesLabel.fontSize=22
@@ -1030,7 +1040,9 @@ class GameScene: SKScene {
         {
             currentState=inGameState
             droneHUD.isHidden=false
-            mmBG.isHidden=true
+            mmBG01.isHidden=true
+            mmBG02.isHidden=true
+            mmBG03.isHidden=true
             map.isHidden=true
             hudTimeBG.isHidden=false
             hudLightMask.isHidden=false

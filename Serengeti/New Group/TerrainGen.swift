@@ -74,6 +74,7 @@ func genTileMap()
     bottomLayer.fill(with: grass01Tiles)
     bottomLayer.zPosition=0
     tMap.name="tMap"
+
     tMap.addChild(bottomLayer)
     bottomLayer.name="Bottom Layer"
     // create the noise map
@@ -93,6 +94,7 @@ func genTileMap()
     // make SpriteKit do the work of placing specific tiles
     topLayer.enableAutomapping = true
     topLayer.name="Top Layer"
+    
     // add the grass/water layer to our main map node
     tMap.addChild(topLayer)
     
