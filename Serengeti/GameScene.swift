@@ -1892,10 +1892,10 @@ class GameScene: SKScene {
             {
                 let tempCritter=SKSpriteNode(imageNamed: "mmCritter")
                 tempCritter.position.x = size.width/2 + tempCritter.size.width/2+random(min: 10, max: 150)
-                tempCritter.position.y = random(min: -size.height*0.45, max: -size.height*0.32)
+                tempCritter.position.y = random(min: -size.height*0.4, max: -size.height*0.32)
                 tempCritter.zPosition=10004
                 tempCritter.name="tempCritter"
-                let ratio = (tempCritter.position.y+size.height*0.45)/size.height*0.45
+                let ratio = (tempCritter.position.y+size.height*0.4)/size.height*0.4
                 tempCritter.setScale(0.2-ratio)
                 tempCritter.alpha=0.5
                 mmBG01.addChild(tempCritter)
@@ -1915,13 +1915,13 @@ class GameScene: SKScene {
             mmFog.setScale(random(min: 0.15, max: 0.35))
             mmFog.alpha=0.75
             mmFog.colorBlendFactor=0.7
-            let y = random(min: size.height*0.2, max: size.height*0.35)
+            let y = random(min: size.height*0, max: size.height*0.35)
             mmFog.position=CGPoint(x: -size.width/2 - mmFog.size.width*0.35, y: y)
             mmFog.color=NSColor(calibratedRed: 1.0, green: 0.4, blue: 0.0, alpha: 1.0)
-            let fogAction=SKAction.sequence([SKAction.move(to: CGPoint(x: size.width/2+mmFog.size.width/2, y: y), duration: Double(random(min: 155, max: 165))),SKAction.removeFromParent()])
+            let fogAction=SKAction.sequence([SKAction.move(to: CGPoint(x: size.width/2+mmFog.size.width/2, y: y), duration: Double(random(min: 120, max: 180))),SKAction.removeFromParent()])
             mmFog.run(fogAction)
          
-            nextMMCloudSpawn=Double(random(min: 30, max: 160))
+            nextMMCloudSpawn=Double(random(min: 10, max: 60))
             lastMMCloudSpawn=NSDate()
         } // if it's time to spawn a cloud
  
@@ -1935,7 +1935,7 @@ class GameScene: SKScene {
             mmFog.alpha=0.4
             mmFog.colorBlendFactor=0.5
             let y = random(min: -size.height*0.3, max: -size.height*0.45)
-            mmFog.position=CGPoint(x: -size.width/2 - mmFog.size.width*0.35, y: y)
+            mmFog.position=CGPoint(x: -size.width*0.68, y: y)
             mmFog.color=NSColor(calibratedRed: 0.6, green: 0.3, blue: 0.0, alpha: 1.0)
             let fogAction=SKAction.sequence([SKAction.move(to: CGPoint(x: size.width/2+mmFog.size.width/2, y: y), duration: Double(random(min: 90, max: 120))),SKAction.removeFromParent()])
             mmFog.run(fogAction)
