@@ -53,9 +53,16 @@ let BUZZARDFLOCK:Int=12
 let ENTITYHERDSIZE:CGFloat=10
 let BIRDFLOCKSIZE:Int=20
 
+let DARTTIMER:Double=10
+let MEDTIMER:Double=20
+
+
 var entityHerdCount:Int=0
 
 var treeMaster=SKSpriteNode(imageNamed: "treeVariation1")
+
+var mmCritterSpawn=NSDate()
+
 
 // GameScene //
 
@@ -72,7 +79,7 @@ class GameScene: SKScene {
     let WATERZONECOUNT:Int=20
     let RESTZONECOUNT:Int=20
     let FOODZONECOUNT:Int=20
-    let TESTENTITYCOUNT:Int=100
+    let TESTENTITYCOUNT:Int=50
     let BUZZARDCOUNT:Int=24
     let TREECOUNT:Int=3000
     
@@ -90,6 +97,10 @@ class GameScene: SKScene {
     let DRONEINERTIA:CGFloat=0.025
     var nextLightning:Double=32.00
     var rainChange:Double=0.00
+    var nextMMCritterHerd:Double = 0
+    var nextMMCloudSpawn:Double=0
+    var nextMMFogSpawn:Double=0
+    
     
     var myMap=MapClass()
     
@@ -109,12 +120,13 @@ class GameScene: SKScene {
     let mmBG01=SKSpriteNode(imageNamed: "mm01")
     let mmBG02=SKSpriteNode(imageNamed: "mm02")
     let mmBG03=SKSpriteNode(imageNamed: "mm03")
-    let mmPlayButton=SKSpriteNode(imageNamed: "playButton")
+    let mmPlayButton=SKSpriteNode(imageNamed: "mmPlayButton")
     let mmLoadButton=SKSpriteNode(imageNamed: "loadButton")
-    let mmHowButton=SKSpriteNode(imageNamed: "loadButton")
+    let mmHowButton=SKSpriteNode(imageNamed: "mmHowPlayButton")
     let mmLogo=SKSpriteNode(imageNamed: "mmLogo")
     let mmGenerating=SKSpriteNode(imageNamed: "mmGeneratingMap")
     let mmHowPlay=SKSpriteNode(imageNamed: "mmHowToPlay")
+
     
     // SpriteNodes - In Game HUD
     let droneHUD=SKSpriteNode(imageNamed: "hudReticle")
@@ -128,6 +140,8 @@ class GameScene: SKScene {
     let hudSelectArrow=SKSpriteNode(imageNamed: "hudSelectArrow")
     let hudFollowIcon=SKSpriteNode(imageNamed: "hudFollowIcon02")
     let hudAnimalInfoBG=SKSpriteNode(imageNamed: "hudAnimalInfo")
+    let hudDart=SKSpriteNode(imageNamed: "dart_icon2")
+    let hudMed=SKSpriteNode(imageNamed: "pillIcon")
     
     // ShapeNodes - In Game HUD
     let hudMapMarker=SKShapeNode(circleOfRadius: 5)
@@ -176,6 +190,8 @@ class GameScene: SKScene {
     var isRaining:Bool=false
     var treeLayerCreated:Bool=false
     var followModeOn:Bool=false
+    var dartActive:Bool=true
+    var medicineActive:Bool=true
     
     
     // Camera
@@ -191,6 +207,10 @@ class GameScene: SKScene {
     var lastParkInfoUpdate=NSDate()
     var lastLightning=NSDate()
     var lastRainChange=NSDate()
+    var lastMMFogSpawn=NSDate()
+    var lastMMCloudSpawn=NSDate()
+    var lastDart=NSDate()
+    var lastMedicine=NSDate()
     
     // Others
     
@@ -269,87 +289,84 @@ class GameScene: SKScene {
         addChild(mmBG01)
         
         mmBG02.name="mmBG02"
-        mmBG02.zPosition=10001
+        mmBG02.zPosition=10003
         mmBG01.addChild(mmBG02)
         
         mmBG03.name="mmBG03"
-        mmBG03.zPosition=10002
+        mmBG03.zPosition=10006
         mmBG01.addChild(mmBG03)
+        
+
+        
         
         mmPlayButton.position.x = size.width*0.3
         mmPlayButton.position.y = size.height*0.1
         mmPlayButton.name="mmPlayButton"
-        mmPlayButton.zPosition=10001
-        mmPlayButton.alpha=0.00001
+        mmPlayButton.zPosition=10007
+        mmPlayButton.alpha=1
         mmBG01.addChild(mmPlayButton)
         
-        mmLoadButton.position.x = size.width*0.3
-        mmLoadButton.position.y = -size.height*0.05
-        mmLoadButton.zPosition=10001
-        mmLoadButton.name="mmLoadButton"
-        mmLoadButton.alpha=0.00001
-        mmBG01.addChild(mmLoadButton)
         
         mmHowButton.position.x = size.width*0.3
-        mmHowButton.position.y = -size.height*0.15
-        mmHowButton.zPosition=10001
+        mmHowButton.position.y = -size.height*0.05
+        mmHowButton.zPosition=10007
         mmHowButton.name="mmHowButton"
-        mmHowButton.alpha=0.00001
+        mmHowButton.alpha=1
         mmBG01.addChild(mmHowButton)
         
-        mmHowPlay.zPosition=10002
+        mmHowPlay.zPosition=10008
         mmHowPlay.isHidden=true
         mmHowPlay.name="mmHowToPlay"
         mmBG01.addChild(mmHowPlay)
         
         
-        mmLogo.zPosition=10001
+        mmLogo.zPosition=10007
         mmLogo.name="mmLogo"
         mmLogo.position.x = -size.width*0.166
         mmLogo.position.y = size.height*0.333
         mmBG01.addChild(mmLogo)
         
-        mmGenerating.zPosition=10002
+        mmGenerating.zPosition=10010
         mmGenerating.isHidden=true
         mmGenerating.name="mmGenerating"
         mmBG01.addChild(mmGenerating)
         
-        mmGenSplinesLabel.zPosition=10003
+        mmGenSplinesLabel.zPosition=10011
         mmGenSplinesLabel.fontSize=22
         mmGenSplinesLabel.position.y = mmGenerating.size.height*0.10
         mmGenSplinesLabel.text="Reticulating Splines: 0%"
         mmGenSplinesLabel.name="mmGenSplinesLabel"
         mmGenerating.addChild(mmGenSplinesLabel)
         
-        mmGenWaterLabel.zPosition=10003
+        mmGenWaterLabel.zPosition=10011
         mmGenWaterLabel.fontSize=22
         mmGenWaterLabel.position.y = 0
         mmGenWaterLabel.text="Hitting the hot tub: 0%"
         mmGenWaterLabel.name="mmGenWaterLabel"
         mmGenerating.addChild(mmGenWaterLabel)
         
-        mmGenRestLabel.zPosition=10003
+        mmGenRestLabel.zPosition=10013
         mmGenRestLabel.fontSize=22
         mmGenRestLabel.position.y = -mmGenerating.size.height*0.1
         mmGenRestLabel.text="Taking a nap: 0%"
         mmGenRestLabel.name="mmGenRestLabel"
         mmGenerating.addChild(mmGenRestLabel)
         
-        mmGenFoodLabel.zPosition=10003
+        mmGenFoodLabel.zPosition=10013
         mmGenFoodLabel.fontSize=22
         mmGenFoodLabel.position.y = -mmGenerating.size.height*0.2
         mmGenFoodLabel.text="Cooking dinner: 0%"
         mmGenFoodLabel.name="mmGenFoodLabel"
         mmGenerating.addChild(mmGenFoodLabel)
 
-        mmGenTreeLabel.zPosition=10003
+        mmGenTreeLabel.zPosition=10013
         mmGenTreeLabel.fontSize=22
         mmGenTreeLabel.position.y = -mmGenerating.size.height*0.3
         mmGenTreeLabel.text="Tending the garden: 0%"
         mmGenTreeLabel.name="mmGenTreeLabel"
         mmGenerating.addChild(mmGenTreeLabel)
         
-        mmGenAnimalsLabel.zPosition=10003
+        mmGenAnimalsLabel.zPosition=10013
         mmGenAnimalsLabel.fontSize=22
         mmGenAnimalsLabel.position.y = -mmGenerating.size.height*0.4
         mmGenAnimalsLabel.text="Rescuing pit bulls: 0%"
@@ -527,6 +544,20 @@ class GameScene: SKScene {
         hudSelectArrow.name="hudSelectArrow"
         hudSelectArrow.alpha=0.8
         droneHUD.addChild(hudSelectArrow)
+        
+        hudDart.zPosition=10001
+        hudDart.name="hudDartIcon"
+        droneHUD.addChild(hudDart)
+        hudDart.setScale(0.2)
+        hudDart.position.x = droneHUD.size.width*0.65
+        hudDart.position.y = droneHUD.size.height*0.3
+        
+        hudMed.zPosition=10001
+        hudMed.name="hudMedIcon"
+        droneHUD.addChild(hudMed)
+        hudMed.setScale(0.2)
+        hudMed.position.x = droneHUD.size.width*0.65
+        hudMed.position.y = -droneHUD.size.height*0.3
         
         hudAnimalInfoBG.zPosition=10000
         hudAnimalInfoBG.position.x=size.width/2-hudAnimalInfoBG.size.width/2
@@ -736,6 +767,38 @@ class GameScene: SKScene {
                 }
             } // if we're in game
             
+        case 11:
+            if currentState==inGameState && medicineActive
+            {
+                let temp=SKSpriteNode(imageNamed: "antibiotic")
+                temp.position=cam.position
+                temp.name="antibiotic"
+                temp.zPosition=10
+                addChild(temp)
+                lastMedicine=NSDate()
+                medicineActive=false
+                temp.run(SKAction.sequence([SKAction.fadeOut(withDuration: 15),SKAction.removeFromParent()]))
+                // check for healing animals
+                for ent in myMap.entList
+                {
+                    if ent.isDiseased
+                    {
+                        let dx=ent.sprite.position.x - cam.position.x
+                        let dy=ent.sprite.position.y - cam.position.y
+                        let dist=hypot(dy, dx)
+                        if dist < 300
+                        {
+                            let chance=random(min: 0, max: 1)
+                            if chance > 0.5
+                            {
+                                ent.isDiseased=false
+                                ent.sprite.color=ent.healthyColor
+                            }
+                        } // if we're close enough
+                    } // if we're diseased
+                } // for each entity
+            } // if we're in game
+            
         case 13:
             if currentState==inGameState
             {
@@ -802,6 +865,12 @@ class GameScene: SKScene {
         case 39: // '
             flashLightning()
             
+            
+        case 44:
+            if currentState==inGameState && currentSelection != nil
+            {
+                currentSelection!.catchDisease()
+            }
         case 45: // N
             if currentState==inGameState
             {
@@ -826,6 +895,32 @@ class GameScene: SKScene {
                     map.isHidden=true
                 }
             } // if we're in game
+            
+        case 49:
+            if currentState==inGameState && dartActive==true
+            {
+                if currentSelection != nil
+                {
+                    let dx=currentSelection!.sprite.position.x - cam.position.x
+                    let dy=currentSelection!.sprite.position.y - cam.position.y
+                    let dist = hypot(dy, dx)
+                    if dist < 200
+                    {
+                        currentSelection!.die()
+                        currentSelection=nil
+                        dartActive=false
+                        lastDart=NSDate()
+                    }
+                    else
+                    {
+                        myMap.msg.sendCustomMessage(message: "Out of range for tranq.")
+                    }
+                }
+                else
+                {
+                    myMap.msg.sendCustomMessage(message: "No target selected")
+                }
+            }
         default:
             print("keyDown: \(event.characters!) keyCode: \(event.keyCode)")
         } // switch
@@ -1376,7 +1471,42 @@ class GameScene: SKScene {
     
     func updateHUD()
     {
+        if dartActive
+        {
+            hudDart.isHidden=false
+        }
+        else
+        {
+            hudDart.isHidden=true
+        }
         
+        if !dartActive
+        {
+            if -lastDart.timeIntervalSinceNow > DARTTIMER
+            {
+                dartActive=true
+            }
+        }
+        
+        if medicineActive
+        {
+            hudMed.isHidden=false
+        }
+        else
+        {
+            hudMed.isHidden=true
+
+        }
+        
+        
+        if !medicineActive
+        {
+            if -lastMedicine.timeIntervalSinceNow > MEDTIMER
+            {
+                medicineActive=true
+            }
+        }
+ 
         // first update the drone
         if !leftPressed && !rightPressed
         {
@@ -1753,11 +1883,77 @@ class GameScene: SKScene {
         
     } // updateWeather
     
+    
+    func animateMainMenu()
+    {
+        if -mmCritterSpawn.timeIntervalSinceNow > nextMMCritterHerd
+        {
+            for _ in 1...Int(random(min: 5, max: 25))
+            {
+                let tempCritter=SKSpriteNode(imageNamed: "mmCritter")
+                tempCritter.position.x = size.width/2 + tempCritter.size.width/2+random(min: 10, max: 150)
+                tempCritter.position.y = random(min: -size.height*0.45, max: -size.height*0.32)
+                tempCritter.zPosition=10004
+                tempCritter.name="tempCritter"
+                let ratio = (tempCritter.position.y+size.height*0.45)/size.height*0.45
+                tempCritter.setScale(0.2-ratio)
+                tempCritter.alpha=0.5
+                mmBG01.addChild(tempCritter)
+                tempCritter.run(SKAction.sequence([SKAction.move(to: CGPoint(x: -size.width*0.15, y: tempCritter.position.y), duration: Double(random(min: 160, max: 180))), SKAction.removeFromParent()]))
+            }
+            
+            mmCritterSpawn=NSDate()
+            nextMMCritterHerd=Double(random(min: 155, max: 190))
+        } // if it's time to spawn a critter
+        
+        if -lastMMCloudSpawn.timeIntervalSinceNow > nextMMCloudSpawn
+        {
+            let mmFog=SKSpriteNode(imageNamed: "fog")
+            mmFog.zPosition=10005
+            mmFog.name="mmFog"
+            mmBG01.addChild(mmFog)
+            mmFog.setScale(random(min: 0.15, max: 0.35))
+            mmFog.alpha=0.75
+            mmFog.colorBlendFactor=0.7
+            let y = random(min: size.height*0.2, max: size.height*0.35)
+            mmFog.position=CGPoint(x: -size.width/2 - mmFog.size.width*0.35, y: y)
+            mmFog.color=NSColor(calibratedRed: 1.0, green: 0.4, blue: 0.0, alpha: 1.0)
+            let fogAction=SKAction.sequence([SKAction.move(to: CGPoint(x: size.width/2+mmFog.size.width/2, y: y), duration: Double(random(min: 155, max: 165))),SKAction.removeFromParent()])
+            mmFog.run(fogAction)
+         
+            nextMMCloudSpawn=Double(random(min: 30, max: 160))
+            lastMMCloudSpawn=NSDate()
+        } // if it's time to spawn a cloud
+ 
+        if -lastMMFogSpawn.timeIntervalSinceNow > nextMMFogSpawn
+        {
+            let mmFog=SKSpriteNode(imageNamed: "fog")
+            mmFog.zPosition=10005
+            mmFog.name="mmFog"
+            mmBG01.addChild(mmFog)
+            mmFog.setScale(0.85)
+            mmFog.alpha=0.4
+            mmFog.colorBlendFactor=0.5
+            let y = random(min: -size.height*0.3, max: -size.height*0.45)
+            mmFog.position=CGPoint(x: -size.width/2 - mmFog.size.width*0.35, y: y)
+            mmFog.color=NSColor(calibratedRed: 0.6, green: 0.3, blue: 0.0, alpha: 1.0)
+            let fogAction=SKAction.sequence([SKAction.move(to: CGPoint(x: size.width/2+mmFog.size.width/2, y: y), duration: Double(random(min: 90, max: 120))),SKAction.removeFromParent()])
+            mmFog.run(fogAction)
+            
+            nextMMFogSpawn=Double(random(min: 85, max: 125))
+            lastMMFogSpawn=NSDate()
+            
+        }
+        
+    }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
         switch currentState
         {
+        case mainmenuState:
+            animateMainMenu()
+            
         case inGameState:
             center.isPaused=true
             myMap.timePlus()

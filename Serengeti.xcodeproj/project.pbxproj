@@ -12,11 +12,8 @@
 		F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47D205621F25B9E00A867A9 /* rainTest01.sks */; };
 		F47D205921F25B9E00A867A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F47D205721F25B9E00A867A9 /* Assets.xcassets */; };
 		F47E9A8F2208BCD100AB8B3C /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47E9A8E2208BCD100AB8B3C /* MyTileSet.sks */; };
-		F4830243220C84600081EC93 /* ZebraClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F483023E220C845F0081EC93 /* ZebraClass.swift */; };
 		F4830244220C84600081EC93 /* SpringbokClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F483023F220C84600081EC93 /* SpringbokClass.swift */; };
 		F4830245220C84600081EC93 /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830240220C84600081EC93 /* TestClass.swift */; };
-		F4830246220C84600081EC93 /* CheetahClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830241220C84600081EC93 /* CheetahClass.swift */; };
-		F4830247220C84600081EC93 /* EntityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830242220C84600081EC93 /* EntityClass.swift */; };
 		F483024A220C84760081EC93 /* MapClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830248220C84760081EC93 /* MapClass.swift */; };
 		F483024B220C84760081EC93 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830249220C84760081EC93 /* MessageClass.swift */; };
 		F489901721F2902B00E4B83B /* thunder01.wav in Resources */ = {isa = PBXBuildFile; fileRef = F489901621F2902B00E4B83B /* thunder01.wav */; };
@@ -25,6 +22,9 @@
 		F489901D21F2926500E4B83B /* thunder04.wav in Resources */ = {isa = PBXBuildFile; fileRef = F489901A21F2926500E4B83B /* thunder04.wav */; };
 		F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4621EACD2100527926 /* BirdClass.swift */; };
 		F49CCB4921EB99DC00527926 /* BuzzardClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49CCB4821EB99DC00527926 /* BuzzardClass.swift */; };
+		F4D136A92224463D00CE24A3 /* CheetahClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D136A72224463D00CE24A3 /* CheetahClass.swift */; };
+		F4D136AA2224463D00CE24A3 /* ZebraClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D136A82224463D00CE24A3 /* ZebraClass.swift */; };
+		F4D136AC2224466500CE24A3 /* EntityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D136AB2224466400CE24A3 /* EntityClass.swift */; };
 		F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */; };
 		F4D8420F21E17E3700B9D0A8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8420E21E17E3700B9D0A8 /* GameScene.sks */; };
 		F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = F4D8421021E17E3800B9D0A8 /* Actions.sks */; };
@@ -44,11 +44,8 @@
 		F47D205621F25B9E00A867A9 /* rainTest01.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = rainTest01.sks; sourceTree = "<group>"; };
 		F47D205721F25B9E00A867A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F47E9A8E2208BCD100AB8B3C /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
-		F483023E220C845F0081EC93 /* ZebraClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZebraClass.swift; sourceTree = "<group>"; };
 		F483023F220C84600081EC93 /* SpringbokClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringbokClass.swift; sourceTree = "<group>"; };
 		F4830240220C84600081EC93 /* TestClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
-		F4830241220C84600081EC93 /* CheetahClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheetahClass.swift; sourceTree = "<group>"; };
-		F4830242220C84600081EC93 /* EntityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityClass.swift; sourceTree = "<group>"; };
 		F4830248220C84760081EC93 /* MapClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClass.swift; sourceTree = "<group>"; };
 		F4830249220C84760081EC93 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
 		F489901621F2902B00E4B83B /* thunder01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = thunder01.wav; sourceTree = "<group>"; };
@@ -57,6 +54,9 @@
 		F489901A21F2926500E4B83B /* thunder04.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = thunder04.wav; sourceTree = "<group>"; };
 		F49CCB4621EACD2100527926 /* BirdClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirdClass.swift; sourceTree = "<group>"; };
 		F49CCB4821EB99DC00527926 /* BuzzardClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuzzardClass.swift; sourceTree = "<group>"; };
+		F4D136A72224463D00CE24A3 /* CheetahClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheetahClass.swift; sourceTree = "<group>"; };
+		F4D136A82224463D00CE24A3 /* ZebraClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZebraClass.swift; sourceTree = "<group>"; };
+		F4D136AB2224466400CE24A3 /* EntityClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityClass.swift; sourceTree = "<group>"; };
 		F4D8420921E17E3700B9D0A8 /* Serengeti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Serengeti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D8420C21E17E3700B9D0A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F4D8420E21E17E3700B9D0A8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -148,11 +148,11 @@
 		F4D8422621E1814100B9D0A8 /* AI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F4830241220C84600081EC93 /* CheetahClass.swift */,
-				F4830242220C84600081EC93 /* EntityClass.swift */,
 				F483023F220C84600081EC93 /* SpringbokClass.swift */,
+				F4D136A72224463D00CE24A3 /* CheetahClass.swift */,
+				F4D136A82224463D00CE24A3 /* ZebraClass.swift */,
+				F4D136AB2224466400CE24A3 /* EntityClass.swift */,
 				F4830240220C84600081EC93 /* TestClass.swift */,
-				F483023E220C845F0081EC93 /* ZebraClass.swift */,
 				F49CCB4621EACD2100527926 /* BirdClass.swift */,
 				F49CCB4821EB99DC00527926 /* BuzzardClass.swift */,
 			);
@@ -281,13 +281,13 @@
 				F4D8421521E17E3800B9D0A8 /* ViewController.swift in Sources */,
 				F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */,
 				F483024B220C84760081EC93 /* MessageClass.swift in Sources */,
+				F4D136AA2224463D00CE24A3 /* ZebraClass.swift in Sources */,
 				F49CCB4921EB99DC00527926 /* BuzzardClass.swift in Sources */,
+				F4D136AC2224466500CE24A3 /* EntityClass.swift in Sources */,
 				F47D204A21EFC51200A867A9 /* ArchiveClass.swift in Sources */,
-				F4830247220C84600081EC93 /* EntityClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
+				F4D136A92224463D00CE24A3 /* CheetahClass.swift in Sources */,
 				F4830244220C84600081EC93 /* SpringbokClass.swift in Sources */,
-				F4830246220C84600081EC93 /* CheetahClass.swift in Sources */,
-				F4830243220C84600081EC93 /* ZebraClass.swift in Sources */,
 				F47D204721EFA8E300A867A9 /* InfoClass.swift in Sources */,
 				F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */,
 				F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */,

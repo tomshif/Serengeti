@@ -5,7 +5,7 @@
 //  Created by Game Design Shared on 1/7/19.
 //  Copyright © 2019 Liberty Game Dev. All rights reserved.
 //
-
+//
 import Foundation
 import SpriteKit
 class CheetahClass:EntityClass
@@ -13,8 +13,7 @@ class CheetahClass:EntityClass
     var MAXHERD:Int = 1
     var MAXCHILD:Int = 2
     var isPregnant:Bool = false
-    var isChasing:Bool = false
-    var lastMeal:Bool = false     // I would recommend doing this more as "var lastMeal:Int=0"
+    var isChasing:Bool = false // I would recommend doing this more as "var lastMeal:Int=0"
     var isClose:Bool = false        // close to what?
     var isTravel:Bool = false       // travel?
     var cubs:Bool = false
@@ -22,6 +21,11 @@ class CheetahClass:EntityClass
     var lastBaby:CGFloat = 0
     var preyTarget:EntityClass?
     var lastPreyCheck = NSDate()
+    var getDiseaseDay:CGFloat = 6
+    var timePassed:CGFloat = 0
+    var diseaseDay:Int=0
+    var diseaseHour:CGFloat=0
+    var targetZone:ZoneClass?
     
     override init()
     {
@@ -53,7 +57,7 @@ class CheetahClass:EntityClass
         TURNFREQ=3
         AICycle=0
         MAXAGE=8*8640
-        MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
+        MAXAGE=random(min: MAXAGE*0.7, max: MAXAGE*1.0) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         
         
@@ -137,23 +141,41 @@ class CheetahClass:EntityClass
         updateGraphics()
         Baby()
         Stam()
-        border()
-
+        meal()
+        
+        if herdLeader == nil
+        {
+            border()
+        }
+        sprite.zPosition = age + 120
         
         if alive
         {
             if !ageEntity()
             {
                 ret=2
+                let chance=random(min: 0, max: 1)
+                if chance > 0.99999999995
+                {
+                    catchDisease()
+                }
             } // we're able to age, if we die, set return death code
         } // if we're alive
+        
+        if isDiseased && map!.getDay() != diseaseDay && diseaseHour > map!.getTimeOfDay()
+        {
+            die()
+            map!.msg.sendMessage(type: map!.msg.DEATH_DISEASE, from: self.name)
+        }
+        
         if cycle==AICycle
         {
         
-            if -lastPreyCheck.timeIntervalSinceNow > 1.0 && stamina > 0.85
+            if (-lastPreyCheck.timeIntervalSinceNow > 1.0 && stamina > 0.85) || (-lastPreyCheck.timeIntervalSinceNow > 1.0 && hunger < 0.15 )
             {
                 checkPrey()
                 lastPreyCheck = NSDate()
+
             }// if -lastPreyCheck
             if currentState==WANDERSTATE
             {
@@ -215,6 +237,10 @@ class CheetahClass:EntityClass
             {
                 if !(map!.entList[i].name.contains("Zebra") && map!.entList[i].getAgeString() == "Mature")
                 {
+                    wander()
+                }
+                if !(map!.entList[i].name.contains("Zebra") && map!.entList[i].getAgeString() == "Mature" && isDiseased == true)
+                {
                     let dist = getDistToEntity(ent: map!.entList[i])
                     if dist < closest
                     {
@@ -236,23 +262,23 @@ class CheetahClass:EntityClass
         {
             currentState = WANDERSTATE
         }
-    }
+    }// func checkPrey()
     
     private func hunt()
     {
-        if preyTarget != nil && getAgeString()=="Baby" && getAgeString()=="Juvinile" && herdLeader?.currentState == HUNTSTATE
+        if preyTarget != nil && getAgeString()=="Baby" && getAgeString()=="Juvinile" && herdLeader!.currentState == HUNTSTATE
         {
             speed = 0
             if herdLeader?.currentState == WANDERSTATE
             {
                 catchUp()
                 Stam()
-            }
-        }
+            }// herdLeader?
+        }//if preyTarget
         if preyTarget != nil && getAgeString()=="Mature"
         {
-    
-            stamina -= 0.01 *  map!.getTimeScale()
+            isChasing = true
+            stamina -= 0.0115 *  map!.getTimeScale()
             var angle = getAngleToEntity(ent: preyTarget!)
             if speed > MAXSPEED
             {
@@ -278,19 +304,29 @@ class CheetahClass:EntityClass
             let dist = getDistToEntity(ent: preyTarget!)
             if dist < 20
             {
+                if preyTarget!.isDiseased == true
+                {
+                    let chance = random(min: 0, max: 1)
+                    if chance > 0.95
+                    {
+                        catchDisease()
+                    }
+                }// preyTarget
                 map!.msg.sendMessage(type: map!.msg.DEATH_PREDATOR, from: preyTarget!.name)
                 preyTarget!.die()
                 preyTarget = nil
+                border()
                 currentState = WANDERSTATE
                 speed=0
-
+                hunger = 1.0
+                Stam()
             }// dist < 20
             if stamina < 0
             {
+                stamina = 0.3
                 currentState = WANDERSTATE
                 preyTarget = nil
-                stamina = 0
-                speed=0
+                border()
                 map!.msg.sendMessage(type: map!.msg.HUNTFAILED, from: self.name)
             }// if stamina < 0
             
@@ -327,56 +363,116 @@ class CheetahClass:EntityClass
     
     func border()
     {
-    
-            if sprite.position.x > map!.BOUNDARY * 0.95
-            {
-                gotoLastState = currentState
-                currentState = GOTOSTATE
-                gotoPoint = CGPoint(x: sprite.position.x * 0.9 - 200, y: sprite.position.y)
-            }// sprite.position.x >
-            if sprite.position.x < -map!.BOUNDARY * 0.95
-            {
-                gotoLastState = currentState
-                currentState = GOTOSTATE
-                gotoPoint = CGPoint(x: sprite.position.x * 0.9 - 200, y: sprite.position.y)
-            }// sprite.position.x <
-            if sprite.position.y > map!.BOUNDARY * 0.95
-            {
-                gotoLastState = currentState
-                currentState = GOTOSTATE
-                gotoPoint = CGPoint(x: sprite.position.x, y: sprite.position.y * 0.9 - 200)
-            }// sprite.position.y >
-            if sprite.position.y < -map!.BOUNDARY * 0.95
-            {
-                gotoLastState = currentState
-                currentState = GOTOSTATE
-                gotoPoint = CGPoint(x: sprite.position.x, y: sprite.position.y * 0.9 + 200)
-            }// sprite.position.y <
+        if currentState == WANDERSTATE
+        {
+        if sprite.position.x > map!.BOUNDARY*0.95
+        {
+            gotoLastState = currentState
+            currentState = GOTOSTATE
+            gotoPoint.y = sprite.position.y
+            gotoPoint.x = map!.BOUNDARY*0.8
+        }// sprite x
+        if sprite.position.x < -map!.BOUNDARY*0.95
+        {
+            gotoLastState = currentState
+            currentState = GOTOSTATE
+            gotoPoint.y = sprite.position.y
+            gotoPoint.x = -map!.BOUNDARY*0.8
+        }// sprite -x
+        if sprite.position.y > map!.BOUNDARY*0.95
+        {
+            gotoLastState = currentState
+            currentState = GOTOSTATE
+            gotoPoint.y = map!.BOUNDARY*0.8
+            gotoPoint.x = sprite.position.x
+        }// sprite y
+        if sprite.position.y < -map!.BOUNDARY*0.95
+        {
+            gotoLastState = currentState
+            currentState = GOTOSTATE
+            gotoPoint.y = -map!.BOUNDARY*0.8
+            gotoPoint.x = sprite.position.x
+        }// sprite -y
+        }
     }//border
     
     
     override func catchDisease()
     {
-        let chance=random(min: 0, max: 1)
-        if chance > 0.99999999995
-        {
-
-        }
-    }
+        isDiseased = true
+        map!.msg.sendMessage(type:map!.msg.INFECTED, from: self.name)
+        diseaseHour=map!.getTimeOfDay()
+        diseaseDay=map!.getDay()
+    }// override catchDisease
     
     func Stam()
     {
         if currentState != HUNTSTATE
-        {
-            stamina += 0.00002 * map!.getTimeScale()
-        }
+            {
+                stamina += 0.00002 * map!.getTimeScale()
+            }
         if stamina > 1.0
-        {
+            {
             stamina = 1.0
-        }
-
+            }
+        if stamina < 0.85 && currentState == WANDERSTATE
+            {
+                if targetZone != nil
+                    {
+                        if targetZone!.type == ZoneType.RESTZONE
+                            {
+                                let dist = getDistanceToZone(zone: targetZone!)
+                                if dist > 400
+                                    {
+                                        currentState = WANDERSTATE
+                                    }
+                                if dist < 400
+                                    {
+                                        speed = 0
+                                        stamina += 0.0008
+                                    }
+                                if isHerdLeader == false
+                                {
+                                    let dist=getDistToEntity(ent: herdLeader!)
+                                    
+                                    if dist < 50
+                                    {
+                                        speed = 0
+                                    }
+                                        
+                                }// isHerdLeader == false
+                            }//if targetZone!
+                        else
+                            {
+                                targetZone = findZone(type: ZoneType.RESTZONE)
+                            }// else
+                        currentState=GOTOSTATE
+                        targetZone!.sprite.position = gotoPoint
+                        
+                    }// targetZone != nil
+                else
+                {
+                    targetZone = findZone(type: ZoneType.RESTZONE)
+                }
+        }// if stamina < 0.853
     }// func Stam
     
+    func meal()
+    {
+        if currentState != HUNTSTATE
+        {
+            hunger -= 0.000004 * map!.getTimeScale()
+        }
+        if hunger == 0
+        {
+            hunger = 0
+            die()
+        }// hunger = 0
+        if hunger == 1.0
+        {
+            hunger = 1.0
+        }
+    }// meal()
     
 } // CheetahClass
 

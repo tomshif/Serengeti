@@ -23,6 +23,8 @@ class EntityClass
     internal var thirst:CGFloat=1.0
     public var stamina:CGFloat=1.0
     
+    internal var diseaseColor=NSColor()
+    public var healthyColor=NSColor()
 
     
     internal var turnToAngle:CGFloat=0.0
@@ -119,6 +121,54 @@ class EntityClass
         
     }
     
+    internal func getDistanceToZone(zone: ZoneClass) -> CGFloat
+    {
+        let dx=zone.sprite.position.x-sprite.position.x
+        let dy=zone.sprite.position.y-sprite.position.y
+        let dist:CGFloat=hypot(dy, dx)
+        
+        return dist
+    } // func getDistanceToZone()
+    
+    internal func findZone(type: Int) -> ZoneClass?
+    {
+        
+        if map!.zoneList.count>0
+        {
+            var shortest:CGFloat=999999999
+            var shortIndex:Int = -1
+            
+            // first, find the closest zone
+            for i in 0..<map!.zoneList.count
+            {
+                if map!.zoneList[i].type==type
+                {
+                    let dx=map!.zoneList[i].sprite.position.x-sprite.position.x
+                    let dy=map!.zoneList[i].sprite.position.y-sprite.position.y
+                    let dist:CGFloat=hypot(dy, dx)
+                    if dist < shortest
+                    {
+                        shortest=dist
+                        shortIndex=i
+                    } // if it's the shortest
+                    
+                } // if it's the right type
+                
+            } // for each zone
+            
+            return map!.zoneList[shortIndex]
+            
+            
+        } // if we have zones in our list
+        else
+        {
+            map!.msg.sendCustomMessage(message: "Error -- No zones to search")
+        }
+        
+        
+        return nil
+    } // findZone
+    
     public func updateGraphics()
     {
         let dx=cos(sprite.zRotation)*speed*map!.getTimeScale()
@@ -134,12 +184,15 @@ class EntityClass
     
     public func removeSprite()
     {
-        sprite.removeFromParent()
+        let dieAction=SKAction.sequence([SKAction.fadeOut(withDuration: 2.0),SKAction.removeFromParent()])
+        sprite.run(dieAction)
+        //sprite.removeFromParent()
     }
     
     public func die()
     {
         alive=false
+        
         removeSprite()
         
         // remove all reference pointers
@@ -334,7 +387,7 @@ class EntityClass
                 }
             }
             
-            if abs(turnToAngle-sprite.zRotation) < TURNRATE*2.25*speed
+            if abs(turnToAngle-sprite.zRotation) < TURNRATE*2*speed
             {
                 sprite.zRotation=turnToAngle
                 isTurning=false
