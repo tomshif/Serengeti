@@ -156,6 +156,7 @@ class GameScene: SKScene {
     let mmGenAnimalsLabel=SKLabelNode(fontNamed: "Arial")
     let mmGenFoodLabel=SKLabelNode(fontNamed: "Arial")
     let mmGenTreeLabel=SKLabelNode(fontNamed: "Arial")
+    let mmCopyrightLabel=SKLabelNode(fontNamed: "Arial")
     
     let hudTimeLabel=SKLabelNode(fontNamed: "Arial")
     let hudMsgLabel=SKLabelNode(fontNamed: "Arial")
@@ -176,6 +177,8 @@ class GameScene: SKScene {
     
     // Sounds
     let thunder01=SKAudioNode(fileNamed: "thunder01")
+    let musicBG=SKAudioNode(fileNamed: "musicBG01")
+    
     
     // Booleans
     var leftPressed:Bool=false
@@ -222,6 +225,8 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        musicBG.autoplayLooped=true
+        addChild(musicBG)
         rainChange=Double(random(min: 5, max: 60.00))
         
 
@@ -325,6 +330,13 @@ class GameScene: SKScene {
         mmLogo.position.x = -size.width*0.166
         mmLogo.position.y = size.height*0.333
         mmBG01.addChild(mmLogo)
+        
+        mmCopyrightLabel.zPosition=10009
+        mmCopyrightLabel.position.y = -size.height*0.47
+        mmCopyrightLabel.text="(C) 2019 Liberty Christian School | Kyle Collins | Alexandria Hurd | Reid Rorick | Tom Shiflet | Carter Vanderstoep"
+        mmCopyrightLabel.fontSize=14
+        mmCopyrightLabel.name="mmCopyrightLabel"
+        mmBG01.addChild(mmCopyrightLabel)
         
         mmGenerating.zPosition=10010
         mmGenerating.isHidden=true
@@ -786,10 +798,10 @@ class GameScene: SKScene {
                         let dx=ent.sprite.position.x - cam.position.x
                         let dy=ent.sprite.position.y - cam.position.y
                         let dist=hypot(dy, dx)
-                        if dist < 300
+                        if dist < 400
                         {
                             let chance=random(min: 0, max: 1)
-                            if chance > 0.5
+                            if chance > 0.2
                             {
                                 ent.isDiseased=false
                                 ent.sprite.color=ent.healthyColor

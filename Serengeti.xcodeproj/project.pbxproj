@@ -36,6 +36,7 @@
 		F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */; };
 		F4D8423621E26DC500B9D0A8 /* mapTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423521E26DC500B9D0A8 /* mapTile.swift */; };
 		F4D8423821E26F1900B9D0A8 /* TerrainGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */; };
+		F4FD45BE2224CEC400E8D307 /* musicBG01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 		F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneClass.swift; sourceTree = "<group>"; };
 		F4D8423521E26DC500B9D0A8 /* mapTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapTile.swift; sourceTree = "<group>"; };
 		F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainGen.swift; sourceTree = "<group>"; };
+		F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = musicBG01.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 		F47D205E21F2888F00A867A9 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				F4FD45BC2224CEB200E8D307 /* BGMusic */,
 				F47D205F21F2889800A867A9 /* Weather */,
 			);
 			path = Sounds;
@@ -195,6 +198,14 @@
 			path = "Support Classes";
 			sourceTree = "<group>";
 		};
+		F4FD45BC2224CEB200E8D307 /* BGMusic */ = {
+			isa = PBXGroup;
+			children = (
+				F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */,
+			);
+			path = BGMusic;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -263,6 +274,7 @@
 				F489901C21F2926500E4B83B /* thunder03.wav in Resources */,
 				F489901B21F2926500E4B83B /* thunder02.wav in Resources */,
 				F47D205921F25B9E00A867A9 /* Assets.xcassets in Resources */,
+				F4FD45BE2224CEC400E8D307 /* musicBG01.mp3 in Resources */,
 				F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
