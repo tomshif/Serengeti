@@ -55,6 +55,8 @@ let BIRDFLOCKSIZE:Int=20
 
 let DARTTIMER:Double=10
 let MEDTIMER:Double=20
+let MSGTIMER:Double=3.0
+
 
 
 var entityHerdCount:Int=0
@@ -100,7 +102,7 @@ class GameScene: SKScene {
     var nextMMCritterHerd:Double = 0
     var nextMMCloudSpawn:Double=0
     var nextMMFogSpawn:Double=0
-    
+    var nextAmbientSound:Double=15
     
     var myMap=MapClass()
     
@@ -178,6 +180,8 @@ class GameScene: SKScene {
     // Sounds
     let thunder01=SKAudioNode(fileNamed: "thunder01")
     let musicBG=SKAudioNode(fileNamed: "musicBG01")
+    let natureBG=SKAudioNode(fileNamed: "BGNature")
+    let rainBG=SKAudioNode(fileNamed: "rainLoop")
     
     
     // Booleans
@@ -214,6 +218,8 @@ class GameScene: SKScene {
     var lastMMCloudSpawn=NSDate()
     var lastDart=NSDate()
     var lastMedicine=NSDate()
+    var lastMSG=NSDate()
+    var lastAmbientSound=NSDate()
     
     // Others
     
@@ -227,6 +233,14 @@ class GameScene: SKScene {
         
         musicBG.autoplayLooped=true
         addChild(musicBG)
+        
+        natureBG.autoplayLooped=true
+        addChild(natureBG)
+        
+        rainBG.autoplayLooped=true
+        rainBG.run(SKAction.changeVolume(to: 0, duration: 0))
+        addChild(rainBG)
+        
         rainChange=Double(random(min: 5, max: 60.00))
         
 
@@ -805,7 +819,8 @@ class GameScene: SKScene {
                             {
                                 ent.isDiseased=false
                                 ent.sprite.color=ent.healthyColor
-                            }
+                                myMap.msg.sendMessage(type: myMap.msg.CURED, from: ent.name)
+                            } // if we're cured
                         } // if we're close enough
                     } // if we're diseased
                 } // for each entity
@@ -918,10 +933,13 @@ class GameScene: SKScene {
                     let dist = hypot(dy, dx)
                     if dist < 200
                     {
+                        myMap.msg.sendMessage(type: myMap.msg.TRANQ, from: currentSelection!.name)
+                    currentSelection!.sprite.run(SKAction.playSoundFileNamed("tranqSound.wav",waitForCompletion:false))
                         currentSelection!.die()
                         currentSelection=nil
                         dartActive=false
                         lastDart=NSDate()
+
                     }
                     else
                     {
@@ -1019,6 +1037,7 @@ class GameScene: SKScene {
         {
             mmGenSplinesLabel.text="Reticulating splines: 100%"
             waterZonesSpawned += 1
+
         }
         else if waterZonesSpawned < WATERZONECOUNT
         {
@@ -1159,6 +1178,9 @@ class GameScene: SKScene {
             treeNode2.removeFromParent()
             treeNode3.removeFromParent()
             treeNode4.removeFromParent()
+            lastAmbientSound=NSDate()
+            nextAmbientSound=Double(random(min: 5, max: 20))
+            musicBG.run(SKAction.changeVolume(to: 0, duration: 1.5))
         } // if we're finished generating map
         
 
@@ -1743,13 +1765,14 @@ class GameScene: SKScene {
         } // if nothing is selected
         
         
-        if myMap.msg.getUnreadCount() > 0
+        if myMap.msg.getUnreadCount() > 0 && -lastMSG.timeIntervalSinceNow > MSGTIMER
         {
             hudMsgBG.removeAllActions()
             hudMsgBG.alpha=1.0
             hudMsgLabel.text=myMap.msg.readNextMessage()
             let runAction=SKAction.sequence([SKAction.wait(forDuration: 4.0), SKAction.fadeOut(withDuration: 1.0)])
             hudMsgBG.run(runAction)
+            lastMSG=NSDate()
             //msgBG.run(SKAction.fadeOut(withDuration: 5.0))
         } // if we have unread messages
         
@@ -1860,12 +1883,14 @@ class GameScene: SKScene {
                     isRaining=false
                     rainChange=Double(random(min: 15, max: 35))
                     lastRainChange=NSDate()
+                    rainBG.run(SKAction.changeVolume(to: 0, duration: 1.0))
                 }
                 else
                 {
                     isRaining=true
                     rainChange=Double(random(min: 15, max: 35))
                     lastRainChange=NSDate()
+                    rainBG.run(SKAction.changeVolume(to: 1.0, duration: 1.0))
                 }
             } // if it's time to change the rain
             
@@ -1893,6 +1918,17 @@ class GameScene: SKScene {
             rainNode!.particleBirthRate=0
         } // if it's not raining
         
+        
+        // check ambient sound effects
+        if -lastAmbientSound.timeIntervalSinceNow > nextAmbientSound
+        {
+            let num=Int(random(min: 1, max: 5.999999))
+            let soundFile=String(format: "ambient%02d.wav",num)
+        droneHUD.run(SKAction.playSoundFileNamed(soundFile,waitForCompletion:false))
+            
+            nextAmbientSound=Double(random(min: 5, max: 25))
+            lastAmbientSound=NSDate()
+        }
     } // updateWeather
     
     

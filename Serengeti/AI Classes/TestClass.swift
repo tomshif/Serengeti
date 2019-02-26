@@ -273,7 +273,7 @@ class TestClass:EntityClass
             {
                 let dist=getDistToEntity(ent: map!.entList[i])
 
-                if map!.entList[i].isHerdLeader
+                if map!.entList[i].isHerdLeader && map!.entList[i].name.contains("Warthog")
                 {
                     if dist < closestLeaderDist
                     {
@@ -281,7 +281,7 @@ class TestClass:EntityClass
                         closestLeaderIndex=i
                     } // if we've found a herd leader
                 } // we've found another herd leader
-                else if map!.entList[i].isMale && map!.entList[i].getAgeString()=="Mature"
+                else if map!.entList[i].isMale && map!.entList[i].getAgeString()=="Mature" && map!.entList[i].name.contains("Warthog")
                 {
                     if dist < maleDistance
                     {

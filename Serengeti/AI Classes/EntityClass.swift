@@ -184,7 +184,7 @@ class EntityClass
     
     public func removeSprite()
     {
-        let dieAction=SKAction.sequence([SKAction.fadeOut(withDuration: 2.0),SKAction.removeFromParent()])
+        let dieAction=SKAction.sequence([SKAction.fadeOut(withDuration: 7.0),SKAction.removeFromParent()])
         sprite.run(dieAction)
         //sprite.removeFromParent()
     }

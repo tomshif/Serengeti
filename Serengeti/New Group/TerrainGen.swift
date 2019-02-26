@@ -272,9 +272,10 @@ func drawTree(theMap: MapClass, theScene: SKScene)
     let point=CGPoint(x: random(min: -theMap.BOUNDARY*0.45, max: theMap.BOUNDARY*0.45), y: random(min: -theMap.BOUNDARY*0.45, max: theMap.BOUNDARY*0.45))
         //let point=CGPoint(x: random(min: -6000, max: 6000), y: random(min: -6000, max: 6000))
 
-    var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH), Int32(point.y)/Int32(theMap.MAPWIDTH))
+        //var loc=vector_int2()
+        var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH/2), Int32(point.y)/Int32(theMap.MAPWIDTH/2))
 
-    
+        print(loc)
     let location = vector2(Int32(loc.x), Int32(loc.y))
     let terrainHeight = noiseMap.value(at: location)
     

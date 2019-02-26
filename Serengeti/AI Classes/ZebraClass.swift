@@ -591,7 +591,7 @@ class ZebraClass:EntityClass
                 // the opportunity to pursue the herdLeader...should be OR
                 if herdLeader != nil && !isHerdLeader
                 {
-                    if getDistToEntity(ent: herdLeader!) > followDistance
+                    if getDistToEntity(ent: herdLeader!) > followDistance + followDistVar
                     {
     
                         catchUp()

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F40AEAC8222579A300C8BFE0 /* tranqSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = F40AEAC7222579A300C8BFE0 /* tranqSound.wav */; };
+		F40AEACA22257E0D00C8BFE0 /* BGNature.wav in Resources */ = {isa = PBXBuildFile; fileRef = F40AEAC922257E0D00C8BFE0 /* BGNature.wav */; };
 		F47D204721EFA8E300A867A9 /* InfoClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204621EFA8E300A867A9 /* InfoClass.swift */; };
 		F47D204A21EFC51200A867A9 /* ArchiveClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47D204921EFC51200A867A9 /* ArchiveClass.swift */; };
 		F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47D205621F25B9E00A867A9 /* rainTest01.sks */; };
@@ -36,10 +38,18 @@
 		F4D8422F21E182F500B9D0A8 /* ZoneClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */; };
 		F4D8423621E26DC500B9D0A8 /* mapTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423521E26DC500B9D0A8 /* mapTile.swift */; };
 		F4D8423821E26F1900B9D0A8 /* TerrainGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */; };
+		F4E8CB5A2225BD5A0008EC36 /* rainLoop.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB592225BD5A0008EC36 /* rainLoop.wav */; };
+		F4E8CB612225BFA90008EC36 /* ambient03.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5C2225BFA80008EC36 /* ambient03.wav */; };
+		F4E8CB622225BFA90008EC36 /* ambient04.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5D2225BFA90008EC36 /* ambient04.wav */; };
+		F4E8CB632225BFA90008EC36 /* ambient02.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5E2225BFA90008EC36 /* ambient02.wav */; };
+		F4E8CB642225BFA90008EC36 /* ambient05.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5F2225BFA90008EC36 /* ambient05.wav */; };
+		F4E8CB652225BFA90008EC36 /* ambient01.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB602225BFA90008EC36 /* ambient01.wav */; };
 		F4FD45BE2224CEC400E8D307 /* musicBG01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F40AEAC7222579A300C8BFE0 /* tranqSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = tranqSound.wav; sourceTree = "<group>"; };
+		F40AEAC922257E0D00C8BFE0 /* BGNature.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BGNature.wav; sourceTree = "<group>"; };
 		F47D204621EFA8E300A867A9 /* InfoClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoClass.swift; sourceTree = "<group>"; };
 		F47D204921EFC51200A867A9 /* ArchiveClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveClass.swift; sourceTree = "<group>"; };
 		F47D205621F25B9E00A867A9 /* rainTest01.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = rainTest01.sks; sourceTree = "<group>"; };
@@ -72,6 +82,12 @@
 		F4D8422B21E182F500B9D0A8 /* ZoneClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoneClass.swift; sourceTree = "<group>"; };
 		F4D8423521E26DC500B9D0A8 /* mapTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapTile.swift; sourceTree = "<group>"; };
 		F4D8423721E26F1900B9D0A8 /* TerrainGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainGen.swift; sourceTree = "<group>"; };
+		F4E8CB592225BD5A0008EC36 /* rainLoop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rainLoop.wav; sourceTree = "<group>"; };
+		F4E8CB5C2225BFA80008EC36 /* ambient03.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient03.wav; sourceTree = "<group>"; };
+		F4E8CB5D2225BFA90008EC36 /* ambient04.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient04.wav; sourceTree = "<group>"; };
+		F4E8CB5E2225BFA90008EC36 /* ambient02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient02.wav; sourceTree = "<group>"; };
+		F4E8CB5F2225BFA90008EC36 /* ambient05.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient05.wav; sourceTree = "<group>"; };
+		F4E8CB602225BFA90008EC36 /* ambient01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient01.wav; sourceTree = "<group>"; };
 		F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = musicBG01.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F40AEAC62225799300C8BFE0 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				F40AEAC7222579A300C8BFE0 /* tranqSound.wav */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
 		F47D205521F25B8400A867A9 /* Effects */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,7 +122,9 @@
 		F47D205E21F2888F00A867A9 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				F4FD45BC2224CEB200E8D307 /* BGMusic */,
+				F4E8CB5B2225BF990008EC36 /* Ambient Sounds */,
+				F40AEAC62225799300C8BFE0 /* Actions */,
+				F4FD45BC2224CEB200E8D307 /* BGSounds */,
 				F47D205F21F2889800A867A9 /* Weather */,
 			);
 			path = Sounds;
@@ -198,12 +224,26 @@
 			path = "Support Classes";
 			sourceTree = "<group>";
 		};
-		F4FD45BC2224CEB200E8D307 /* BGMusic */ = {
+		F4E8CB5B2225BF990008EC36 /* Ambient Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				F4E8CB602225BFA90008EC36 /* ambient01.wav */,
+				F4E8CB5E2225BFA90008EC36 /* ambient02.wav */,
+				F4E8CB5C2225BFA80008EC36 /* ambient03.wav */,
+				F4E8CB5D2225BFA90008EC36 /* ambient04.wav */,
+				F4E8CB5F2225BFA90008EC36 /* ambient05.wav */,
+			);
+			path = "Ambient Sounds";
+			sourceTree = "<group>";
+		};
+		F4FD45BC2224CEB200E8D307 /* BGSounds */ = {
+			isa = PBXGroup;
+			children = (
+				F40AEAC922257E0D00C8BFE0 /* BGNature.wav */,
+				F4E8CB592225BD5A0008EC36 /* rainLoop.wav */,
 				F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */,
 			);
-			path = BGMusic;
+			path = BGSounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,13 +308,21 @@
 				F47E9A8F2208BCD100AB8B3C /* MyTileSet.sks in Resources */,
 				F4D8421721E17E3B00B9D0A8 /* Assets.xcassets in Resources */,
 				F489901721F2902B00E4B83B /* thunder01.wav in Resources */,
+				F4E8CB622225BFA90008EC36 /* ambient04.wav in Resources */,
 				F4D8421121E17E3800B9D0A8 /* Actions.sks in Resources */,
+				F4E8CB5A2225BD5A0008EC36 /* rainLoop.wav in Resources */,
+				F40AEAC8222579A300C8BFE0 /* tranqSound.wav in Resources */,
+				F40AEACA22257E0D00C8BFE0 /* BGNature.wav in Resources */,
 				F4D8421A21E17E3B00B9D0A8 /* Main.storyboard in Resources */,
 				F489901D21F2926500E4B83B /* thunder04.wav in Resources */,
+				F4E8CB632225BFA90008EC36 /* ambient02.wav in Resources */,
 				F489901C21F2926500E4B83B /* thunder03.wav in Resources */,
 				F489901B21F2926500E4B83B /* thunder02.wav in Resources */,
+				F4E8CB612225BFA90008EC36 /* ambient03.wav in Resources */,
 				F47D205921F25B9E00A867A9 /* Assets.xcassets in Resources */,
 				F4FD45BE2224CEC400E8D307 /* musicBG01.mp3 in Resources */,
+				F4E8CB642225BFA90008EC36 /* ambient05.wav in Resources */,
+				F4E8CB652225BFA90008EC36 /* ambient01.wav in Resources */,
 				F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
