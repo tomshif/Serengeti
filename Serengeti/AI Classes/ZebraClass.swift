@@ -545,7 +545,7 @@ class ZebraClass:EntityClass
             doTurn()
         updateGraphics()
         
-        sprite.zPosition = age + 100
+        sprite.zPosition = age/8640 + 100
         
         
         if age > MAXAGE*0.2 && sprite.texture==babyTexture
