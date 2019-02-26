@@ -18,7 +18,10 @@ class SpringbokClass:EntityClass
     public var MINHERD:Int=15
     private var MAXCHILD:Int=2
     
+    private var diseaseHour:CGFloat=0
+    private var diseaseDay:Int = -500
     internal var followDist:CGFloat=150
+    internal var followDistVar:CGFloat=0
     
     
     let adultTexture=SKTexture(imageNamed: "springbokAdultSprite")
@@ -61,6 +64,7 @@ class SpringbokClass:EntityClass
         AICycle=0
         ACCELERATION=0.25
         MAXAGE=7*8640
+        followDistVar=random(min: -followDist*0.2, max: followDist*0.65)
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         if (age < MAXAGE*0.2)
@@ -126,6 +130,7 @@ class SpringbokClass:EntityClass
         ACCELERATION=0.325
         MAXAGE=7*8640
         TURNSPEEDLOST=0.15
+        followDistVar=random(min: -followDist*0.2, max: followDist*0.65)
         MAXAGE=random(min: MAXAGE*0.8, max: MAXAGE*1.4) // adjust max age to the individual
         age=random(min: 1.0, max: MAXAGE*0.7)
         
@@ -195,7 +200,10 @@ class SpringbokClass:EntityClass
     
     override func catchDisease()
     {
-        
+        diseaseHour=map!.getTimeOfDay()
+        diseaseDay=map!.getDay()
+        isDiseased=true
+        map!.msg.sendMessage(type: map!.msg.INFECTED, from: self.name)
     }
     
     
@@ -260,27 +268,27 @@ class SpringbokClass:EntityClass
                 gotoLastState = currentState
                 currentState = GOTOSTATE
                 gotoPoint.y = sprite.position.y
-                gotoPoint.x = sprite.position.x*0.9 - 200
+                gotoPoint.x = map!.BOUNDARY*0.8 - 200
             }
             if sprite.position.x < -map!.BOUNDARY*0.95
             {
                 gotoLastState = currentState
                 currentState = GOTOSTATE
                 gotoPoint.y = sprite.position.y
-                gotoPoint.x = sprite.position.x*0.9 + 200
+                gotoPoint.x = map!.BOUNDARY*0.8 + 200
             }
             if sprite.position.y > map!.BOUNDARY*0.95
             {
                 gotoLastState = currentState
                 currentState = GOTOSTATE
-                gotoPoint.y = sprite.position.y*0.9 - 200
+                gotoPoint.y = map!.BOUNDARY*0.8 - 200
                 gotoPoint.x = sprite.position.x
             }
             if sprite.position.y < -map!.BOUNDARY*0.95
             {
                 gotoLastState = currentState
                 currentState = GOTOSTATE
-                gotoPoint.y = sprite.position.y*0.9 + 200
+                gotoPoint.y = map!.BOUNDARY*0.8 + 200
                 gotoPoint.x = sprite.position.x
             }
         }
@@ -331,6 +339,14 @@ class SpringbokClass:EntityClass
     override func ageEntity() -> Bool
     {
         age += map!.getTimeInterval()*map!.getTimeScale()
+        
+        let chance = random(min: 0, max: 1)
+        if chance > 0.999999999995
+        {
+            catchDisease()
+        }
+        
+        
         if age > MAXAGE
         {
             map!.msg.sendMessage(type: 8, from: name)
@@ -359,7 +375,7 @@ class SpringbokClass:EntityClass
             if map!.getDay() >= 1 && map!.getDay() <= 3 && !isMale && self.getAgeString()=="Mature" && herdLeader != nil && map!.getYear()-lastBabyYear > 0 && isFleeing==false
             {
                 let babyChance=random(min: 0.0, max: 1.0)
-                if babyChance > 0.999994
+                if babyChance > 0.9999994
                 {
                     // Hurray! We're having a baby!
                     let babyNumber=Int(random(min: 2, max: 5.999999))
@@ -391,6 +407,9 @@ class SpringbokClass:EntityClass
             
             return true
         } // if we're still alive
+        
+        
+
     } // func ageEntity
     
     
@@ -437,8 +456,21 @@ class SpringbokClass:EntityClass
                 ret=2
             } // we're able to age, if we die, set return death code
         } // if we're alive
+        
+        if isDiseased && map!.getTimeOfDay() > diseaseHour && map!.getDay() != diseaseDay
+        {
+
+            die()
+            map!.msg.sendMessage(type: map!.msg.DEATH_DISEASE, from: self.name)
+        }
+        
+        
+        
         if cycle==AICycle
         {
+            sprite.zPosition = age + 140
+            
+            
             if -lastPredCheck.timeIntervalSinceNow > 1.0
             {
                 checkPredators()
@@ -450,7 +482,7 @@ class SpringbokClass:EntityClass
             {
                 if herdLeader != nil && !isHerdLeader
                 {
-                    if getDistToEntity(ent: herdLeader!) > followDist
+                    if getDistToEntity(ent: herdLeader!) > followDist + followDistVar
                     {
                         catchUp()
                     }

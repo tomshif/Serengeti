@@ -14,7 +14,6 @@
 		F47D205821F25B9E00A867A9 /* rainTest01.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47D205621F25B9E00A867A9 /* rainTest01.sks */; };
 		F47D205921F25B9E00A867A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F47D205721F25B9E00A867A9 /* Assets.xcassets */; };
 		F47E9A8F2208BCD100AB8B3C /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = F47E9A8E2208BCD100AB8B3C /* MyTileSet.sks */; };
-		F4830244220C84600081EC93 /* SpringbokClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F483023F220C84600081EC93 /* SpringbokClass.swift */; };
 		F4830245220C84600081EC93 /* TestClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830240220C84600081EC93 /* TestClass.swift */; };
 		F483024A220C84760081EC93 /* MapClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830248220C84760081EC93 /* MapClass.swift */; };
 		F483024B220C84760081EC93 /* MessageClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4830249220C84760081EC93 /* MessageClass.swift */; };
@@ -44,6 +43,7 @@
 		F4E8CB632225BFA90008EC36 /* ambient02.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5E2225BFA90008EC36 /* ambient02.wav */; };
 		F4E8CB642225BFA90008EC36 /* ambient05.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB5F2225BFA90008EC36 /* ambient05.wav */; };
 		F4E8CB652225BFA90008EC36 /* ambient01.wav in Resources */ = {isa = PBXBuildFile; fileRef = F4E8CB602225BFA90008EC36 /* ambient01.wav */; };
+		F4E8CB672225D2240008EC36 /* SpringbokClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E8CB662225D2240008EC36 /* SpringbokClass.swift */; };
 		F4FD45BE2224CEC400E8D307 /* musicBG01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +55,6 @@
 		F47D205621F25B9E00A867A9 /* rainTest01.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = rainTest01.sks; sourceTree = "<group>"; };
 		F47D205721F25B9E00A867A9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F47E9A8E2208BCD100AB8B3C /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
-		F483023F220C84600081EC93 /* SpringbokClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringbokClass.swift; sourceTree = "<group>"; };
 		F4830240220C84600081EC93 /* TestClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestClass.swift; sourceTree = "<group>"; };
 		F4830248220C84760081EC93 /* MapClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClass.swift; sourceTree = "<group>"; };
 		F4830249220C84760081EC93 /* MessageClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClass.swift; sourceTree = "<group>"; };
@@ -88,6 +87,7 @@
 		F4E8CB5E2225BFA90008EC36 /* ambient02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient02.wav; sourceTree = "<group>"; };
 		F4E8CB5F2225BFA90008EC36 /* ambient05.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient05.wav; sourceTree = "<group>"; };
 		F4E8CB602225BFA90008EC36 /* ambient01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ambient01.wav; sourceTree = "<group>"; };
+		F4E8CB662225D2240008EC36 /* SpringbokClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringbokClass.swift; sourceTree = "<group>"; };
 		F4FD45BD2224CEC400E8D307 /* musicBG01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = musicBG01.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -177,9 +177,9 @@
 		F4D8422621E1814100B9D0A8 /* AI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F483023F220C84600081EC93 /* SpringbokClass.swift */,
 				F4D136A72224463D00CE24A3 /* CheetahClass.swift */,
 				F4D136A82224463D00CE24A3 /* ZebraClass.swift */,
+				F4E8CB662225D2240008EC36 /* SpringbokClass.swift */,
 				F4D136AB2224466400CE24A3 /* EntityClass.swift */,
 				F4830240220C84600081EC93 /* TestClass.swift */,
 				F49CCB4621EACD2100527926 /* BirdClass.swift */,
@@ -346,8 +346,8 @@
 				F4D136AC2224466500CE24A3 /* EntityClass.swift in Sources */,
 				F47D204A21EFC51200A867A9 /* ArchiveClass.swift in Sources */,
 				F4D8421321E17E3800B9D0A8 /* GameScene.swift in Sources */,
+				F4E8CB672225D2240008EC36 /* SpringbokClass.swift in Sources */,
 				F4D136A92224463D00CE24A3 /* CheetahClass.swift in Sources */,
-				F4830244220C84600081EC93 /* SpringbokClass.swift in Sources */,
 				F47D204721EFA8E300A867A9 /* InfoClass.swift in Sources */,
 				F49CCB4721EACD2100527926 /* BirdClass.swift in Sources */,
 				F4D8420D21E17E3700B9D0A8 /* AppDelegate.swift in Sources */,
