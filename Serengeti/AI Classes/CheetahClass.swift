@@ -147,7 +147,7 @@ class CheetahClass:EntityClass
         {
             border()
         }
-        sprite.zPosition = age + 120
+        sprite.zPosition = age/8640 + 120
         
         if alive
         {
@@ -447,7 +447,7 @@ class CheetahClass:EntityClass
                                 targetZone = findZone(type: ZoneType.RESTZONE)
                             }// else
                         currentState=GOTOSTATE
-                        targetZone!.sprite.position = gotoPoint
+                        gotoPoint = targetZone!.sprite.position
                         
                     }// targetZone != nil
                 else

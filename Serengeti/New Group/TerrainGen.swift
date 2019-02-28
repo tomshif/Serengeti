@@ -273,10 +273,11 @@ func drawTree(theMap: MapClass, theScene: SKScene)
         //let point=CGPoint(x: random(min: -6000, max: 6000), y: random(min: -6000, max: 6000))
 
         //var loc=vector_int2()
-        var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH/2), Int32(point.y)/Int32(theMap.MAPWIDTH/2))
+        var loc=vector_int2(Int32(point.x)/Int32(theMap.MAPWIDTH*0.45), Int32(point.y)/Int32(theMap.MAPWIDTH*0.45))
 
         print(loc)
     let location = vector2(Int32(loc.x), Int32(loc.y))
+        print(location)
     let terrainHeight = noiseMap.value(at: location)
     
     // check the spot on the biome map to see what kind of tree

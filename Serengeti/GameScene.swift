@@ -347,7 +347,7 @@ class GameScene: SKScene {
         
         mmCopyrightLabel.zPosition=10009
         mmCopyrightLabel.position.y = -size.height*0.47
-        mmCopyrightLabel.text="(C) 2019 Liberty Christian School | Kyle Collins | Alexandria Hurd | Reid Rorick | Tom Shiflet | Carter Vanderstoep"
+        mmCopyrightLabel.text="(C) 2019 Liberty Christian School | Kyle Collins | Alexandria Hurd | Reid Rorick | Tom Shiflet | Carter Vander Stoep"
         mmCopyrightLabel.fontSize=14
         mmCopyrightLabel.name="mmCopyrightLabel"
         mmBG01.addChild(mmCopyrightLabel)
@@ -1128,15 +1128,15 @@ class GameScene: SKScene {
             let y=random(min: -myMap.BOUNDARY*0.8, max: myMap.BOUNDARY*0.8)
             let pos = CGPoint(x: x, y: y)
             
-            if type > 0.6
+            if type > 0.75
             {
                 spawnHerd(type: ENTITYHERD, loc: pos)
             }
-            else if type > 0.45
+            else if type > 0.5
             {
                 spawnHerd(type: ZEBRAHERD, loc: pos)
             }
-            else if type > 0.1
+            else if type > 0.15
             {
                 spawnHerd(type: SPRINGBOKHERD, loc: pos)
             }
