@@ -23,6 +23,7 @@ class SpringbokClass:EntityClass
     internal var followDist:CGFloat=150
     internal var followDistVar:CGFloat=0
     
+    var targetZone:ZoneClass?
     
     let adultTexture=SKTexture(imageNamed: "springbokAdultSprite")
     let babyTexture=SKTexture(imageNamed: "springbokBabySprite")
@@ -300,6 +301,127 @@ class SpringbokClass:EntityClass
         
     }
     
+    func dailyRoutine()
+    {
+        
+        if (map!.getTimeOfDay()<300 || map!.getTimeOfDay()>1200) && currentState != GOTOSTATE
+        {
+            var resting:Bool=false
+            
+            if targetZone == nil
+            {
+                targetZone = findZone(type: ZoneType.RESTZONE)
+                
+            }
+            if targetZone != nil
+            {
+                if targetZone!.type != ZoneType.RESTZONE
+                {
+                    targetZone = findZone(type: ZoneType.RESTZONE)
+                }
+                gotoPoint=targetZone!.sprite.position
+                gotoLastState=currentState
+                currentState=GOTOSTATE
+                
+            }
+            if currentState==GOTOSTATE
+            {
+                
+                let dist=getDistanceToZone(zone: targetZone!)
+                if dist < 200
+                {
+                    
+                    
+                    currentState=WANDERSTATE
+                    speed=MAXSPEED*0
+                    targetZone=nil
+                    isResting=true
+                    
+                    if !isHerdLeader && herdLeader != nil  &&  resting==true
+                    {
+                        speed=herdLeader!.speed
+                    }
+                    
+                }// if distance is less than 50
+            }// if we're in wander state
+        }// if its between 300 and 1200
+            
+        else if (map!.getTimeOfDay()<420)
+        {
+            if targetZone == nil
+            {
+                targetZone = findZone(type: ZoneType.WATERZONE)
+            }
+            if targetZone != nil
+            {
+                
+                
+                gotoPoint=targetZone!.sprite.position
+                gotoLastState=currentState
+                currentState=GOTOSTATE
+                
+            }
+            if currentState==GOTOSTATE
+            {
+                let dist=getDistanceToZone(zone: targetZone!)
+                
+                if dist < 500
+                {
+                    
+                    
+                    currentState=WANDERSTATE
+                    speed=MAXSPEED*0.2
+                    targetZone=nil
+                }// if distance is less than 50
+            }// if we're in wander state
+        }// if its between 300 and 420
+            
+        else if (map!.getTimeOfDay()<600)
+        {
+            print("Time for Food")
+            if targetZone == nil
+            {
+                print("target zone was nil")
+                targetZone = findZone(type: ZoneType.FOODZONE)
+                print("Target zone: \(targetZone)")
+            }
+            if targetZone != nil
+            {
+                if targetZone!.type != ZoneType.FOODZONE
+                {
+                    print("Target Zone was not food")
+                    targetZone = findZone(type: ZoneType.FOODZONE)
+                    print("Target zone: \(targetZone)")
+                }
+                
+                gotoPoint=targetZone!.sprite.position
+                gotoLastState=currentState
+                currentState=GOTOSTATE
+                
+            }
+            if currentState==GOTOSTATE
+            {
+                
+                let dist=getDistanceToZone(zone: targetZone!)
+                if dist < 500
+                {
+                    
+                    
+                    currentState=WANDERSTATE
+                    speed=MAXSPEED*0.2
+                    targetZone=nil
+                }// if distance is less than 50
+            }// if we're in wander state
+        }// if its between 420 and 600
+        /*
+         else
+         {
+         currentState=WANDERSTATE
+         
+         }
+         */
+    }//daily routine function
+    
     
     private func checkPredators()
     {
@@ -468,7 +590,11 @@ class SpringbokClass:EntityClass
         
         if cycle==AICycle
         {
-            sprite.zPosition = age + 140
+            if isHerdLeader==true
+            {
+                dailyRoutine()
+            }
+            sprite.zPosition = age/8640 + 140
             
             
             if -lastPredCheck.timeIntervalSinceNow > 1.0
