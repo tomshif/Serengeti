@@ -199,6 +199,7 @@ class GameScene: SKScene {
     var followModeOn:Bool=false
     var dartActive:Bool=true
     var medicineActive:Bool=true
+    var platyActive:Bool=true
     
     
     // Camera
@@ -312,59 +313,59 @@ class GameScene: SKScene {
         mmBG01.addChild(mmBG02)
         
         mmBG03.name="mmBG03"
-        mmBG03.zPosition=10006
+        mmBG03.zPosition=10007
         mmBG01.addChild(mmBG03)
         
 
         
         
-        mmPlayButton.position.x = size.width*0.3
-        mmPlayButton.position.y = size.height*0.1
+        mmPlayButton.position.x = -size.width*0.3
+        mmPlayButton.position.y = -size.height*0.15
         mmPlayButton.name="mmPlayButton"
-        mmPlayButton.zPosition=10007
+        mmPlayButton.zPosition=10008
         mmPlayButton.alpha=1
         mmBG01.addChild(mmPlayButton)
         
         
-        mmHowButton.position.x = size.width*0.3
-        mmHowButton.position.y = -size.height*0.05
-        mmHowButton.zPosition=10007
+        mmHowButton.position.x = -size.width*0.3
+        mmHowButton.position.y = -size.height*0.27
+        mmHowButton.zPosition=10008
         mmHowButton.name="mmHowButton"
         mmHowButton.alpha=1
         mmBG01.addChild(mmHowButton)
         
-        mmHowPlay.zPosition=10008
+        mmHowPlay.zPosition=10009
         mmHowPlay.isHidden=true
         mmHowPlay.name="mmHowToPlay"
         mmBG01.addChild(mmHowPlay)
         
         
-        mmLogo.zPosition=10007
+        mmLogo.zPosition=10008
         mmLogo.name="mmLogo"
         mmLogo.position.x = -size.width*0.166
         mmLogo.position.y = size.height*0.333
         mmBG01.addChild(mmLogo)
         
-        mmCopyrightLabel.zPosition=10009
+        mmCopyrightLabel.zPosition=10010
         mmCopyrightLabel.position.y = -size.height*0.47
         mmCopyrightLabel.text="(C) 2019 Liberty Christian School | Kyle Collins | Alexandria Hurd | Reid Rorick | Tom Shiflet | Carter Vander Stoep"
         mmCopyrightLabel.fontSize=14
         mmCopyrightLabel.name="mmCopyrightLabel"
         mmBG01.addChild(mmCopyrightLabel)
         
-        mmGenerating.zPosition=10010
+        mmGenerating.zPosition=10011
         mmGenerating.isHidden=true
         mmGenerating.name="mmGenerating"
         mmBG01.addChild(mmGenerating)
         
-        mmGenSplinesLabel.zPosition=10011
+        mmGenSplinesLabel.zPosition=10012
         mmGenSplinesLabel.fontSize=22
         mmGenSplinesLabel.position.y = mmGenerating.size.height*0.10
         mmGenSplinesLabel.text="Reticulating Splines: 0%"
         mmGenSplinesLabel.name="mmGenSplinesLabel"
         mmGenerating.addChild(mmGenSplinesLabel)
         
-        mmGenWaterLabel.zPosition=10011
+        mmGenWaterLabel.zPosition=10012
         mmGenWaterLabel.fontSize=22
         mmGenWaterLabel.position.y = 0
         mmGenWaterLabel.text="Hitting the hot tub: 0%"
@@ -638,6 +639,10 @@ class GameScene: SKScene {
                     }
                 } // if play button
                 
+                if thisNode.name=="tempCritter"
+                {
+                    platyActive=false
+                }
                 if thisNode.name=="mmHowButton"
                 {
                     if mmHowPlay.isHidden
@@ -1957,7 +1962,7 @@ class GameScene: SKScene {
         if -lastMMCloudSpawn.timeIntervalSinceNow > nextMMCloudSpawn
         {
             let mmFog=SKSpriteNode(imageNamed: "fog")
-            mmFog.zPosition=10005
+            mmFog.zPosition=10006
             mmFog.name="mmFog"
             mmBG01.addChild(mmFog)
             mmFog.setScale(random(min: 0.15, max: 0.35))
@@ -1976,7 +1981,7 @@ class GameScene: SKScene {
         if -lastMMFogSpawn.timeIntervalSinceNow > nextMMFogSpawn
         {
             let mmFog=SKSpriteNode(imageNamed: "fog")
-            mmFog.zPosition=10005
+            mmFog.zPosition=10006
             mmFog.name="mmFog"
             mmBG01.addChild(mmFog)
             mmFog.setScale(0.85)
@@ -1991,6 +1996,25 @@ class GameScene: SKScene {
             nextMMFogSpawn=Double(random(min: 85, max: 125))
             lastMMFogSpawn=NSDate()
             
+        }
+        
+        if !platyActive
+        {
+            let chance=random(min: 0, max: 1)
+            if chance > 0.99955
+            {
+                let platy=SKSpriteNode(imageNamed: "platy")
+                platy.zPosition=10005
+                platy.position.x=size.width/2+platy.size.width/2
+                platy.position.y=random(min: -size.height*0.4, max: -size.height*0.32)
+                let wobbleAction=SKAction.sequence([SKAction.rotate(byAngle: -CGFloat.pi*0.07, duration: 0.15), SKAction.rotate(byAngle: CGFloat.pi*0.07, duration: 0.15)])
+                platy.run(SKAction.repeatForever(wobbleAction))
+                let moveAction=SKAction.sequence([SKAction.move(to: CGPoint(x: -size.width/2-platy.size.width/2, y: platy.position.y), duration: 20), SKAction.removeFromParent(), SKAction.run {
+                    self.platyActive=false}])
+                platy.run(moveAction)
+                platyActive=true
+                mmBG01.addChild(platy)
+            }
         }
         
     }
